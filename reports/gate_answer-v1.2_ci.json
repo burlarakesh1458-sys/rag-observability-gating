@@ -1,0 +1,617 @@
+{
+  "timestamp": "2026-11-06T05:35:18+00:00",
+  "prompt_version": "answer-v1.2",
+  "prompt_file": "/workspace/projects/726ba228-0ac0-4d7b-85a7-54c410c21295/ai-portfolio/03-rag-observability/configs/prompts/answer_v1.yaml",
+  "model": "qwen/qwen3.8-27b",
+  "judge_model": "openai/gpt-oss-120b",
+  "subset": "ci",
+  "passed": true,
+  "checks": [
+    {
+      "metric": "faithfulness",
+      "value": 1.0,
+      "baseline": null,
+      "floor": 0.8,
+      "max_drop": 0.05,
+      "status": "pass",
+      "why": ""
+    },
+    {
+      "metric": "answer_relevancy",
+      "value": 0.75,
+      "baseline": null,
+      "floor": 0.7,
+      "max_drop": 0.1,
+      "status": "pass",
+      "why": ""
+    },
+    {
+      "metric": "citation_accuracy",
+      "value": 1.0,
+      "baseline": null,
+      "floor": 0.8,
+      "max_drop": 0.1,
+      "status": "pass",
+      "why": ""
+    },
+    {
+      "metric": "refusal_correctness",
+      "value": 0.8,
+      "baseline": null,
+      "floor": 0.75,
+      "max_drop": 0.1,
+      "status": "pass",
+      "why": ""
+    },
+    {
+      "metric": "context_recall",
+      "value": 0.875,
+      "baseline": null,
+      "floor": 0.7,
+      "max_drop": 0.1,
+      "status": "pass",
+      "why": ""
+    }
+  ],
+  "summary": {
+    "n_items": 10,
+    "n_answerable": 8,
+    "n_unanswerable": 2,
+    "n_not_evaluated_quota": 2,
+    "not_evaluated_ids": [
+      "ap-07",
+      "px-06"
+    ],
+    "faithfulness": 1.0,
+    "answer_relevancy": 0.75,
+    "context_recall": 0.875,
+    "context_precision": 0.6667,
+    "citation_accuracy": 1.0,
+    "citation_validity": 1.0,
+    "refusal_correctness": 0.8,
+    "answer_rate_answerable": 0.75,
+    "refusal_rate_unanswerable": 1.0,
+    "fused_recall@20": 1.0,
+    "mrr@5": 0.6667,
+    "errors": 0,
+    "latency": {
+      "retrieve": {
+        "p50_ms": 381.8,
+        "p95_ms": 2131.6
+      },
+      "rerank": {
+        "p50_ms": 2470.1,
+        "p95_ms": 3011.0
+      },
+      "generate": {
+        "p50_ms": 2063.2,
+        "p95_ms": 14946.1
+      },
+      "total": {
+        "p50_ms": 4786.8,
+        "p95_ms": 17176.0
+      }
+    },
+    "tokens": {
+      "prompt": 15171,
+      "completion": 417,
+      "judge": 7287
+    },
+    "mean_prompt_tokens": 1896.4,
+    "wall_time_s": 112.0
+  },
+  "rows": [
+    {
+      "id": "dr-01",
+      "question": "What is the maximum all-up weight of a nano unmanned aircraft system under the Drone Rules 2021?",
+      "answerable": true,
+      "answer": "A nano unmanned aircraft system is classified as weighing less than or equal to 250 grams [drone_rules_2021.pdf#c005].",
+      "raw_answer": "A nano unmanned aircraft system is classified as weighing less than or equal to 250 grams [drone_rules_2021.pdf#c005].",
+      "refused": false,
+      "refusal_reason": null,
+      "error": null,
+      "context_ids": [
+        "drone_rules_2021.pdf#c005",
+        "pib_drone_rules_backgrounder.pdf#c001",
+        "pib_drone_rules_backgrounder.pdf#c004"
+      ],
+      "cited_ids": [
+        "drone_rules_2021.pdf#c005"
+      ],
+      "raw_cited_ids": [
+        "drone_rules_2021.pdf#c005"
+      ],
+      "best_rerank_score": 5.2918,
+      "latency_s": {
+        "retrieve": 3.4354808779999075,
+        "rerank": 3.230351297999732,
+        "evidence_gate": 1.2339000022620894e-05,
+        "generate": 0.36003432699999394,
+        "validate_citations": 0.00046728699999221135,
+        "total": 7.054174278000119
+      },
+      "usage": {
+        "prompt_tokens": 1965,
+        "completion_tokens": 35,
+        "retries": 0
+      },
+      "refusal_correct": true,
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "fused_recall": 1.0,
+      "mrr": 1.0,
+      "citation_accuracy": 1.0,
+      "citation_validity": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "judge_claims": 1,
+      "judge_supported": 1,
+      "judge_reason": "The answer directly provides the correct maximum weight supported by the cited rule.",
+      "judge_tokens": 1080
+    },
+    {
+      "id": "dr-05",
+      "question": "Up to what height does the green zone extend under the Drone Rules 2021?",
+      "answerable": true,
+      "answer": "The green zone extends up to a vertical distance of 400 feet or 120 metres [drone_rules_2021.pdf#c002]. Additionally, it extends up to 200 feet or 60 metres above the area located between a lateral distance of 8 kilometres and 12 kilometres from the perimeter of an operational airport [drone_rules_2021.pdf#c002].",
+      "raw_answer": "The green zone extends up to a vertical distance of 400 feet or 120 metres [drone_rules_2021.pdf#c002]. Additionally, it extends up to 200 feet or 60 metres above the area located between a lateral distance of 8 kilometres and 12 kilometres from the perimeter of an operational airport [drone_rules_2021.pdf#c002].",
+      "refused": false,
+      "refusal_reason": null,
+      "error": null,
+      "context_ids": [
+        "pib_drone_rules_backgrounder.pdf#c006",
+        "pib_drone_rules_backgrounder.pdf#c005",
+        "drone_rules_2021.pdf#c002"
+      ],
+      "cited_ids": [
+        "drone_rules_2021.pdf#c002"
+      ],
+      "raw_cited_ids": [
+        "drone_rules_2021.pdf#c002"
+      ],
+      "best_rerank_score": 4.76,
+      "latency_s": {
+        "retrieve": 0.20230585899980724,
+        "rerank": 1.8637799729999642,
+        "evidence_gate": 5.9419999161036685e-06,
+        "generate": 0.41816324299998087,
+        "validate_citations": 0.00012347699976089643,
+        "total": 2.490727404000154
+      },
+      "usage": {
+        "prompt_tokens": 2012,
+        "completion_tokens": 92,
+        "retries": 0
+      },
+      "refusal_correct": true,
+      "context_recall": 1.0,
+      "context_precision": 0.3333333333333333,
+      "fused_recall": 1.0,
+      "mrr": 0.3333333333333333,
+      "citation_accuracy": 1.0,
+      "citation_validity": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "judge_claims": 2,
+      "judge_supported": 2,
+      "judge_reason": "System answer fully matches the reference answer.",
+      "judge_tokens": 1268
+    },
+    {
+      "id": "dr-07",
+      "question": "What is the minimum and maximum age to be eligible for a remote pilot licence?",
+      "answerable": true,
+      "answer": "An individual must be not less than eighteen years of age and not more than sixty-five years of age to be eligible for a remote pilot licence [drone_rules_2021.pdf#c011].",
+      "raw_answer": "An individual must be not less than eighteen years of age and not more than sixty-five years of age to be eligible for a remote pilot licence [drone_rules_2021.pdf#c011].",
+      "refused": false,
+      "refusal_reason": null,
+      "error": null,
+      "context_ids": [
+        "drone_rules_2021.pdf#c011",
+        "drone_rules_2021.pdf#c012",
+        "drone_rules_2021.pdf#c013"
+      ],
+      "cited_ids": [
+        "drone_rules_2021.pdf#c011"
+      ],
+      "raw_cited_ids": [
+        "drone_rules_2021.pdf#c011"
+      ],
+      "best_rerank_score": 6.5764,
+      "latency_s": {
+        "retrieve": 0.15759641400018154,
+        "rerank": 2.7428627310000593,
+        "evidence_gate": 8.015999810595531e-06,
+        "generate": 0.32369023699993704,
+        "validate_citations": 0.00011727099990821443,
+        "total": 3.2417055870000695
+      },
+      "usage": {
+        "prompt_tokens": 1903,
+        "completion_tokens": 44,
+        "retries": 0
+      },
+      "refusal_correct": true,
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "fused_recall": 1.0,
+      "mrr": 1.0,
+      "citation_accuracy": 1.0,
+      "citation_validity": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "judge_claims": 1,
+      "judge_supported": 1,
+      "judge_reason": "The system answer correctly provides the minimum and maximum ages as in the reference and is supported by the cited passage.",
+      "judge_tokens": 1108
+    },
+    {
+      "id": "dr-11",
+      "question": "Within how many hours must a drone accident be reported, and to whom?",
+      "answerable": true,
+      "answer": "I can't answer that from the indexed documents: the retrieved passages do not contain enough evidence to support an answer.",
+      "raw_answer": "",
+      "refused": true,
+      "refusal_reason": "refused_by_gate",
+      "error": null,
+      "context_ids": [
+        "px4_config_safety.md#c004",
+        "drone_amendment_rules_2022.pdf#c000",
+        "pib_drone_rules_backgrounder.pdf#c007"
+      ],
+      "cited_ids": [],
+      "raw_cited_ids": [],
+      "best_rerank_score": -4.985,
+      "latency_s": {
+        "retrieve": 0.4112801080000281,
+        "rerank": 2.4999228739998216,
+        "evidence_gate": 7.329999789362773e-06,
+        "refuse": 0.0,
+        "total": 2.920631121000042
+      },
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "retries": 0
+      },
+      "refusal_correct": false,
+      "context_recall": 0.0,
+      "context_precision": 0.0,
+      "fused_recall": 1.0,
+      "mrr": 0.0,
+      "answer_relevancy": 0.0
+    },
+    {
+      "id": "dr-13",
+      "question": "What is the fee for issuance or renewal of a remote pilot licence?",
+      "answerable": true,
+      "answer": "The fee for the issuance or renewal of a remote pilot licence is 100 Rupees [drone_rules_2021.pdf#c015]. This fee is valid for 10 years [pib_drone_rules_backgrounder.pdf#c003].",
+      "raw_answer": "The fee for the issuance or renewal of a remote pilot licence is 100 Rupees [drone_rules_2021.pdf#c015]. This fee is valid for 10 years [pib_drone_rules_backgrounder.pdf#c003].",
+      "refused": false,
+      "refusal_reason": null,
+      "error": null,
+      "context_ids": [
+        "drone_rules_2021.pdf#c015",
+        "pib_drone_rules_backgrounder.pdf#c003",
+        "drone_rules_2021.pdf#c013"
+      ],
+      "cited_ids": [
+        "drone_rules_2021.pdf#c015",
+        "pib_drone_rules_backgrounder.pdf#c003"
+      ],
+      "raw_cited_ids": [
+        "drone_rules_2021.pdf#c015",
+        "pib_drone_rules_backgrounder.pdf#c003"
+      ],
+      "best_rerank_score": 4.7583,
+      "latency_s": {
+        "retrieve": 0.5380579679999755,
+        "rerank": 2.717571164000219,
+        "evidence_gate": 8.510000043315813e-06,
+        "generate": 0.3987260349999815,
+        "validate_citations": 0.0002808630001709389,
+        "total": 3.663423330000114
+      },
+      "usage": {
+        "prompt_tokens": 1920,
+        "completion_tokens": 60,
+        "retries": 0
+      },
+      "refusal_correct": true,
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "fused_recall": 1.0,
+      "mrr": 1.0,
+      "citation_accuracy": 1.0,
+      "citation_validity": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "judge_claims": 2,
+      "judge_supported": 2,
+      "judge_reason": "System answer provides the correct fee and adds a correct validity period, fully matching the reference.",
+      "judge_tokens": 1576
+    },
+    {
+      "id": "am-01",
+      "question": "What did the Drone (Amendment) Rules 2022 replace the remote pilot licence with?",
+      "answerable": true,
+      "answer": "The Drone (Amendment) Rules, 2022 substituted the term \"Remote Pilot License\" with \"Remote Pilot Certificate\" in rule 3 of the Drone Rules, 2021 [drone_amendment_rules_2022.pdf#c000]. The new definition specifies that it is a certificate issued by an authorised remote pilot training organisation to any individual under rule 34 [drone_amendment_rules_2022.pdf#c000].",
+      "raw_answer": "The Drone (Amendment) Rules, 2022 substituted the term \"Remote Pilot License\" with \"Remote Pilot Certificate\" in rule 3 of the Drone Rules, 2021 [drone_amendment_rules_2022.pdf#c000]. The new definition specifies that it is a certificate issued by an authorised remote pilot training organisation to any individual under rule 34 [drone_amendment_rules_2022.pdf#c000].",
+      "refused": false,
+      "refusal_reason": null,
+      "error": null,
+      "context_ids": [
+        "drone_amendment_rules_2023.pdf#c001",
+        "drone_amendment_rules_2022.pdf#c000",
+        "pib_drone_rules_backgrounder.pdf#c007"
+      ],
+      "cited_ids": [
+        "drone_amendment_rules_2022.pdf#c000"
+      ],
+      "raw_cited_ids": [
+        "drone_amendment_rules_2022.pdf#c000"
+      ],
+      "best_rerank_score": 3.5069,
+      "latency_s": {
+        "retrieve": 0.22715032199994312,
+        "rerank": 1.9694500380001045,
+        "evidence_gate": 7.529999948019395e-06,
+        "generate": 3.708291523000298,
+        "validate_citations": 0.00014101900023888447,
+        "total": 5.910219726999912
+      },
+      "usage": {
+        "prompt_tokens": 1648,
+        "completion_tokens": 101,
+        "retries": 1
+      },
+      "refusal_correct": true,
+      "context_recall": 1.0,
+      "context_precision": 0.5,
+      "fused_recall": 1.0,
+      "mrr": 0.5,
+      "citation_accuracy": 1.0,
+      "citation_validity": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "judge_claims": 3,
+      "judge_supported": 3,
+      "judge_reason": "All key facts from the reference answer are present and supported by the cited passage.",
+      "judge_tokens": 1128
+    },
+    {
+      "id": "ap-03",
+      "question": "What is the default BATT_LOW_VOLT battery failsafe voltage in ArduPilot Copter and how long must voltage stay below it?",
+      "answerable": true,
+      "answer": "The default voltage for the BATT_LOW_VOLT parameter is 10.5 volts [ardupilot_copter_failsafe-battery.html#c000]. The battery failsafe triggers if the voltage drops below this threshold for more than 10 seconds [ardupilot_copter_failsafe-battery.html#c000].",
+      "raw_answer": "The default voltage for the BATT_LOW_VOLT parameter is 10.5 volts [ardupilot_copter_failsafe-battery.html#c000]. The battery failsafe triggers if the voltage drops below this threshold for more than 10 seconds [ardupilot_copter_failsafe-battery.html#c000].",
+      "refused": false,
+      "refusal_reason": null,
+      "error": null,
+      "context_ids": [
+        "ardupilot_copter_failsafe-battery.html#c000",
+        "ardupilot_copter_failsafe-battery.html#c002",
+        "ardupilot_copter_gcs-failsafe.html#c000"
+      ],
+      "cited_ids": [
+        "ardupilot_copter_failsafe-battery.html#c000"
+      ],
+      "raw_cited_ids": [
+        "ardupilot_copter_failsafe-battery.html#c000"
+      ],
+      "best_rerank_score": 5.2544,
+      "latency_s": {
+        "retrieve": 0.5019124450000163,
+        "rerank": 2.699286766000114,
+        "evidence_gate": 1.0808000297402032e-05,
+        "generate": 11.944969536999906,
+        "validate_citations": 0.0022312450000754325,
+        "total": 15.166528562000167
+      },
+      "usage": {
+        "prompt_tokens": 1821,
+        "completion_tokens": 71,
+        "retries": 1
+      },
+      "refusal_correct": true,
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "fused_recall": 1.0,
+      "mrr": 1.0,
+      "citation_accuracy": 1.0,
+      "citation_validity": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "judge_claims": 2,
+      "judge_supported": 2,
+      "judge_reason": "System answer fully matches the reference facts",
+      "judge_tokens": 1127
+    },
+    {
+      "id": "ap-07",
+      "question": "What is the default RTL_ALT_M return altitude in ArduPilot Copter?",
+      "answerable": true,
+      "answer": "The default return altitude for the RTL_ALT_M parameter in ArduPilot Copter is 15 meters [ardupilot_copter_rtl-mode.html#c002].",
+      "raw_answer": "The default return altitude for the RTL_ALT_M parameter in ArduPilot Copter is 15 meters [ardupilot_copter_rtl-mode.html#c002].",
+      "refused": false,
+      "refusal_reason": null,
+      "error": "judge quota exhausted (retry-after 401s): HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m4qehpzhes290vf2dr4qhhzj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199597, Requested 1329. Please try again in 6m40.032s. Need more tokens? Upgrade to Dev Tier today at https://",
+      "context_ids": [
+        "ardupilot_copter_rtl-mode.html#c002",
+        "ardupilot_copter_rtl-mode.html#c000",
+        "px4_flight_modes_return.md#c011"
+      ],
+      "cited_ids": [
+        "ardupilot_copter_rtl-mode.html#c002"
+      ],
+      "raw_cited_ids": [
+        "ardupilot_copter_rtl-mode.html#c002"
+      ],
+      "best_rerank_score": 7.9192,
+      "latency_s": {
+        "retrieve": 0.32216322700014643,
+        "rerank": 1.9902094869999019,
+        "evidence_gate": 5.8760001593327615e-06,
+        "generate": 14.554723057000047,
+        "validate_citations": 0.00015239999993355013,
+        "total": 16.873910715999955
+      },
+      "usage": {
+        "prompt_tokens": 2017,
+        "completion_tokens": 38,
+        "retries": 1
+      },
+      "refusal_correct": true,
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "fused_recall": 1.0,
+      "mrr": 1.0,
+      "citation_accuracy": 1.0,
+      "citation_validity": 1.0
+    },
+    {
+      "id": "px-02",
+      "question": "What is the default PX4 auto-disarm timeout after landing (COM_DISARM_LAND)?",
+      "answerable": true,
+      "answer": "I can't answer that from the indexed documents: the retrieved passages do not contain enough evidence to support an answer.",
+      "raw_answer": "INSUFFICIENT_EVIDENCE",
+      "refused": true,
+      "refusal_reason": "refused_by_model",
+      "error": null,
+      "context_ids": [
+        "px4_config_safety.md#c018",
+        "px4_advanced_config_prearm_arm_disarm.md#c003",
+        "px4_flight_modes_mc_land.md#c000"
+      ],
+      "cited_ids": [],
+      "raw_cited_ids": [],
+      "best_rerank_score": 4.3228,
+      "latency_s": {
+        "retrieve": 0.3523728459999802,
+        "rerank": 2.3770478550000007,
+        "evidence_gate": 1.0062999990623211e-05,
+        "generate": 15.155447501999788,
+        "validate_citations": 0.00019940399988627178,
+        "total": 17.894328037999912
+      },
+      "usage": {
+        "prompt_tokens": 2030,
+        "completion_tokens": 7,
+        "retries": 1
+      },
+      "refusal_correct": false,
+      "context_recall": 1.0,
+      "context_precision": 0.5,
+      "fused_recall": 1.0,
+      "mrr": 0.5,
+      "answer_relevancy": 0.0
+    },
+    {
+      "id": "px-06",
+      "question": "Which PX4 parameter sets the geofence breach action, and what options does it have?",
+      "answerable": true,
+      "answer": "The parameter `GF_ACTION` sets the geofence breach action, with options: None, Warning, Hold mode, Return mode, Terminate, and Land [px4_config_safety.md#c007].",
+      "raw_answer": "The parameter `GF_ACTION` sets the geofence breach action, with options: None, Warning, Hold mode, Return mode, Terminate, and Land [px4_config_safety.md#c007].",
+      "refused": false,
+      "refusal_reason": null,
+      "error": "judge quota exhausted (retry-after 354s): HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m4qehpzhes290vf2dr4qhhzj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199527, Requested 1291. Please try again in 5m53.376s. Need more tokens? Upgrade to Dev Tier today at https://",
+      "context_ids": [
+        "px4_config_safety.md#c007",
+        "px4_flying_geofence.md#c001",
+        "px4_flying_geofence.md#c000"
+      ],
+      "cited_ids": [
+        "px4_config_safety.md#c007"
+      ],
+      "raw_cited_ids": [
+        "px4_config_safety.md#c007"
+      ],
+      "best_rerank_score": 5.5177,
+      "latency_s": {
+        "retrieve": 0.5332253699998546,
+        "rerank": 3.133210753000185,
+        "evidence_gate": 5.078999947727425e-06,
+        "generate": 8.647112436000043,
+        "validate_citations": 0.0002837960000761086,
+        "total": 12.338032286999805
+      },
+      "usage": {
+        "prompt_tokens": 1568,
+        "completion_tokens": 45,
+        "retries": 1
+      },
+      "refusal_correct": true,
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "fused_recall": 1.0,
+      "mrr": 1.0,
+      "citation_accuracy": 1.0,
+      "citation_validity": 1.0
+    },
+    {
+      "id": "na-01",
+      "question": "What is the drone registration fee in the United States under FAA Part 107?",
+      "answerable": false,
+      "answer": "I can't answer that from the indexed documents: the retrieved passages do not contain enough evidence to support an answer.",
+      "raw_answer": "INSUFFICIENT_EVIDENCE",
+      "refused": true,
+      "refusal_reason": "refused_by_model",
+      "error": null,
+      "context_ids": [
+        "pib_drone_rules_backgrounder.pdf#c003",
+        "pib_drone_rules_backgrounder.pdf#c007",
+        "pib_drone_rules_backgrounder.pdf#c004"
+      ],
+      "cited_ids": [],
+      "raw_cited_ids": [],
+      "best_rerank_score": -2.102,
+      "latency_s": {
+        "retrieve": 0.2580202939998344,
+        "rerank": 1.4711282799999026,
+        "evidence_gate": 7.318999905692181e-06,
+        "generate": 14.557282407000002,
+        "validate_citations": 0.00020810000023629982,
+        "total": 16.29802311000003
+      },
+      "usage": {
+        "prompt_tokens": 1872,
+        "completion_tokens": 7,
+        "retries": 1
+      },
+      "refusal_correct": true
+    },
+    {
+      "id": "na-03",
+      "question": "How do I tune the PID gains of a Betaflight racing quad?",
+      "answerable": false,
+      "answer": "I can't answer that from the indexed documents: the retrieved passages do not contain enough evidence to support an answer.",
+      "raw_answer": "",
+      "refused": true,
+      "refusal_reason": "refused_by_gate",
+      "error": null,
+      "context_ids": [
+        "ardupilot_copter_altholdmode.html#c001",
+        "px4_config_safety.md#c012",
+        "px4_config_safety.md#c013"
+      ],
+      "cited_ids": [],
+      "raw_cited_ids": [],
+      "best_rerank_score": -5.603,
+      "latency_s": {
+        "retrieve": 0.44021633400006976,
+        "rerank": 2.440189892000035,
+        "evidence_gate": 9.716000022308435e-06,
+        "refuse": 0.0,
+        "total": 2.898084590000053
+      },
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "retries": 0
+      },
+      "refusal_correct": true
+    }
+  ],
+  "baseline_file": "baselines/eval_baseline.json",
+  "baseline_found": false
+}

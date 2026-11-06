@@ -1,0 +1,403 @@
+{
+  "trace_id": "47f174421414b26caaeb9ae3ede3de64",
+  "request_id": "rp-10311014-001",
+  "ts": "2026-10-31T04:44:02+00:00",
+  "question": "At what rate does PX4 run arming checks internally?",
+  "answer": "PX4 runs arming checks internally at a rate of 10Hz [px4_advanced_config_prearm_arm_disarm.md#c003].",
+  "refused": false,
+  "refusal_reason": null,
+  "error": null,
+  "model": "qwen/qwen3.8-27b",
+  "prompt_version": "answer-v1.2",
+  "prompt_tokens": 1963,
+  "completion_tokens": 32,
+  "cost_usd": 0.0016984,
+  "latency_ms": {
+    "retrieve": 174.91,
+    "rerank": 1590.06,
+    "evidence_gate": 0.01,
+    "generate": 355.23,
+    "validate_citations": 0.29,
+    "total": 2135.85
+  },
+  "citation_coverage": 1.0,
+  "n_citations": 1,
+  "n_invalid_citations": 0,
+  "best_rerank_score": -0.3134,
+  "spans": [
+    {
+      "name": "rag.request",
+      "start_s": 1793421840.0002215,
+      "end_s": 1793421842.136068,
+      "attributes": {
+        "question": "At what rate does PX4 run arming checks internally?"
+      }
+    },
+    {
+      "name": "retrieve",
+      "start_s": 1793421840.0027907,
+      "end_s": 1793421840.1777027,
+      "attributes": {
+        "mode": "hybrid",
+        "fused": [
+          {
+            "chunk_id": "px4_advanced_config_prearm_arm_disarm.md#c003",
+            "score": 0.0328,
+            "rank": 1,
+            "source": "px4_advanced_config_prearm_arm_disarm.md",
+            "locator": "section: Arm, Disarm, Prearm Configuration > Auto-Disarming (+2 more)",
+            "pre_rank": null,
+            "n_tokens": 513
+          },
+          {
+            "chunk_id": "px4_advanced_config_prearm_arm_disarm.md#c004",
+            "score": 0.031,
+            "rank": 2,
+            "source": "px4_advanced_config_prearm_arm_disarm.md",
+            "locator": "section: Arm, Disarm, Prearm Configuration > Pre-Arm Checks (+3 more)",
+            "pre_rank": null,
+            "n_tokens": 487
+          },
+          {
+            "chunk_id": "px4_config_safety.md#c016",
+            "score": 0.0308,
+            "rank": 3,
+            "source": "px4_config_safety.md",
+            "locator": "section: Safety (Failsafe) Configuration > Failure Detector > Motor Not Spinning After Arming (+2 more)",
+            "pre_rank": null,
+            "n_tokens": 533
+          },
+          {
+            "chunk_id": "px4_config_safety.md#c017",
+            "score": 0.0308,
+            "rank": 4,
+            "source": "px4_config_safety.md",
+            "locator": "section: Safety (Failsafe) Configuration > Failure Detector > External Automatic Trigger System (ATS) (+6 more)",
+            "pre_rank": null,
+            "n_tokens": 545
+          },
+          {
+            "chunk_id": "px4_advanced_config_prearm_arm_disarm.md#c000",
+            "score": 0.0298,
+            "rank": 5,
+            "source": "px4_advanced_config_prearm_arm_disarm.md",
+            "locator": "section: Arm, Disarm, Prearm Configuration (+1 more)",
+            "pre_rank": null,
+            "n_tokens": 544
+          },
+          {
+            "chunk_id": "px4_config_safety.md#c019",
+            "score": 0.0286,
+            "rank": 6,
+            "source": "px4_config_safety.md",
+            "locator": "section: Safety (Failsafe) Configuration > Arming/Disarming Settings > Arming Pre-Conditions (+1 more)",
+            "pre_rank": null,
+            "n_tokens": 190
+          },
+          {
+            "chunk_id": "px4_flight_modes_mc_mission.md#c002",
+            "score": 0.0284,
+            "rank": 7,
+            "source": "px4_flight_modes_mc_mission.md",
+            "locator": "section: Mission Mode (Multicopter) > Description (+3 more)",
+            "pre_rank": null,
+            "n_tokens": 482
+          },
+          {
+            "chunk_id": "ardupilot_copter_arming_the_motors.html#c000",
+            "score": 0.0283,
+            "rank": 8,
+            "source": "ardupilot_copter_arming_the_motors.html",
+            "locator": "section: Arming the motors",
+            "pre_rank": null,
+            "n_tokens": 513
+          },
+          {
+            "chunk_id": "px4_config_safety.md#c010",
+            "score": 0.0283,
+            "rank": 9,
+            "source": "px4_config_safety.md",
+            "locator": "section: Safety (Failsafe) Configuration > Position Estimation Failsafes > GNSS Check Failsafe (+2 more)",
+            "pre_rank": null,
+            "n_tokens": 518
+          },
+          {
+            "chunk_id": "px4_advanced_config_flight_termination.md#c000",
+            "score": 0.0269,
+            "rank": 10,
+            "source": "px4_advanced_config_flight_termination.md",
+            "locator": "section: Flight Termination Configuration (+4 more)",
+            "pre_rank": null,
+            "n_tokens": 497
+          },
+          {
+            "chunk_id": "px4_config_safety.md#c003",
+            "score": 0.026,
+            "rank": 11,
+            "source": "px4_config_safety.md",
+            "locator": "section: Safety (Failsafe) Configuration > Battery Failsafes > Battery level failsafe (+1 more)",
+            "pre_rank": null,
+            "n_tokens": 466
+          },
+          {
+            "chunk_id": "px4_config_safety.md#c007",
+            "score": 0.0159,
+            "rank": 12,
+            "source": "px4_config_safety.md",
+            "locator": "section: Safety (Failsafe) Configuration > Geofence Failsafe (+3 more)",
+            "pre_rank": null,
+            "n_tokens": 498
+          },
+          {
+            "chunk_id": "px4_flight_modes_mc_mission.md#c006",
+            "score": 0.0154,
+            "rank": 13,
+            "source": "px4_flight_modes_mc_mission.md",
+            "locator": "section: Mission Mode (Multicopter) > Mission Command Timeouts (+3 more)",
+            "pre_rank": null,
+            "n_tokens": 517
+          },
+          {
+            "chunk_id": "px4_advanced_config_prearm_arm_disarm.md#c005",
+            "score": 0.0152,
+            "rank": 14,
+            "source": "px4_advanced_config_prearm_arm_disarm.md",
+            "locator": "section: Arm, Disarm, Prearm Configuration > Arming Sequence: Safety State > COM_SAFETY_MODE=Always off (Default) and COM_PREARM_MODE=Disabled (Default) (+4 more)",
+            "pre_rank": null,
+            "n_tokens": 544
+          },
+          {
+            "chunk_id": "px4_config_safety_simulation.md#c000",
+            "score": 0.0152,
+            "rank": 15,
+            "source": "px4_config_safety_simulation.md",
+            "locator": "section: Failsafe State Machine Simulation",
+            "pre_rank": null,
+            "n_tokens": 237
+          },
+          {
+            "chunk_id": "px4_advanced_config_prearm_arm_disarm.md#c002",
+            "score": 0.0147,
+            "rank": 16,
+            "source": "px4_advanced_config_prearm_arm_disarm.md",
+            "locator": "section: Arm, Disarm, Prearm Configuration > Arming Button/Switch (+2 more)",
+            "pre_rank": null,
+            "n_tokens": 541
+          },
+          {
+            "chunk_id": "ardupilot_copter_rtl-mode.html#c001",
+            "score": 0.0143,
+            "rank": 17,
+            "source": "ardupilot_copter_rtl-mode.html",
+            "locator": "section: RTL Mode > Overview",
+            "pre_rank": null,
+            "n_tokens": 455
+          },
+          {
+            "chunk_id": "px4_config_battery.md#c000",
+            "score": 0.0141,
+            "rank": 18,
+            "source": "px4_config_battery.md",
+            "locator": "section: Battery Estimation Tuning (Power Setup) (+2 more)",
+            "pre_rank": null,
+            "n_tokens": 517
+          },
+          {
+            "chunk_id": "ardupilot_copter_altholdmode.html#c001",
+            "score": 0.0139,
+            "rank": 19,
+            "source": "ardupilot_copter_altholdmode.html",
+            "locator": "section: Altitude Hold Mode > Controls (+3 more)",
+            "pre_rank": null,
+            "n_tokens": 550
+          },
+          {
+            "chunk_id": "px4_config_safety.md#c008",
+            "score": 0.0137,
+            "rank": 20,
+            "source": "px4_config_safety.md",
+            "locator": "section: Safety (Failsafe) Configuration > Position Estimation Failsafes > Position Loss Failsafe Trigger (+1 more)",
+            "pre_rank": null,
+            "n_tokens": 478
+          }
+        ],
+        "vector": [
+          [
+            "px4_advanced_config_prearm_arm_disarm.md#c003",
+            0.7397
+          ],
+          [
+            "px4_advanced_config_prearm_arm_disarm.md#c000",
+            0.7013
+          ],
+          [
+            "px4_config_safety.md#c007",
+            0.6843
+          ],
+          [
+            "px4_advanced_config_prearm_arm_disarm.md#c004",
+            0.6767
+          ],
+          [
+            "px4_flight_modes_mc_mission.md#c006",
+            0.6687
+          ],
+          [
+            "px4_config_safety_simulation.md#c000",
+            0.6674
+          ],
+          [
+            "px4_config_safety.md#c017",
+            0.6629
+          ],
+          [
+            "px4_config_safety.md#c016",
+            0.6603
+          ],
+          [
+            "px4_config_safety.md#c019",
+            0.6597
+          ],
+          [
+            "px4_advanced_config_flight_termination.md#c000",
+            0.657
+          ]
+        ],
+        "bm25": [
+          [
+            "px4_advanced_config_prearm_arm_disarm.md#c003",
+            13.853
+          ],
+          [
+            "px4_config_safety.md#c016",
+            11.083
+          ],
+          [
+            "px4_config_safety.md#c017",
+            9.206
+          ],
+          [
+            "ardupilot_copter_arming_the_motors.html#c000",
+            8.489
+          ],
+          [
+            "px4_advanced_config_prearm_arm_disarm.md#c004",
+            8.244
+          ],
+          [
+            "px4_advanced_config_prearm_arm_disarm.md#c005",
+            6.769
+          ],
+          [
+            "px4_config_safety.md#c010",
+            6.484
+          ],
+          [
+            "px4_advanced_config_prearm_arm_disarm.md#c002",
+            6.197
+          ],
+          [
+            "px4_flight_modes_mc_mission.md#c002",
+            5.722
+          ],
+          [
+            "ardupilot_copter_rtl-mode.html#c001",
+            5.664
+          ]
+        ]
+      }
+    },
+    {
+      "name": "rerank",
+      "start_s": 1793421840.1827903,
+      "end_s": 1793421841.7728453,
+      "attributes": {
+        "provider": "cross_encoder",
+        "order": [
+          {
+            "chunk_id": "px4_advanced_config_prearm_arm_disarm.md#c004",
+            "score": -0.3134,
+            "rank": 1,
+            "source": "px4_advanced_config_prearm_arm_disarm.md",
+            "locator": "section: Arm, Disarm, Prearm Configuration > Pre-Arm Checks (+3 more)",
+            "pre_rank": 2,
+            "n_tokens": 487
+          },
+          {
+            "chunk_id": "px4_advanced_config_prearm_arm_disarm.md#c003",
+            "score": -0.5761,
+            "rank": 2,
+            "source": "px4_advanced_config_prearm_arm_disarm.md",
+            "locator": "section: Arm, Disarm, Prearm Configuration > Auto-Disarming (+2 more)",
+            "pre_rank": 1,
+            "n_tokens": 513
+          },
+          {
+            "chunk_id": "px4_advanced_config_prearm_arm_disarm.md#c000",
+            "score": -3.7945,
+            "rank": 3,
+            "source": "px4_advanced_config_prearm_arm_disarm.md",
+            "locator": "section: Arm, Disarm, Prearm Configuration (+1 more)",
+            "pre_rank": 5,
+            "n_tokens": 544
+          }
+        ]
+      }
+    },
+    {
+      "name": "evidence_gate",
+      "start_s": 1793421841.7737207,
+      "end_s": 1793421841.77373,
+      "attributes": {
+        "passed": true,
+        "best_score": -0.3133792579174042,
+        "threshold": -4.0
+      }
+    },
+    {
+      "name": "generate",
+      "start_s": 1793421841.7793822,
+      "end_s": 1793421842.134616,
+      "attributes": {
+        "model": "qwen/qwen3.8-27b",
+        "prompt_version": "answer-v1.2",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are DroneDocs, an assistant that answers questions about Indian drone regulations\n(Drone Rules 2021 and amendments) and the ArduPilot / PX4 autopilot documentation.\nRules:\n1. Use ONLY the context passages below. Never use outside knowledge.\n2. After every sentence that states a fact, cite the supporting passage id(s) in square\n   brackets exactly as given, e.g. [drone_rules_2021.pdf#c012]. Do not invent ids.\n3. If the passages do not contain the answer, reply with exactly: INSUFFICIENT_EVIDENCE\n4. Be concise: 1-4 sentences. Quote numbers, parameter names and rule numbers exactly."
+          },
+          {
+            "role": "user",
+            "content": "Context passages:\n[px4_advanced_config_prearm_arm_disarm.md#c004] (source: px4_advanced_config_prearm_arm_disarm.md, section: Arm, Disarm, Prearm Configuration > Pre-Arm Checks (+3 more))\nthe current list using the Events interface.\nThe list is also sent out when the GCS connects.\nEffectively the GCS knows the status of pre-arm checks immediately, both when disarmed and armed.\n\nThe client implementation is in libevents:\n\n- libevents > Event groups\n- health_and_arming_checks.h\n\nQGC implementation: HealthAndArmingCheckReport.cc.\n\nPX4 also emits a subset of the arming check information in the SYS_STATUS message (see MAV_SYS_STATUS_SENSOR).\n\nThe arming sequence depends on whether or not there is a _safety switch_, and is controlled by the parameter COM_SAFETY_MODE. Changes to the parameter only take effect after a reboot.\n\nWhen disarmed (or pre-armed), the safety state can either be _ON_ (a.k.a. _SAFE_), or _OFF_ (a.k.a. _DANGEROUS_). When it is _ON_, arming will always be prevented. When it is _OFF_, the vehicle can be armed for as long as the pre-arm checks have passed.\n\nAdditionally, the COM_PREARM_MODE parameter defines when/if pre-arm mode is enabled (\"safe\"/non-throttling actuators are able to move):\n\n- `Disabled` (Default): Pre-arm mode disabled (there is no stage where only non-throttling actuators are enabled).\n- `When safety off`: Pre-arm mode is enabled when safety is turned off.\n- `Always`: Pre-arm mode is enabled from power up.\n\nThe sections below detail the startup sequences for the different configurations of COM_SAFETY_MODE and COM_PREARM_MODE.\n\nThe default configuration does not impose any additional safety measures. Arming is possible as soon as the rest of the system is ready.\n\nThe startup sequence is:\n\n1. Power-up.\n - All actuators locked into disarmed position\n - System safety is off: Arming possible once the other pre-arm checks pass.\n1. Arm command is issued.\n - The system is armed.\n - All motors and actuators can move.\n\nThis configuration lets you use either the safety switch or a MAVLink command MAV_CMD_DO_SET_SAFETY_SWITCH_STATE to turn safety off. Note that sending the corresponding MAVLink command with SAFETY*SWITCH_STATE_SAFE also lets you turn safety back on, but the physical switch does \\_not* allow to go back to a safe state.\n\nThe startup sequence is:\n\n[px4_advanced_config_prearm_arm_disarm.md#c003] (source: px4_advanced_config_prearm_arm_disarm.md, section: Arm, Disarm, Prearm Configuration > Auto-Disarming (+2 more))\n-armed state.\nThis parameter has no effect when `COM_SAFETY_MODE` is set to `0`.\n\n| Parameter | Description |\n| COM_FORCE_SAFETY | Re-enable safety when the vehicle disarms. Default: `0` (Disabled). |\n\nThe vehicle can be configured to arm automatically on boot once all preflight checks pass,\nusing the `COM_ARM_ON_BOOT` parameter. For safety, PX4 enforces a minimum 5-second delay after boot before attempting to arm.\n\nOnce armed this way, the vehicle will not re-arm automatically after a manual disarm.\n\nThe parameter value is read once at boot.\nChanging it while the system is running has no effect until the next reboot.\n\nUse with caution.\nA vehicle that arms automatically can spin up motors and actuators without any operator gesture.\nEnsure the vehicle is in a safe state before powering on.\n\n| Parameter | Description |\n| COM_ARM_ON_BOOT | Arm automatically once preflight checks pass after boot. Default: `0` (Disabled). |\n\nTo reduce accidents, vehicles are only allowed to arm certain conditions are met (some of which are configurable).\nArming is prevented if:\n\n- The vehicle is not in a \"healthy\" state.\n For example it is not calibrated, or is reporting sensor errors.\n- The vehicle still has its safety state set to _ON_. This could for instance be a safety switch that has not been engaged.\n- The vehicle has a remote ID that is unhealthy or otherwise not ready\n- A VTOL vehicle is in fixed-wing mode (by default).\n- The current mode requires an adequate global position estimate but the vehicle does not have GPS lock.\n- Many more (see arming/disarming safety settings for more information).\n\nThe current failed checks can be viewed in QGroundControl (v4.2.0 and later) Arming Check Report (see also Fly View > Toolbar > Flight Status).\n\nNote that internally PX4 runs arming checks at 10Hz.\nA list of the failed checks is kept, and if the list changes PX4 emits the current list using the Events interface.\nThe list is also sent out when the GCS connects.\nEffectively the GCS knows the status of pre-arm checks immediately, both when disarmed and armed.\n\nThe client implementation is in libevents:\n\n- libevents > Event groups\n- health_and_arming_checks.h\n\nQGC implementation: HealthAndArmingCheckReport.cc.\n\nPX4 also emits a subset of the arming check information in the SYS_STATUS message (see MAV_SYS_STATUS_SENSOR).\n\n[px4_advanced_config_prearm_arm_disarm.md#c000] (source: px4_advanced_config_prearm_arm_disarm.md, section: Arm, Disarm, Prearm Configuration (+1 more))\nVehicles may have moving parts, some of which are potentially dangerous when powered (in particular motors and propellers)!\n\nTo reduce the chance of accidents, PX4 has explicit state(s) for powering the vehicle components:\n\n- **Disarmed:** There is no power to motors or actuators.\n- **Pre-armed:** Motors/propellers are locked but actuators for non-dangerous electronics are powered (e.g. ailerons, flaps etc.).\n- **Armed:** Vehicle is fully powered. Motors/propellers may be turning (dangerous!)\n\nGround stations may display _disarmed_ for pre-armed vehicles.\nWhile not technically correct for pre-armed vehicles, it is \"safe\".\n\nUsers can control progression though these states using a safety switch on the vehicle (optional) _and_ an arming switch/button, arming gesture, or _MAVLink command_ on the ground controller:\n\n- A _safety switch_ is a control _on the vehicle_ that must be engaged before the vehicle can be armed, and which may also prevent pre-arming (depending on the configuration).\n Commonly the safety switch is integrated into a GPS unit, but it may also be a separate physical component.\n\nA vehicle that is armed is potentially dangerous.\n The safety switch is an additional mechanism that prevents arming from happening by accident.\n\n- An _arming switch_ is a switch or button _on an RC controller_ that can be used to arm the vehicle and start motors (provided arming is not prevented by a safety switch).\n- An _arming gesture_ is a stick movement _on an RC controller_ that can be used as an alternative to an arming switch.\n- MAVLink commands can also be sent by a ground control station to pre-arm, arm, or disarm a vehicle.\n\nPX4 will also automatically disarm the vehicle if it does not takeoff within a certain amount of time after arming, and if it is not manually disarmed after landing.\nThis reduces the amount of time where an armed (and therefore dangerous) vehicle is on the ground.\n\nPX4 allows you to configure how pre-arming, arming and disarming work using parameters (which can be edited in _QGroundControl_ via the parameter editor), as described in the following sections.\n\nArming/disarming parameters can be found in Parameter Reference > Commander (search for `COM_ARM_*` and `COM_DISARM_*`).\n\nBy default, the vehicle is armed and disarmed by moving RC throttle/yaw sticks to particular extremes and holding them for 1 second.\n\n- **Arming:** Throttle minimum, yaw maximum\n- **Disarming:** Throttle minimum, yaw minimum\n\n\nQuestion: At what rate does PX4 run arming checks internally?\n\nAnswer (with [chunk_id] citations, or INSUFFICIENT_EVIDENCE):\n"
+          }
+        ],
+        "response": "PX4 runs arming checks internally at a rate of 10Hz [px4_advanced_config_prearm_arm_disarm.md#c003].",
+        "prompt_tokens": 1963,
+        "completion_tokens": 32,
+        "retries": 0,
+        "cached": false
+      }
+    },
+    {
+      "name": "validate_citations",
+      "start_s": 1793421842.1353061,
+      "end_s": 1793421842.1355963,
+      "attributes": {
+        "status": "ok",
+        "cited_ids": [
+          "px4_advanced_config_prearm_arm_disarm.md#c003"
+        ],
+        "valid_ids": [
+          "px4_advanced_config_prearm_arm_disarm.md#c003"
+        ],
+        "invalid_ids": [],
+        "n_sentences": 1,
+        "n_cited_sentences": 1,
+        "coverage": 1.0
+      }
+    }
+  ],
+  "tags": {
+    "source": "replay-backfill"
+  }
+}

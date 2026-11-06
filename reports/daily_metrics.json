@@ -1,0 +1,221 @@
+{
+  "buckets": [
+    {
+      "bucket": "2026-10-31",
+      "requests": 8,
+      "prompt_versions": [
+        "answer-v1.2"
+      ],
+      "cost_per_request_usd": 0.0014674,
+      "cost_total_usd": 0.0117392,
+      "tokens_per_request": 1666.25,
+      "citation_coverage": 1.0,
+      "grounded_rate": 0.75,
+      "refusal_rate": 0.25,
+      "unsupported_rate": 0.0,
+      "error_rate": 0.0,
+      "failure_rate": 0.0,
+      "latency_retrieve_p50_ms": 236.51999999999998,
+      "latency_retrieve_p95_ms": 2358.8144999999986,
+      "latency_rerank_p50_ms": 1540.745,
+      "latency_rerank_p95_ms": 2395.6644999999994,
+      "latency_generate_p50_ms": 1626.62,
+      "latency_generate_p95_ms": 14299.948999999999,
+      "latency_total_p50_ms": 4780.43,
+      "latency_total_p95_ms": 16083.905499999997
+    },
+    {
+      "bucket": "2026-11-01",
+      "requests": 8,
+      "prompt_versions": [
+        "answer-v1.2"
+      ],
+      "cost_per_request_usd": 0.0012973000000000001,
+      "cost_total_usd": 0.010378400000000001,
+      "tokens_per_request": 1460.625,
+      "citation_coverage": 1.0,
+      "grounded_rate": 0.625,
+      "refusal_rate": 0.375,
+      "unsupported_rate": 0.0,
+      "error_rate": 0.0,
+      "failure_rate": 0.0,
+      "latency_retrieve_p50_ms": 176.65,
+      "latency_retrieve_p95_ms": 434.2959999999998,
+      "latency_rerank_p50_ms": 1411.09,
+      "latency_rerank_p95_ms": 2178.8269999999998,
+      "latency_generate_p50_ms": 12945.755000000001,
+      "latency_generate_p95_ms": 14861.3625,
+      "latency_total_p50_ms": 14165.48,
+      "latency_total_p95_ms": 16360.694
+    },
+    {
+      "bucket": "2026-11-02",
+      "requests": 8,
+      "prompt_versions": [
+        "answer-v1.2"
+      ],
+      "cost_per_request_usd": 0.0016772,
+      "cost_total_usd": 0.0134176,
+      "tokens_per_request": 1907.5,
+      "citation_coverage": 1.0,
+      "grounded_rate": 0.875,
+      "refusal_rate": 0.125,
+      "unsupported_rate": 0.0,
+      "error_rate": 0.0,
+      "failure_rate": 0.0,
+      "latency_retrieve_p50_ms": 181.84,
+      "latency_retrieve_p95_ms": 217.051,
+      "latency_rerank_p50_ms": 1544.815,
+      "latency_rerank_p95_ms": 2359.5009999999993,
+      "latency_generate_p50_ms": 13764.365,
+      "latency_generate_p95_ms": 14056.909,
+      "latency_total_p50_ms": 15431.400000000001,
+      "latency_total_p95_ms": 15774.5495
+    },
+    {
+      "bucket": "2026-11-03",
+      "requests": 8,
+      "prompt_versions": [
+        "answer-v1.3-concise"
+      ],
+      "cost_per_request_usd": 0.0010401,
+      "cost_total_usd": 0.0083208,
+      "tokens_per_request": 1211.125,
+      "citation_coverage": 0.0,
+      "grounded_rate": 0.0,
+      "refusal_rate": 0.25,
+      "unsupported_rate": 0.75,
+      "error_rate": 0.0,
+      "failure_rate": 0.75,
+      "latency_retrieve_p50_ms": 158.845,
+      "latency_retrieve_p95_ms": 354.89149999999984,
+      "latency_rerank_p50_ms": 1482.655,
+      "latency_rerank_p95_ms": 1883.54,
+      "latency_generate_p50_ms": 10594.98,
+      "latency_generate_p95_ms": 11458.4175,
+      "latency_total_p50_ms": 10801.725,
+      "latency_total_p95_ms": 13518.2015
+    },
+    {
+      "bucket": "2026-11-04",
+      "requests": 8,
+      "prompt_versions": [
+        "answer-v1.2",
+        "answer-v1.3-concise"
+      ],
+      "cost_per_request_usd": 0.0012529,
+      "cost_total_usd": 0.0100232,
+      "tokens_per_request": 1458.125,
+      "citation_coverage": 1.0,
+      "grounded_rate": 0.5,
+      "refusal_rate": 0.375,
+      "unsupported_rate": 0.125,
+      "error_rate": 0.0,
+      "failure_rate": 0.125,
+      "latency_retrieve_p50_ms": 130.59,
+      "latency_retrieve_p95_ms": 215.8315,
+      "latency_rerank_p50_ms": 1427.3000000000002,
+      "latency_rerank_p95_ms": 1670.6864999999998,
+      "latency_generate_p50_ms": 12701.115,
+      "latency_generate_p95_ms": 14519.5175,
+      "latency_total_p50_ms": 13565.93,
+      "latency_total_p95_ms": 16076.863
+    },
+    {
+      "bucket": "2026-11-05",
+      "requests": 8,
+      "prompt_versions": [
+        "answer-v1.2"
+      ],
+      "cost_per_request_usd": 0.0015022,
+      "cost_total_usd": 0.0120176,
+      "tokens_per_request": 1667.25,
+      "citation_coverage": 1.0,
+      "grounded_rate": 0.75,
+      "refusal_rate": 0.25,
+      "unsupported_rate": 0.0,
+      "error_rate": 0.0,
+      "failure_rate": 0.0,
+      "latency_retrieve_p50_ms": 190.345,
+      "latency_retrieve_p95_ms": 396.9209999999999,
+      "latency_rerank_p50_ms": 1127.0349999999999,
+      "latency_rerank_p95_ms": 1608.8279999999995,
+      "latency_generate_p50_ms": 12743.69,
+      "latency_generate_p95_ms": 15155.82,
+      "latency_total_p50_ms": 13999.795,
+      "latency_total_p95_ms": 16528.9015
+    }
+  ],
+  "anomalies": [
+    {
+      "bucket": "2026-11-03",
+      "metric": "failure_rate",
+      "value": 0.75,
+      "baseline": 0.0,
+      "reason": "+0.75 abs vs baseline 0.00",
+      "prompt_versions": [
+        "answer-v1.3-concise"
+      ]
+    },
+    {
+      "bucket": "2026-11-03",
+      "metric": "citation_coverage",
+      "value": 0.0,
+      "baseline": 1.0,
+      "reason": "-1.00 abs vs baseline 1.00",
+      "prompt_versions": [
+        "answer-v1.3-concise"
+      ]
+    }
+  ],
+  "by_prompt_version": [
+    {
+      "bucket": "answer-v1.2",
+      "requests": 38,
+      "prompt_versions": [
+        "answer-v1.2"
+      ],
+      "cost_per_request_usd": 0.001469263157894737,
+      "cost_total_usd": 0.055832,
+      "tokens_per_request": 1668.0526315789473,
+      "citation_coverage": 1.0,
+      "grounded_rate": 0.7368421052631579,
+      "refusal_rate": 0.2631578947368421,
+      "unsupported_rate": 0.0,
+      "error_rate": 0.0,
+      "failure_rate": 0.0,
+      "latency_retrieve_p50_ms": 181.45,
+      "latency_retrieve_p95_ms": 487.8274999999999,
+      "latency_rerank_p50_ms": 1445.725,
+      "latency_rerank_p95_ms": 2522.7389999999996,
+      "latency_generate_p50_ms": 12647.77,
+      "latency_generate_p95_ms": 14969.39,
+      "latency_total_p50_ms": 13909.065,
+      "latency_total_p95_ms": 16484.199
+    },
+    {
+      "bucket": "answer-v1.3-concise",
+      "requests": 10,
+      "prompt_versions": [
+        "answer-v1.3-concise"
+      ],
+      "cost_per_request_usd": 0.0010064800000000001,
+      "cost_total_usd": 0.0100648,
+      "tokens_per_request": 1158.1,
+      "citation_coverage": 0.0,
+      "grounded_rate": 0.0,
+      "refusal_rate": 0.3,
+      "unsupported_rate": 0.7,
+      "error_rate": 0.0,
+      "failure_rate": 0.7,
+      "latency_retrieve_p50_ms": 150.97500000000002,
+      "latency_retrieve_p95_ms": 330.0404999999997,
+      "latency_rerank_p50_ms": 1431.775,
+      "latency_rerank_p95_ms": 1866.6,
+      "latency_generate_p50_ms": 10862.65,
+      "latency_generate_p95_ms": 11434.361,
+      "latency_total_p50_ms": 10801.725,
+      "latency_total_p95_ms": 13389.030499999999
+    }
+  ]
+}
