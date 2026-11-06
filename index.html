@@ -1,0 +1,460 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RAG Observability &amp; Regression Gating · Rakesh Burla</title>
+<meta name="description" content="RAG Observability &amp; Regression Gating — AI engineering portfolio project by Rakesh Burla">
+<style>
+:root{--bg:#0b0f17;--card:#121826;--fg:#e6e9ef;--mut:#9aa4b2;--acc:#5eead4;--line:#243044}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 -apple-system,Segoe UI,Inter,Roboto,sans-serif}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#0f1625,#0b0f17)}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:22px 0;flex-wrap:wrap}
+.brand{font-weight:700;font-size:1.15rem}.brand small{display:block;color:var(--mut);font-weight:400;font-size:.85rem}
+.btn{display:inline-block;padding:9px 16px;border:1px solid var(--acc);color:var(--acc);border-radius:8px;text-decoration:none;font-weight:600}
+.btn:hover{background:var(--acc);color:#04201b}
+main{padding:28px 0 60px}h1,h2,h3{line-height:1.25}h1{font-size:2rem}h2{margin-top:2.2em;padding-bottom:.3em;border-bottom:1px solid var(--line)}
+a{color:var(--acc)}code{background:#1b2333;padding:.1em .35em;border-radius:5px;font-size:.92em}
+pre{background:var(--card);border:1px solid var(--line);padding:14px;border-radius:10px;overflow:auto}pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;margin:1em 0}th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}th{background:var(--card)}
+img{max-width:100%;border-radius:10px;background:#fff}blockquote{border-left:3px solid var(--acc);margin:0;padding:.2em 1em;color:var(--mut)}
+pre.mermaid{background:#fff;color:#000}
+footer{border-top:1px solid var(--line);color:var(--mut);padding:20px 0;font-size:.9rem}
+</style></head><body>
+<header><div class="wrap top"><div class="brand">RAG Observability &amp; Regression Gating<small>AI engineering portfolio · Rakesh Burla</small></div>
+<div><a class="btn" href="https://github.com/burlarakesh1458-sys/rag-observability-gating">View code on GitHub</a></div></div></header>
+<main class="wrap"><h1
+id="rag-observability-tracing-quality-slos-and-a-ci-regression-gate-for-a-production-rag">RAG
+Observability: tracing, quality SLOs and a CI regression gate for a
+production RAG</h1>
+<p>This repo adds an observability layer to the DroneDocs RAG system
+from <a href="https://github.com/burlarakesh1458-sys/rag-observability-gating/blob/main/01-production-rag"><code>01-production-rag</code></a>:
+cited Q&amp;A over Indian drone regulations and ArduPilot/PX4 docs. It
+is built to answer one question:</p>
+<blockquote>
+<p><em>"Quality degraded last Tuesday. What happened?"</em></p>
+</blockquote>
+<p>It answers by pulling up the dashboard, pointing at the anomaly and
+walking through the root cause (see the <a
+href="https://github.com/burlarakesh1458-sys/rag-observability-gating/blob/main/docs/incident-2026-11-03.md">incident write-up</a>). The same
+golden set then gates every PR, so that change can't ship again.</p>
+<p><img src="docs/dashboard.png" alt="dashboard" /></p>
+<h2 id="the-problem">The problem</h2>
+<p>A RAG system rarely fails by crashing. It fails quietly: a prompt
+edit drops the citation rule, a retriever change surfaces worse chunks,
+or a model swap doubles cost. Latency and HTTP-error monitors stay green
+through all of it. You need to see <strong>inside</strong> each request
+(which chunks, what rerank order, what prompt, what answer, how many
+tokens) and to track <strong>quality</strong> signals over time, not
+just uptime.</p>
+<h2 id="architecture">Architecture</h2>
+<pre class="mermaid">flowchart LR
+    subgraph RAG[&quot;DroneDocs RAG (vendored, unmodified)&quot;]
+        R[retrieve&lt;br/&gt;BM25 + vector + RRF] --&gt; RR[rerank&lt;br/&gt;cross-encoder] --&gt; G[evidence gate] --&gt; L[generate&lt;br/&gt;versioned prompt] --&gt; V[validate citations]
+    end
+    R &amp; RR &amp; G &amp; L &amp; V -- on_stage / on_result --&gt; T[RAGTracer&lt;br/&gt;one trace per request,&lt;br/&gt;one span per stage]
+    T --&gt; J[(traces/*.jsonl&lt;br/&gt;full trace docs)]
+    T --&gt; O[OTel spans&lt;br/&gt;GenAI + Langfuse attrs]
+    O -- OTLP/HTTP --&gt; LF[Langfuse&lt;br/&gt;self-hosted / cloud]
+    O --&gt; OJ[(traces/otel_spans.jsonl)]
+    T --&gt; S[(SQLite metrics&lt;br/&gt;1 row / request)]
+    S --&gt; A[analytics&lt;br/&gt;p50/p95, cost, coverage,&lt;br/&gt;failure + refusal rates,&lt;br/&gt;anomaly vs trailing median]
+    A --&gt; D[Streamlit dashboard&lt;br/&gt;+ PNG renderer]
+    A --&gt; API[/FastAPI /metrics/daily/]
+    GS[golden set&lt;br/&gt;12-item CI subset] --&gt; GATE[ragobs.gate&lt;br/&gt;floor + max-drop vs baseline]
+    GATE -- exit 1 --&gt; CI[GitHub Actions&lt;br/&gt;blocks the PR]</pre>
+<p>The RAG package exposes observer hooks, so the tracing layer has no
+tracing-vendor dependency and the RAG code is vendored untouched
+(<code>vendor/dronedocs-rag</code>, re-synced with
+<code>scripts/sync_vendor.sh</code>).</p>
+<h2 id="features">Features</h2>
+<p><strong>Phase 1: tracing every step.</strong> For each request, the
+trace records:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Span</th>
+<th>Captured</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>retrieve</code></td>
+<td>vector hits, BM25 hits and the RRF-fused list (ids, scores,
+sources)</td>
+</tr>
+<tr class="even">
+<td><code>rerank</code></td>
+<td>cross-encoder order with each chunk's pre-rerank position</td>
+</tr>
+<tr class="odd">
+<td><code>evidence_gate</code></td>
+<td>pass/fail, best score, threshold</td>
+</tr>
+<tr class="even">
+<td><code>generate</code></td>
+<td>model, <strong>prompt version</strong>, the exact final prompt
+messages, raw response, prompt/completion tokens, retries, cost</td>
+</tr>
+<tr class="odd">
+<td><code>validate_citations</code></td>
+<td>cited / valid / invalid chunk ids, sentences vs cited sentences,
+coverage</td>
+</tr>
+</tbody>
+</table>
+<p>Traces are written three ways: as JSONL documents (always on, no
+infrastructure), as OpenTelemetry spans following the GenAI semantic
+conventions plus Langfuse attributes
+(<code>langfuse.observation.type=generation</code>, input/output,
+usage), and over OTLP/HTTP to Langfuse when
+<code>LANGFUSE_PUBLIC_KEY</code>/<code>LANGFUSE_SECRET_KEY</code> are
+set (or to any collector via <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>).
+<code>docker-compose.langfuse.yml</code> runs self-hosted Langfuse v3. A
+real trace: <a
+href="https://github.com/burlarakesh1458-sys/rag-observability-gating/blob/main/traces/sample_trace.json"><code>traces/sample_trace.json</code></a>.</p>
+<p><strong>Phase 2: quality metrics over time</strong>
+(<code>src/ragobs/analytics.py</code>), per day or per hour:</p>
+<ul>
+<li>latency p50 <strong>and</strong> p95 per stage (retrieve / rerank /
+generate / total). Averages hide the tail.</li>
+<li>cost per request in USD from token usage x a pricing table
+(<code>configs/observability.yaml</code>)</li>
+<li>citation coverage (share of answer sentences with a valid citation)
+and grounded-answer rate</li>
+<li>failure rate = errors + answers the citation validator rejected;
+refusal rate (declined for lack of evidence) tracked separately</li>
+<li>anomaly flags: each metric vs. the median of the previous 3 days,
+with per-metric rules</li>
+<li>a split by prompt version, which is what finds root causes</li>
+</ul>
+<p><strong>Phase 3: regression gating</strong>
+(<code>src/ragobs/gate.py</code>,
+<code>.github/workflows/regression-gate.yml</code>): every PR runs a
+stratified 12-question golden subset through the <em>instrumented</em>
+pipeline with the prompt/config in that commit. The build fails if a key
+metric falls below its hard floor or drops more than
+<code>max_drop</code> below <code>baselines/eval_baseline.json</code>.
+Prompts and configs are versioned next to the code, so a prompt edit is
+gated exactly like a code change. The gate writes a Markdown table to
+the job summary.</p>
+<h2 id="quickstart">Quickstart</h2>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> install-dev</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> .env.example .env                 <span class="co"># LLM_API_KEY (Groq) ; optional Langfuse keys</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> ingest                          <span class="co"># build the vendored RAG index</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> replay                          <span class="co"># 48 real requests over a simulated 6-day timeline (incl. the incident)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> charts                          <span class="co"># docs/dashboard.png, docs/regression_gate.png, reports/daily_metrics.json</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> dashboard                       <span class="co"># interactive Streamlit dashboard on :8501 (drill into any trace)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> gate                            <span class="co"># CI regression gate on the 12-item subset (exit 1 on regression)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> test                            <span class="co"># offline unit tests (fake index/reranker/LLM, local OTLP collector)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># optional: self-hosted Langfuse</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> langfuse-up                     <span class="co"># UI on :3000; set LANGFUSE_PUBLIC_KEY/SECRET_KEY in .env, re-run make replay</span></span></code></pre></div>
+<h2 id="configuration-configsobservabilityyaml">Configuration
+(<code>configs/observability.yaml</code>)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rag</code></td>
+<td>vendored settings file, production prompt
+(<code>answer_v1.yaml</code> = <code>answer-v1.2</code>), generator
+<code>qwen/qwen3.8-27b</code>, gate judge
+<code>openai/gpt-oss-120b</code> (a different model family), deployment
+overrides (<code>rerank.top_n: 3</code>)</td>
+</tr>
+<tr class="even">
+<td><code>tracing</code></td>
+<td>JSONL / OTel span file / OTLP export, Langfuse host, prompt capture,
+attribute size cap</td>
+</tr>
+<tr class="odd">
+<td><code>pricing</code></td>
+<td>USD per 1M tokens per model (Groq list prices: gpt-oss-20b <span
+class="math inline">0.075/</span>0.30, gpt-oss-120b <span
+class="math inline">0.15/</span>0.60, qwen3.8-27b <span
+class="math inline">0.80/</span>4.00)</td>
+</tr>
+<tr class="even">
+<td><code>anomaly</code></td>
+<td>3-day trailing window; rules: failure_rate +0.15 abs, refusal_rate
++0.20 abs, citation_coverage -0.15 abs, total p95 latency +75%,
+cost/request +50%</td>
+</tr>
+<tr class="odd">
+<td><code>regression_gate</code></td>
+<td>baseline file, per-metric <code>floor</code> +
+<code>max_drop</code>, the 12-item CI subset</td>
+</tr>
+</tbody>
+</table>
+<h2 id="results-all-measured-in-this-repo">Results (all measured in this
+repo)</h2>
+<h3 id="48-request-replay-with-a-real-incident">48-request replay with a
+real incident</h3>
+<p><code>ragobs.replay --backfill</code> sent 48 real questions (golden
+questions plus user-style paraphrases and off-topic questions) through
+the full pipeline with real Groq calls. Only the timestamps are
+simulated, spread over Sat 10-31 to Thu 11-05 IST (8/day). On
+<strong>Tue 11-03 10:00</strong> the replay deploys
+<code>answer-v1.3-concise</code>, a "token diet" prompt, and rolls it
+back <strong>Wed 11-04 11:00</strong>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Prompt</th>
+<th>Requests</th>
+<th>Citation coverage</th>
+<th>Grounded answers</th>
+<th>Failure (unsupported) rate</th>
+<th>Tokens / req</th>
+<th>Cost / req</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>answer-v1.2</code></td>
+<td>38</td>
+<td><strong>1.00</strong></td>
+<td>74%</td>
+<td><strong>0.00</strong></td>
+<td>1,668</td>
+<td>$0.00147</td>
+</tr>
+<tr class="even">
+<td><code>answer-v1.3-concise</code></td>
+<td>10</td>
+<td><strong>0.00</strong></td>
+<td>0%</td>
+<td><strong>0.70</strong></td>
+<td>1,158</td>
+<td>$0.00101</td>
+</tr>
+</tbody>
+</table>
+<p>The anomaly detector flagged exactly one day and exactly the right
+two metrics:</p>
+<pre><code>2026-11-03 failure_rate       +0.75 abs vs baseline 0.00   [&#39;answer-v1.3-concise&#39;]
+2026-11-03 citation_coverage  -1.00 abs vs baseline 1.00   [&#39;answer-v1.3-concise&#39;]</code></pre>
+<p>Error rate was 0.00 every day, so a classic error-rate alert would
+have stayed silent. Total replay cost was <strong>$0.066</strong> for
+74,967 tokens. Root cause and timeline: <a
+href="https://github.com/burlarakesh1458-sys/rag-observability-gating/blob/main/docs/incident-2026-11-03.md"><code>docs/incident-2026-11-03.md</code></a>.</p>
+<h3 id="ci-regression-gate-baseline-vs-the-regressed-prompt">CI
+regression gate: baseline vs. the regressed prompt</h3>
+<p><img src="docs/regression_gate.png" alt="gate" /></p>
+<table>
+<thead>
+<tr class="header">
+<th>Metric (floor / max drop)</th>
+<th><code>answer-v1.2</code> (baseline)</th>
+<th><code>answer-v1.3-concise</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>faithfulness (0.80 / 0.05)</td>
+<td>1.000</td>
+<td>n/a: no answer survived validation, FAIL</td>
+</tr>
+<tr class="even">
+<td>answer_relevancy (0.70 / 0.10)</td>
+<td>0.750</td>
+<td>0.000, FAIL</td>
+</tr>
+<tr class="odd">
+<td>citation_accuracy (0.80 / 0.10)</td>
+<td>1.000</td>
+<td>n/a, FAIL</td>
+</tr>
+<tr class="even">
+<td>refusal_correctness (0.75 / 0.10)</td>
+<td>0.800</td>
+<td>0.167, FAIL</td>
+</tr>
+<tr class="odd">
+<td>context_recall (0.70 / 0.10)</td>
+<td>0.875</td>
+<td>0.900, pass (retrieval untouched)</td>
+</tr>
+<tr class="even">
+<td><strong>gate</strong></td>
+<td><strong>PASS</strong> (exit 0)</td>
+<td><strong>FAIL</strong> (exit 1)</td>
+</tr>
+</tbody>
+</table>
+<p>Reports: <code>reports/gate_answer-v1.2_ci.json</code>,
+<code>reports/gate_answer-v1.3-concise_ci.json</code>.</p>
+<h3 id="latency-replay-answer-v12">Latency (replay,
+<code>answer-v1.2</code>)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Stage</th>
+<th>p50</th>
+<th>p95</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>retrieve (hybrid, CPU)</td>
+<td>181 ms</td>
+<td>488 ms</td>
+</tr>
+<tr class="even">
+<td>rerank (cross-encoder, 2 CPUs)</td>
+<td>1,446 ms</td>
+<td>2,523 ms</td>
+</tr>
+<tr class="odd">
+<td>generate (Groq, incl. 429 backoff)</td>
+<td>12,648 ms</td>
+<td>14,969 ms</td>
+</tr>
+<tr class="even">
+<td>total</td>
+<td>13,909 ms</td>
+<td>16,484 ms</td>
+</tr>
+</tbody>
+</table>
+<p>The total is dominated by Groq <strong>free-tier rate
+limiting</strong>: 36 of 40 generation calls waited on at least one HTTP
+429 backoff. The 4 calls with no retry took 0.29-1.6 s. This is exactly
+what per-stage p50/p95 plus the <code>retries</code> attribute on the
+<code>generate</code> span exposes: the bottleneck is the provider
+quota, not retrieval or the model.</p>
+<h2 id="design-decisions-and-trade-offs">Design decisions and
+trade-offs</h2>
+<ul>
+<li><strong>Observer hooks instead of decorators in the RAG
+code.</strong> The RAG package stays vendor-neutral. Swapping Langfuse
+for Phoenix/Tempo means changing an exporter, not the pipeline.</li>
+<li><strong>JSONL + SQLite first, Langfuse optional.</strong> The
+dashboards, anomaly rules and gate work with zero infrastructure (and in
+CI). Langfuse is a drop-in OTLP destination for richer UI when it's
+available.</li>
+<li><strong>Quality metrics are first-class SLOs.</strong> Citation
+coverage and unsupported-answer rate caught the incident; latency and
+error rate didn't move.</li>
+<li><strong>Failure ≠ refusal.</strong> A correct "I can't find this in
+the docs" is a success for unanswerable questions, so refusals (no
+evidence) and failures (unsupported answer / error) are tracked
+separately.</li>
+<li><strong>Gate = floor and max-drop.</strong> Floors stop absolute
+badness; max-drop catches a slide from a good baseline that is still
+above the floor. A metric that cannot be computed (n/a) fails.</li>
+<li><strong>Small stratified CI subset (12 items).</strong> A PR run
+fits the free-tier token budget. <code>make gate-full</code> runs all
+60.</li>
+<li><strong>Simulated clock, real everything else.</strong> History is
+needed for anomaly baselines, so the replay shifts timestamps only.
+Latencies, tokens, costs, answers and refusals are all real
+measurements.</li>
+<li><strong>Judge from another model family</strong> (gpt-oss judges
+Qwen) to avoid self-preference.</li>
+</ul>
+<h2 id="what-went-wrong-and-how-i-fixed-it">What went wrong and how I
+fixed it</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Problem</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Two prompt versions served in one replay process would load the
+embedding model and cross-encoder twice on a RAM-constrained box</td>
+<td><code>shared_components</code>: pipelines share one index +
+reranker</td>
+</tr>
+<tr class="even">
+<td>Groq daily token cap (200k/model/day) hit mid-run</td>
+<td>Quota errors are reported as <strong>not evaluated</strong> instead
+of scored as failures; replay stops on quota and supports
+<code>--resume</code> (request ids are deterministic, so rows are
+overwritten, not duplicated)</td>
+</tr>
+<tr class="odd">
+<td>Deployment needed fewer tokens/request than upstream</td>
+<td><code>rag.overrides</code> in <code>observability.yaml</code>
+(<code>rerank.top_n: 3</code>, ~1.9k prompt tokens) without forking the
+vendored settings</td>
+</tr>
+<tr class="even">
+<td>Gate chart drew "0.00" for metrics that were really n/a</td>
+<td>n/a labelled explicitly; n/a fails the gate</td>
+</tr>
+<tr class="odd">
+<td>Free-text declines were counted as unsupported answers once the
+sentinel was gone</td>
+<td>Documented in the incident; it is why the refusal sentinel is part
+of the gated prompt contract</td>
+</tr>
+<tr class="even">
+<td>Upstream RAG bugs (gpt-oss <code>【】</code> citation brackets, PIB
+duplicating Drone Rules facts, OOM during eval)</td>
+<td>Fixed upstream in <code>01-production-rag</code> and
+re-vendored</td>
+</tr>
+</tbody>
+</table>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li><strong>Langfuse was not run in this environment</strong> (no Docker
+in the sandbox). The OTLP export path is tested against a local
+OTLP/HTTP collector in <code>tests/test_otlp_export.py</code>, which
+checks the endpoint path, the Basic-auth header and the span names. All
+traces here went to JSONL + SQLite.</li>
+<li><strong>The incident is staged.</strong> The prompt regression and
+its timeline were deliberately replayed. Every metric is real, but the
+timestamps are simulated and the traffic is 48 requests, not production
+volume.</li>
+<li><strong>Baseline gate scored 10 of 12 items.</strong> The judge's
+free-tier daily quota ran out on 2 answered items (<code>ap-07</code>,
+<code>px-06</code>). They are listed as <code>not_evaluated_ids</code>
+in the report, not counted as passes.</li>
+<li>Small samples: 8 requests/day means a single request moves a daily
+rate by 12.5 points. The anomaly rules use abs thresholds and a minimum
+request count for that reason.</li>
+<li>Latency numbers reflect the Groq free tier and a shared 2-CPU
+sandbox, not production hardware.</li>
+</ul>
+<h2 id="future-work">Future work</h2>
+<ul>
+<li>Run self-hosted Langfuse and add Langfuse-native scores
+(faithfulness per trace) from the offline judge.</li>
+<li>Online evaluation: sample 5% of production traffic for async
+LLM-judge faithfulness.</li>
+<li>Hourly anomaly detection with seasonality and alert routing
+(Slack/PagerDuty webhook).</li>
+<li>Per-chunk analytics: which documents are retrieved but never cited
+(stale or noisy content).</li>
+<li>Canary deploys for prompt versions, with automatic rollback on the
+citation-coverage SLO.</li>
+</ul>
+<h2 id="repo-layout">Repo layout</h2>
+<pre><code>configs/observability.yaml       tracing, pricing, anomaly rules, gate thresholds, deployment overrides
+configs/prompts/                 answer_v1.yaml (answer-v1.2, prod) + answer_v1_3_concise.yaml (regression fixture)
+src/ragobs/                      tracing, store (SQLite), analytics, cost, charts, gate, replay, instrument, api
+dashboard/app.py                 Streamlit dashboard with trace drill-down
+scripts/                         render_dashboard.py, sync_vendor.sh
+baselines/eval_baseline.json     gate baseline (answer-v1.2)
+reports/                         daily_metrics.json, gate reports, replay log
+docs/                            dashboard.png, regression_gate.png, incident-2026-11-03.md
+traces/sample_trace.json         one real trace
+vendor/dronedocs-rag/            vendored RAG package + corpus + golden set</code></pre>
+<h2 id="license">License</h2>
+<p>MIT</p>
+</main>
+<footer><div class="wrap">© 2026 Rakesh Burla · MIT License · <a href="https://github.com/burlarakesh1458-sys/rag-observability-gating">https://github.com/burlarakesh1458-sys/rag-observability-gating</a></div></footer>
+<script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";mermaid.initialize({startOnLoad:true,theme:"default"});</script>
+</body></html>
