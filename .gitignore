@@ -1,0 +1,19 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# vendored RAG: index + caches are rebuilt with `make ingest`
+vendor/dronedocs-rag/data/index/
+vendor/dronedocs-rag/.cache/
+.cache/
+
+# runtime data (regenerate with `make replay`); one real trace is committed as a sample
+data/*.sqlite
+traces/*.jsonl
+!traces/sample_trace.json
+.DS_Store

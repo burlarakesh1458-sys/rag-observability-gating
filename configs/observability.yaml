@@ -1,0 +1,57 @@
+# RAG observability layer configuration (versioned with the code).
+# Override any key with RAGOBS__<SECTION>__<KEY>=value
+
+rag:
+  # The vendored DroneDocs RAG settings file + the production prompt bundle served by this deployment.
+  settings_file: vendor/dronedocs-rag/configs/settings.yaml
+  prompt_file: configs/prompts/answer_v1.yaml
+  model: qwen/qwen3.8-27b          # production generator for this deployment (OpenAI-compatible, any provider)
+  judge_model: openai/gpt-oss-120b # offline regression-gate judge (different model family from the generator)
+  # Deployment-specific overrides of the vendored settings. top_n 3 (vs 4 upstream) keeps each request
+  # near ~1.9k prompt tokens so replay + gate fit the Groq free tier (200k tokens/day per model).
+  overrides:
+    rerank: {top_n: 3}
+
+storage:
+  sqlite_path: data/metrics.sqlite
+  trace_dir: traces                # local JSONL trace + OTel span files (always on)
+
+tracing:
+  service_name: dronedocs-rag
+  jsonl: true                      # local fallback, works with no infrastructure
+  otel_spans_jsonl: true           # OTel SDK spans serialized to traces/otel_spans.jsonl
+  # OTLP/HTTP export. Langfuse (self-hosted or cloud) ingests OTLP at <host>/api/public/otel/v1/traces.
+  # Enabled automatically when LANGFUSE_PUBLIC_KEY + LANGFUSE_SECRET_KEY are set, or when OTEL_EXPORTER_OTLP_ENDPOINT is set.
+  langfuse_host_env: LANGFUSE_HOST
+  default_langfuse_host: http://localhost:3000
+  capture_prompt: true             # store the full final prompt on the generation span
+  max_attr_chars: 20000
+
+# USD per 1M tokens. Source: https://console.groq.com/docs/models (fetched 2026-11-06).
+pricing:
+  openai/gpt-oss-120b: {input: 0.15, output: 0.60}
+  openai/gpt-oss-20b: {input: 0.075, output: 0.30}
+  qwen/qwen3.8-27b: {input: 0.80, output: 4.00}
+  default: {input: 0.0, output: 0.0}   # local / unknown models (e.g. Ollama) cost 0
+
+anomaly:
+  window_days: 3                   # trailing baseline (median of the previous N days)
+  min_requests: 5
+  rules:                           # flag a day when the metric moves past these limits vs. its baseline
+    failure_rate: {abs_increase: 0.15}
+    refusal_rate: {abs_increase: 0.20}
+    citation_coverage: {abs_drop: 0.15}
+    latency_total_p95_ms: {rel_increase: 0.75}
+    cost_per_request_usd: {rel_increase: 0.50}
+
+regression_gate:
+  baseline_file: baselines/eval_baseline.json
+  # A PR fails if a metric drops more than max_drop below the stored baseline, or below its hard floor.
+  metrics:
+    faithfulness: {max_drop: 0.05, floor: 0.80}
+    answer_relevancy: {max_drop: 0.10, floor: 0.70}
+    citation_accuracy: {max_drop: 0.10, floor: 0.80}
+    refusal_correctness: {max_drop: 0.10, floor: 0.75}
+    context_recall: {max_drop: 0.10, floor: 0.70}
+  # Stratified CI subset (keeps each PR run inside free-tier LLM rate limits). Full set: make gate-full.
+  ci_subset: [dr-01, dr-05, dr-07, dr-11, dr-13, am-01, ap-03, ap-07, px-02, px-06, na-01, na-03]

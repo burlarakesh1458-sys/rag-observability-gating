@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ragobs"
+version = "1.0.0"
+description = "Observability + regression gating for the DroneDocs RAG: OpenTelemetry/Langfuse tracing, SQLite metrics, anomaly detection, CI eval gate."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Rakesh Burla", email = "burlarakesh1458@gmail.com" }]
+requires-python = ">=3.11"
+dependencies = [
+  "dronedocs-rag",                       # vendored: pip install -e vendor/dronedocs-rag
+  "opentelemetry-sdk==1.45.2",
+  "opentelemetry-exporter-otlp-proto-http==1.45.2",
+  "matplotlib==3.11.2",
+  "PyYAML==6.0.3",
+  "python-dotenv==1.2.4",
+]
+
+[project.optional-dependencies]
+dashboard = ["streamlit==1.67.0"]
+dev = ["pytest==9.2.0", "ruff==0.17.4"]
+
+[project.scripts]
+ragobs-replay = "ragobs.replay:main"
+ragobs-gate = "ragobs.gate:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+extend-exclude = ["vendor"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF"]
+ignore = ["E501", "S101", "S311", "RUF001", "RUF002", "RUF003", "S603", "S607", "S608"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "B"]

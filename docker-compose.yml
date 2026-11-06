@@ -1,0 +1,15 @@
+# App stack: traced API + dashboard. Add Langfuse with:
+#   docker compose -f docker-compose.yml -f docker-compose.langfuse.yml up -d
+services:
+  api:
+    build: .
+    env_file: .env
+    environment:
+      LANGFUSE_HOST: http://langfuse-web:3000
+    ports: ["8000:8000"]
+    volumes: ["./data:/app/data", "./traces:/app/traces"]
+  dashboard:
+    build: .
+    command: ["streamlit", "run", "dashboard/app.py", "--server.address", "0.0.0.0"]
+    ports: ["8501:8501"]
+    volumes: ["./data:/app/data", "./traces:/app/traces"]

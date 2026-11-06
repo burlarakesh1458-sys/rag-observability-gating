@@ -1,0 +1,7 @@
+# Install CPU torch first: pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+-e vendor/dronedocs-rag
+-r vendor/dronedocs-rag/requirements.txt
+opentelemetry-sdk==1.45.2
+opentelemetry-exporter-otlp-proto-http==1.45.2
+matplotlib==3.11.2
+streamlit==1.67.0
