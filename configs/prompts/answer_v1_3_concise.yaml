@@ -1,0 +1,20 @@
+# Shipped Tue 2026-11-03 10:00 IST in PR "prompt: token diet for the answer prompt" (rolled back Wed 11:00 IST).
+# Intent: shorter answers + ~40% fewer system-prompt tokens. Side effect: the explicit
+# "cite after every sentence" and "reply INSUFFICIENT_EVIDENCE" rules were dropped.
+# Kept in the repo as the regression fixture for the CI gate and the incident write-up.
+version: answer-v1.3-concise
+description: Concise answers for mobile UI (REGRESSED - see docs/incident-2026-11-03.md)
+refusal_sentinel: "INSUFFICIENT_EVIDENCE"
+system: |
+  You are DroneDocs, a helpful assistant for drone pilots in India and ArduPilot / PX4 users.
+  Answer the user's question in one or two short, direct sentences using the context below.
+  Be confident and helpful; avoid unnecessary caveats.
+user: |
+  Context:
+  {context}
+
+  Question: {question}
+  Answer:
+context_item: |
+  [{chunk_id}] (source: {source}, {locator})
+  {text}
