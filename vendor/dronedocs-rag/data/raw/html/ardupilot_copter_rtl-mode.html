@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RTL Mode &mdash; Copter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ardupilot.css?v=ae9666d5" />
+      <link rel="stylesheet" type="text/css" href="../_static/common_theme_override.css?v=01d3cdd0" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon_copter.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=7f41d439"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/./useralerts.js?v=3014f84e"></script>
+        <script data-domain="ardupilot.org" defer="defer" src="https://plausible.ardupilot.org/js/script.outbound-links.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Simple and Super Simple Modes" href="simpleandsuper-simple-modes.html" />
+    <link rel="prev" title="PosHold Mode" href="poshold-mode.html" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2980b9" />
+  <link rel="apple-touch-icon" href="/apple-icon.png" />
+  <script src="/js/pwa.js" defer="defer"></script> 
+</head>
+
+<body class="wy-body-for-nav">    
+    <div id='cssmenu'>
+        <ul>
+           <li><a href='/ardupilot/index.html'>Home</a>
+              <ul>
+                 <li><a href='/copter/index.html'>Copter</a></li>
+                 <li><a href='/plane/index.html'>Plane</a></li>
+                 <li><a href='/rover/index.html'>Rover</a></li>
+                 <li><a href='/blimp/index.html'>Blimp</a></li>
+                 <li><a href='/sub/index.html'>Sub</a></li>
+                 <li><a href='/antennatracker/index.html'>AntennaTracker</a></li>
+                 <li><a href='/planner/index.html'>Mission Planner</a></li>
+                 <li><a href='/planner2/index.html'>APM Planner 2</a></li>
+                 <li><a href='/mavproxy/index.html'>MAVProxy</a></li>
+                 <li><a href='/dev/docs/companion-computers.html'>Companion Computers</a></li>
+                 <li><a href='/dev/index.html'>Developer</a></li>
+              </ul>
+           </li>
+           
+          
+           
+           <li><a href='https://firmware.ardupilot.org/'>Downloads</a>
+              <ul>
+                <li><a href='https://firmware.ardupilot.org/Tools/MissionPlanner/'>Mission Planner</a></li>
+                <li><a href='https://firmware.ardupilot.org/Tools/APMPlanner/'>APM Planner 2</a></li>
+                   <li><a title="Advanced User Tools" href="common-downloads_advanced_user_tools.html">Advanced User Tools</a></li>
+                   <li><a title="Developer Tools" href="common-downloads_developer_tools.html">Developer Tools</a></li>
+                   <li><a title="Firmware" href="common-downloads_firmware.html">Firmware</a></li>
+                </ul>
+           </li>
+           
+           <li><a href='https://discuss.ardupilot.org' />Community</a>
+              <ul>
+                 <li><a href='https://discuss.ardupilot.org/'>Support Forums</a></li>
+                 <li><a href='https://www.facebook.com/groups/ArduPilot.org'>Facebook</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Chat (Discord)</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Voice (Discord)</a></li>
+				 <li><a href='https://ardupilot.org/dev/docs/common-contact-us.html'>Contact us</a></li>
+				 <li><a href='https://ardupilot.org/dev/index.html#getting-involved'>Getting involved</a></li>
+                   <li><a title="Commercial Support" href="common-commercial-support.html">Commercial Support</a></li>
+                   <li><a title="Dev Team" href="common-team.html">Development Team</a></li>
+                   <li><a title="Training Centers" href="common-training-centers.html">UAS Training Centers</a></li>
+              </ul>
+           </li>
+             <li><a title="Stores" href="common-stores.html">Stores</a></li>
+
+
+           
+                        <li><a title="About" href="../index.html">About</a>
+               <ul>
+                   <li><a title="Project News" href="project-news.html">News</a></li>
+                   <li><a title="History of ArduPilot" href="common-history-of-ardupilot.html">History</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/license-gplv3.html'>License</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/trademark.html'>Trademark</a></li>
+                   <li><a title="Acknowledgments" href="common-acknowledgments.html">Acknowledgments</a></li>
+                   <li><a title="Wiki Editing Guide" href="common-wiki_editing_guide.html">Wiki Editing Guide</a></li>
+                   <li><a title="Partners Program" href="common-partners.html">Partners Program</a></li>
+               </ul>
+             </li>
+             <li><a title="Offline" href="common-offline.html">Offline</a></li>
+        </ul>
+        
+
+</div>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Copter
+              <img src="../_static/ardupilot_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="copter-introduction.html">Introduction to Copter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-autopilots.html">Choosing an Autopilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-GCS.html">Ground Control Stations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-setup.html">First Time Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flying-arducopter.html">First Flight and Tuning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="traditional-helicopters.html">Traditional Helicopters</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="traditional-helicopter-first-time-setup.html">First Time Setup</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common-install-gcs.html">Install Ground Station Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traditional-helicopter-autopilot-assembly-instructions.html">Autopilot System Assembly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-loading-firmware.html">Loading Firmware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-connect-mission-planner-autopilot.html">Connect Mission Planner to AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traditional-heli-parts-list.html">Suggested Parts List</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="traditional-helicopter-configuring-hardware.html">Configuration</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="common-basic-operation.html">Basic System Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frame-type-configuration.html">Frame Type Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-parameter-list.html">Helicopter Parameter List at a Glance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-connecting-apm.html">Configuring Servo, Motor, and RC Connections with the autopilot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-rc-calibration.html">Radio Control Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-accelerometer-calibration.html">Accelerometer Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-compass-calibration-in-mission-planner.html">Compass Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-rc-transmitter-flight-mode-configuration.html">RC Transmitter Mode Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-esc-calibration.html">ESC Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-swashplate-setup.html">Swashplate Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-tailrotor-setup.html">Tailrotor Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-rsc-setup.html">Rotor Speed Control Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-internal-rsc-governor.html">Internal Rotor Speed Governor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="failsafe-landing-page.html">Failsafe Mechanisms</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="flight-modes.html">Flight Modes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-first-flight.html">First Flights and Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="copter-flight-features.html">Flight Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dual-helicopter.html">Dual Helicopters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heliquads.html">HeliQuads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-tips.html">Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-configuration.html">ArduPilot Helicopter Ground School</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="common-mission-planning.html">Mission Planning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-when-problems-arise.html">If A Problem Arises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-advanced-configuration.html">Advanced Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-optional-hardware.html">Peripheral Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-information.html">Additional Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-user-alerts.html">User Alerts</a></li>
+</ul>
+
+          <!-- add paypal and dronecode logos -->        <div style="margin: auto; padding-left:20px; padding-right:20px; width=100%">
+
+        <hr />
+        <form style="margin:auto;" action="https://ardupilot.org/donate">
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate" />
+        </form>
+        <br>
+        <a href="common-donation.html">Individual</a>
+        <a href="common-partners.html">Partners</a>
+        <a href="https://ardupilot.org/shop">SWAG Shop</a>
+
+        <hr />
+        </div>
+          <!-- endadd paypal and dronecode logos -->
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Copter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="initial-setup.html">First Time Setup</a></li>
+          <li class="breadcrumb-item"><a href="configuring-hardware.html">Mandatory Hardware Configuration</a></li>
+          <li class="breadcrumb-item"><a href="flight-modes.html">Flight Modes</a></li>
+      <li class="breadcrumb-item active">RTL Mode</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ArduPilot/ardupilot_wiki/blob/master/copter/source/docs/rtl-mode.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rtl-mode">
+<span id="id1"></span><h1>RTL Mode<a class="headerlink" href="#rtl-mode" title="Link to this heading">¶</a></h1>
+<p>RTL mode (Return To Launch mode) navigates Copter from its current
+position to hover above the home position. The behavior of RTL mode can
+be controlled by several adjustable parameters. This page describes how
+to use and customize RTL mode.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>When RTL mode is selected, the copter will return to the home location, or if <a class="reference internal" href="common-rally-points.html#common-rally-points"><span class="std std-ref">rally points</span></a> have been setup, the closest rally point.</p>
+<p>The copter will first rise a minimum of <a class="reference external" href="https://ardupilot.org/plane/docs/parameters.html#rtl-climb-min" title="(in Plane)"><span class="xref std std-ref">RTL_CLIMB_MIN</span></a> or to  <a class="reference internal" href="parameters.html#rtl-alt-m"><span class="std std-ref">RTL_ALT_M</span></a>, whichever is higher, before returning home.  The default value for <a class="reference internal" href="parameters.html#rtl-alt-m"><span class="std std-ref">RTL_ALT_M</span></a> is 15m. Under no circumstances will this altitude be below 30cm.</p>
+<p>The altitude reference frame is set by either the rally point, if proceeding to one of those, or by <a class="reference internal" href="parameters.html#rtl-alt-type"><span class="std std-ref">RTL_ALT_TYPE</span></a> to select relative to HOME, or Terrain. If <a class="reference internal" href="parameters.html#wp-rfnd-use"><span class="std std-ref">WP_RFND_USE</span></a> = 1 and Terrain is selected, then rangefinder will be used.</p>
+<a class="reference external image-reference" href="../_images/RTL.jpg"><img alt="../_images/RTL.jpg" src="../_images/RTL.jpg" /></a>
+<p>If RTL is entered close to its return point, the altitude Copter climbs to may
+be limited to avoid an unnecessary climb and descent.  The
+<a class="reference internal" href="parameters.html#rtl-cone-slope"><span class="std std-ref">RTL_CONE_SLOPE</span></a> parameter determines the slope of an
+inverted cone centered on the return point.  The cone height is calculated as
+the distance from the return point multiplied by <code class="docutils literal notranslate"><span class="pre">RTL_CONE_SLOPE</span></code>.  For
+example, if RTL is entered 10m from the return point with the default slope of
+3, the cone limits the return altitude to 30m unless one of the minimums
+described below is higher.  With a slope of 0.5, the cone height at the same
+distance is 5m.  A value of 0 disables the cone and 0.5 is the minimum enabled
+slope.</p>
+<p>The cone only limits additional climbing; it never commands the vehicle to
+descend when RTL begins.  The return altitude will not be below the vehicle’s
+current altitude plus <a class="reference internal" href="parameters.html#rtl-climb-min-m"><span class="std std-ref">RTL_CLIMB_MIN_M</span></a>, or below the
+absolute RTL minimum of 0.3m.  For example, a vehicle entering RTL at 1.5m
+with <code class="docutils literal notranslate"><span class="pre">RTL_CLIMB_MIN_M</span></code> set to zero will remain at least 1.5m high even if the
+calculated cone height is lower.</p>
+<p>If an <a class="reference internal" href="common-geofencing-landing-page.html#common-geofencing-landing-page"><span class="std std-ref">altitude fence</span></a> has been enabled, the RTL climb/return altitude will be limited to be below the fence’s maximum altitude.</p>
+<p>By default RTL flies a direct, straight-line path back to the return point, which can breach a polygon/circular <a class="reference internal" href="common-geofencing-landing-page.html#common-geofencing-landing-page"><span class="std std-ref">fence, inclusion or exclusion zone</span></a> if the direct path happens to cross one. To have RTL instead plan a path around these horizontal fence boundaries, enable path planning with <a class="reference internal" href="parameters.html#oa-type"><span class="std std-ref">OA_TYPE</span></a> = 2 (Dijkstra’s) or 3 (Dijkstra’s with BendyRuler, which also avoids proximity sensor obstacles); see <a class="reference internal" href="common-oa-dijkstras.html#common-oa-dijkstras"><span class="std std-ref">Object Avoidance with Dijkstra’s</span></a> and <a class="reference internal" href="common-oa-dijkstrabendyruler.html#common-oa-dijkstrabendyruler"><span class="std std-ref">Object Avoidance using Dijkstra’s with BendyRuler</span></a> for setup. This applies to AUTO and GUIDED modes as well as RTL.</p>
+<p>RTL mode requires a reliable position estimate to work properly, most commonly provided by GPS and compass. Default prearm checks will ensure a 3D GPS lock with sufficient HDOP is acquired and your mag is working as expected prior to arming, if required by the selected mode and configuration during arming (ie STABILIZE could be armed without a reliable position and a switch into RTL would be refused without it). When using non-default arming checks, make sure you do have a sufficient GPS lock and / or a reliable position estimate for RTL to perform as expected.</p>
+<p>RTL will command the copter to return to the home position, meaning that
+it will return to the location where it was armed. Therefore, the home
+position is always supposed to be your copter’s actual GPS takeoff
+location, unobstructed and away from people. For Copter if you get GPS
+lock and then ARM your copter, the home position is the location the
+copter was in when it was armed. This means if you execute an RTL in
+Copter, it will return to the location where it was armed.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In RTL mode the autopilot uses a barometer which
+measures air pressure as the primary means for determining altitude
+(“Pressure Altitude”) and if the air pressure is changing in your flight
+area, the copter will follow the air pressure change rather than actual
+altitude (unless you are within 20 feet of the ground and have SONAR
+installed and enabled).</p>
+</div>
+</section>
+<section id="options-user-adjustable-parameters">
+<h2>Options (User Adjustable Parameters)<a class="headerlink" href="#options-user-adjustable-parameters" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="parameters.html#rtl-alt-m"><span class="std std-ref">RTL_ALT_M</span></a>: The
+minimum altitude the copter will move to before returning to launch.</p>
+<ul>
+<li><p>Set to zero to return at the current altitude.</p></li>
+<li><p>The return altitude can be set from 0.3 to 3000 meters.</p></li>
+<li><p>The default return altitude Default is 15 meters.</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="parameters.html#rtl-alt-final-m"><span class="std std-ref">RTL_ALT_FINAL_M</span></a>: The
+altitude the copter will move to at the final stage of “Returning to
+Launch” or after completing a Mission.</p>
+<ul>
+<li><p>Set to zero to automatically land the copter. See <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land Mode</span></a>.</p></li>
+<li><p>The final return altitude may be adjusted from 0 to 10
+meters.</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="parameters.html#rtl-loit-time"><span class="std std-ref">RTL_LOIT_TIME</span></a>:
+Time in milliseconds to hover/pause above the “Home” position before
+beginning final descent.</p>
+<ul>
+<li><p>The “Loiter” time may be adjusted from 0 to 60,000 milliseconds.</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="parameters.html#wp-yaw-behavior"><span class="std std-ref">WP_YAW_BEHAVIOR</span></a>:
+Sets how the autopilot controls the “Yaw” during Missions and RTL.</p>
+<ul>
+<li><p>0 = Never change Yaw.</p></li>
+<li><p>1 = Face Next Waypoint including facing home during RTL.</p></li>
+<li><p>2 = Face Next Waypoint except for RTL (i.e. during RTL vehicle
+will remain pointed at its last heading)</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="parameters.html#rtl-options"><span class="std std-ref">RTL_OPTIONS</span></a>:
+A bitmask of options that modify RTL mode behaviour.</p>
+<ul>
+<li><p>Bit 2 (value “4”), “Ignore Pilot Yaw”, stops the pilot’s yaw stick
+from overriding the autopilot’s yaw control while RTL is flying back
+to the return point. During the final descent/landing stage of RTL,
+pilot yaw control instead follows the <a class="reference internal" href="parameters.html#land-reposition"><span class="std std-ref">LAND_REPOSITION</span></a>
+setting (see <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land Mode</span></a>) regardless of this option.</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="parameters.html#land-spd-ms"><span class="std std-ref">LAND_SPD_MS</span></a>:
+The descent speed for the final stage of landing in centimeters per
+second.</p>
+<ul>
+<li><p>The landing speed is adjustable from 0.3 to 2 meters per
+second.</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://ardupilot.org/plane/docs/parameters.html#rtl-climb-min" title="(in Plane)"><span class="xref std std-ref">RTL_CLIMB_MIN</span></a>:
+The vehicle will climb at least this many meters at the first stage
+of the RTL.  By default this value is zero.</p></li>
+<li><p><a class="reference external" href="https://ardupilot.org/rover/docs/parameters.html#rtl-speed" title="(in Rover)"><span class="xref std std-ref">RTL_SPEED</span></a>:
+The horizontal speed (in cm/s) at which the vehicle will return to
+home.  By default this value is zero meaning it will use
+<a class="reference internal" href="parameters.html#wp-spd"><span class="std std-ref">WP_SPD</span></a>.</p></li>
+<li><p><a class="reference internal" href="parameters.html#rtl-cone-slope"><span class="std std-ref">RTL_CONE_SLOPE</span></a>:
+Defines the slope of an inverted cone above home which is used
+to limit the amount the vehicle climbs when RTL-ing from close
+to home. Low values lead to a wide cone meaning the vehicle
+will climb less, High values will lead to the vehicle climbing more.</p></li>
+</ul>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Other navigation settings also have an influence over RTL mode:</p>
+<ul>
+<li><p><a class="reference internal" href="parameters.html#wp-acc"><span class="std std-ref">WP_ACC</span></a></p></li>
+<li><p><a class="reference internal" href="parameters.html#wp-spd-dn"><span class="std std-ref">WP_SPD_DN</span></a></p></li>
+<li><p><a class="reference internal" href="parameters.html#wp-spd-up"><span class="std std-ref">WP_SPD_UP</span></a></p></li>
+</ul>
+</li>
+<li><p>To use RTL, GPS lock needs to be achieved (Blue GPS LED and Blue APM
+LED on solid not blinking) before arming and takeoff to establish the
+home or launch position.</p></li>
+<li><p>Landing and re-arming the copter will reset home, which is a great
+feature for flying at airfields.</p></li>
+<li><p>If you get lock for the first time while flying, your home will be
+set at the location of lock.</p></li>
+<li><p>If you set the <a class="reference internal" href="parameters.html#rtl-alt-m"><span class="std std-ref">RTL_ALT_M</span></a> to a number at other than 0 it will go to
+and maintain that altitude while returning.</p></li>
+<li><p>RTL uses <a class="reference internal" href="parameters.html#wp-spd"><span class="std std-ref">WP_SPD</span></a> to determine how fast it travels.</p></li>
+<li><p>Once the copter arrives at the home location the copter will pause
+for <code class="docutils literal notranslate"><span class="pre">RTL_LOIT_TIME</span></code> milliseconds, timeout (AUTO_LAND), then land.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="poshold-mode.html" class="btn btn-neutral float-left" title="PosHold Mode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simpleandsuper-simple-modes.html" class="btn btn-neutral float-right" title="Simple and Super Simple Modes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+    Questions, issues, and suggestions about this page can be raised on the <a href="https://discuss.ardupilot.org">forums</a>. Issues and suggestions may be posted on the forums or the <a href="https://github.com/ArduPilot/ardupilot_wiki/issues/new?title=RTL Mode&amp;body=[RTL Mode](https://ardupilot.org/copter/docs/rtl-mode.html)%20-%20Describe%20the%20issue/suggestion%20and%20improve%20the%20title.%20Please%20keep%20a%20link%20to%20the%20original%20article%20if%20relevant.&amp;labels=docs">Github Issue Tracker</a>.
+    <hr/>
+
+  <div role="contentinfo">
+    <p><a style="float:right;" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>&#169; Copyright 2024, ArduPilot Dev Team.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

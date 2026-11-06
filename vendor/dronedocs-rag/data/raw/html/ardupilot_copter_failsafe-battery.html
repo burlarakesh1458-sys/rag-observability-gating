@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Battery Failsafe &mdash; Copter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ardupilot.css?v=ae9666d5" />
+      <link rel="stylesheet" type="text/css" href="../_static/common_theme_override.css?v=01d3cdd0" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon_copter.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=7f41d439"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/./useralerts.js?v=3014f84e"></script>
+        <script data-domain="ardupilot.org" defer="defer" src="https://plausible.ardupilot.org/js/script.outbound-links.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GCS Failsafe" href="gcs-failsafe.html" />
+    <link rel="prev" title="Radio Failsafe" href="radio-failsafe.html" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2980b9" />
+  <link rel="apple-touch-icon" href="/apple-icon.png" />
+  <script src="/js/pwa.js" defer="defer"></script> 
+</head>
+
+<body class="wy-body-for-nav">    
+    <div id='cssmenu'>
+        <ul>
+           <li><a href='/ardupilot/index.html'>Home</a>
+              <ul>
+                 <li><a href='/copter/index.html'>Copter</a></li>
+                 <li><a href='/plane/index.html'>Plane</a></li>
+                 <li><a href='/rover/index.html'>Rover</a></li>
+                 <li><a href='/blimp/index.html'>Blimp</a></li>
+                 <li><a href='/sub/index.html'>Sub</a></li>
+                 <li><a href='/antennatracker/index.html'>AntennaTracker</a></li>
+                 <li><a href='/planner/index.html'>Mission Planner</a></li>
+                 <li><a href='/planner2/index.html'>APM Planner 2</a></li>
+                 <li><a href='/mavproxy/index.html'>MAVProxy</a></li>
+                 <li><a href='/dev/docs/companion-computers.html'>Companion Computers</a></li>
+                 <li><a href='/dev/index.html'>Developer</a></li>
+              </ul>
+           </li>
+           
+          
+           
+           <li><a href='https://firmware.ardupilot.org/'>Downloads</a>
+              <ul>
+                <li><a href='https://firmware.ardupilot.org/Tools/MissionPlanner/'>Mission Planner</a></li>
+                <li><a href='https://firmware.ardupilot.org/Tools/APMPlanner/'>APM Planner 2</a></li>
+                   <li><a title="Advanced User Tools" href="common-downloads_advanced_user_tools.html">Advanced User Tools</a></li>
+                   <li><a title="Developer Tools" href="common-downloads_developer_tools.html">Developer Tools</a></li>
+                   <li><a title="Firmware" href="common-downloads_firmware.html">Firmware</a></li>
+                </ul>
+           </li>
+           
+           <li><a href='https://discuss.ardupilot.org' />Community</a>
+              <ul>
+                 <li><a href='https://discuss.ardupilot.org/'>Support Forums</a></li>
+                 <li><a href='https://www.facebook.com/groups/ArduPilot.org'>Facebook</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Chat (Discord)</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Voice (Discord)</a></li>
+				 <li><a href='https://ardupilot.org/dev/docs/common-contact-us.html'>Contact us</a></li>
+				 <li><a href='https://ardupilot.org/dev/index.html#getting-involved'>Getting involved</a></li>
+                   <li><a title="Commercial Support" href="common-commercial-support.html">Commercial Support</a></li>
+                   <li><a title="Dev Team" href="common-team.html">Development Team</a></li>
+                   <li><a title="Training Centers" href="common-training-centers.html">UAS Training Centers</a></li>
+              </ul>
+           </li>
+             <li><a title="Stores" href="common-stores.html">Stores</a></li>
+
+
+           
+                        <li><a title="About" href="../index.html">About</a>
+               <ul>
+                   <li><a title="Project News" href="project-news.html">News</a></li>
+                   <li><a title="History of ArduPilot" href="common-history-of-ardupilot.html">History</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/license-gplv3.html'>License</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/trademark.html'>Trademark</a></li>
+                   <li><a title="Acknowledgments" href="common-acknowledgments.html">Acknowledgments</a></li>
+                   <li><a title="Wiki Editing Guide" href="common-wiki_editing_guide.html">Wiki Editing Guide</a></li>
+                   <li><a title="Partners Program" href="common-partners.html">Partners Program</a></li>
+               </ul>
+             </li>
+             <li><a title="Offline" href="common-offline.html">Offline</a></li>
+        </ul>
+        
+
+</div>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Copter
+              <img src="../_static/ardupilot_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="copter-introduction.html">Introduction to Copter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-autopilots.html">Choosing an Autopilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-GCS.html">Ground Control Stations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-setup.html">First Time Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flying-arducopter.html">First Flight and Tuning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="traditional-helicopters.html">Traditional Helicopters</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="traditional-helicopter-first-time-setup.html">First Time Setup</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common-install-gcs.html">Install Ground Station Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traditional-helicopter-autopilot-assembly-instructions.html">Autopilot System Assembly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-loading-firmware.html">Loading Firmware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-connect-mission-planner-autopilot.html">Connect Mission Planner to AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traditional-heli-parts-list.html">Suggested Parts List</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="traditional-helicopter-configuring-hardware.html">Configuration</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="common-basic-operation.html">Basic System Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frame-type-configuration.html">Frame Type Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-parameter-list.html">Helicopter Parameter List at a Glance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-connecting-apm.html">Configuring Servo, Motor, and RC Connections with the autopilot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-rc-calibration.html">Radio Control Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-accelerometer-calibration.html">Accelerometer Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-compass-calibration-in-mission-planner.html">Compass Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-rc-transmitter-flight-mode-configuration.html">RC Transmitter Mode Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-esc-calibration.html">ESC Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-swashplate-setup.html">Swashplate Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-tailrotor-setup.html">Tailrotor Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-rsc-setup.html">Rotor Speed Control Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-internal-rsc-governor.html">Internal Rotor Speed Governor</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="failsafe-landing-page.html">Failsafe Mechanisms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="flight-modes.html">Flight Modes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-first-flight.html">First Flights and Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="copter-flight-features.html">Flight Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dual-helicopter.html">Dual Helicopters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heliquads.html">HeliQuads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-tips.html">Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-configuration.html">ArduPilot Helicopter Ground School</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="common-mission-planning.html">Mission Planning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-when-problems-arise.html">If A Problem Arises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-advanced-configuration.html">Advanced Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-optional-hardware.html">Peripheral Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-information.html">Additional Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-user-alerts.html">User Alerts</a></li>
+</ul>
+
+          <!-- add paypal and dronecode logos -->        <div style="margin: auto; padding-left:20px; padding-right:20px; width=100%">
+
+        <hr />
+        <form style="margin:auto;" action="https://ardupilot.org/donate">
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate" />
+        </form>
+        <br>
+        <a href="common-donation.html">Individual</a>
+        <a href="common-partners.html">Partners</a>
+        <a href="https://ardupilot.org/shop">SWAG Shop</a>
+
+        <hr />
+        </div>
+          <!-- endadd paypal and dronecode logos -->
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Copter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="initial-setup.html">First Time Setup</a></li>
+          <li class="breadcrumb-item"><a href="configuring-hardware.html">Mandatory Hardware Configuration</a></li>
+          <li class="breadcrumb-item"><a href="failsafe-landing-page.html">Failsafe</a></li>
+      <li class="breadcrumb-item active">Battery Failsafe</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ArduPilot/ardupilot_wiki/blob/master/copter/source/docs/failsafe-battery.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="battery-failsafe">
+<span id="failsafe-battery"></span><h1>Battery Failsafe<a class="headerlink" href="#battery-failsafe" title="Link to this heading">¶</a></h1>
+<p>The battery failsafe can be configured to automatically switch the vehicle into <a class="reference internal" href="rtl-mode.html#rtl-mode"><span class="std std-ref">RTL</span></a>, <a class="reference internal" href="smartrtl-mode.html#smartrtl-mode"><span class="std std-ref">SmartRTL</span></a> or <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land</span></a> mode if the vehicle battery voltage drops below a specified voltage for 10 seconds or the estimated remaining capacity has dropped below a configurable threshold.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This failsafe requires the vehicle have a working <a class="reference internal" href="common-powermodule-landingpage.html#common-powermodule-landingpage"><span class="std std-ref">Power Module</span></a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>ArduPilot supports up to 16 batteries/power monitors (9 in standard firmware builds). The discussion below applies to those optional batteries also. Each can trigger a failsafe and each can have different actions and setup values. In addition, a group of batteries can be treated as a single unit, see <code class="docutils literal notranslate"><span class="pre">BATTx_MONITOR</span></code> = 10.</p>
+</div>
+<section id="when-the-failsafe-will-trigger">
+<h2>When the failsafe will trigger<a class="headerlink" href="#when-the-failsafe-will-trigger" title="Link to this heading">¶</a></h2>
+<p>If enabled and set-up correctly the battery failsafe will trigger if the main battery’s</p>
+<ul class="simple">
+<li><p>voltage drops below the voltage held in the <a class="reference internal" href="parameters.html#batt-low-volt"><span class="std std-ref">BATT_LOW_VOLT</span></a> parameter (or FS_BATT_VOLTAGE in older versions) for more than 10 seconds. The default voltage is 10.5 volts. If set to zero, the voltage based trigger will be disabled.</p></li>
+<li><p>remaining capacity falls below the <a class="reference internal" href="parameters.html#batt-low-mah"><span class="std std-ref">BATT_LOW_MAH</span></a> parameter (or FS_BATT_MAH in older versions) 20% of the battery’s full capacity is a good choice (i.e. “1000” for a 5000mAh battery). If set to zero, the capacity based trigger will be disabled (i.e. only voltage will be used)</p></li>
+</ul>
+</section>
+<section id="what-will-happen">
+<h2>What will happen<a class="headerlink" href="#what-will-happen" title="Link to this heading">¶</a></h2>
+<p>When the failsafe is triggered:</p>
+<ul class="simple">
+<li><p>Buzzer will play a loud low-battery alarm</p></li>
+<li><p>LEDs will flash yellow</p></li>
+<li><p>“Low Battery!” will be displayed on the ground stations HUD (if telemetry is connected)</p></li>
+</ul>
+<p>Then one of the following will happen:</p>
+<ul class="simple">
+<li><p><strong>Nothing</strong> if the vehicle is already disarmed or executing RTL or Land</p></li>
+<li><p><strong>Disarm motors</strong> if the vehicle is in Stabilize or Acro mode and the throttle is at zero OR the vehicle is landed</p></li>
+<li><p>The user configurable action held in the <a class="reference internal" href="parameters.html#batt-fs-low-act"><span class="std std-ref">BATT_FS_LOW_ACT</span></a> parameter</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>0</strong> : Warn Only - no action will be taken</p></li>
+<li><p><strong>1</strong> : Land - the vehicle will switch to <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land</span></a> mode</p></li>
+<li><p><strong>2</strong> : RTL - the vehicle will switch to <a class="reference internal" href="rtl-mode.html#rtl-mode"><span class="std std-ref">Return-to-Launch</span></a> mode if possible but if not possible (because of no good position estimate) the vehicle will <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land</span></a> (<strong>Recommended</strong>)</p></li>
+<li><p><strong>3</strong> : SmartRTL or RTL - the vehicle will switch to <a class="reference internal" href="smartrtl-mode.html#smartrtl-mode"><span class="std std-ref">SmartRTL</span></a> mode if possible, if not possible (because SmartRTL’s position buffer is full) the vehicle will switch to <a class="reference internal" href="rtl-mode.html#rtl-mode"><span class="std std-ref">RTL</span></a>. If RTL is also not possible (because of no good position estimate) the vehicle will switch to <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land</span></a></p></li>
+<li><p><strong>4</strong> : SmartRTL or Land - the vehicle will switch to <a class="reference internal" href="smartrtl-mode.html#smartrtl-mode"><span class="std std-ref">SmartRTL</span></a> mode if possible, if not possible (because SmartRTL’s position buffer is full) the vehicle will switch to <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land</span></a></p></li>
+<li><p><strong>5</strong> : Terminate - the vehicle will disarm the motors. This is a dangerous option that should not be used in most cases</p></li>
+<li><p><strong>6</strong> : Auto DO_LAND_START or RTL - the vehicle will jump to the nearest “DO_LAND_START” mission item or RTL if no “DO_LAND_START” mission item has been programmed (see <a class="reference internal" href="common-do-land-start.html#common-do-land-start"><span class="std std-ref">Using DO_LAND_START</span></a>).</p></li>
+<li><p><strong>7</strong> : Switch to <a class="reference internal" href="brake-mode.html#brake-mode"><span class="std std-ref">Brake mode</span></a> if it can, otherwise, switch to <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land</span></a>.</p></li>
+</ul>
+</div></blockquote>
+<p>As with all failsafes, the user can re-take control of the vehicle by changing the flight mode switch to another mode. The battery failsafe will not trigger again unless the two-layer failsafe is setup (see below)</p>
+<p>The <a class="reference internal" href="parameters.html#fs-options"><span class="std std-ref">FS_OPTIONS</span></a> parameter is a bitmask parameter to select one or more options that modify the standard actions of the radio, GCS, and battery failsafe. In the Mission Planner full parameter list or full parameter tree, the handy checkbox popup window is an easy way to set this (and any other bitmask) parameter. Be sure to go to Help &gt; Check Beta Updates to pull the latest parameter definitions first while connected to the internet. The <a class="reference internal" href="parameters.html#fs-options"><span class="std std-ref">FS_OPTIONS</span></a> bits are as follows:</p>
+<ul class="simple">
+<li><p>bit 0 set: Continue if in auto mode on <a class="reference internal" href="radio-failsafe.html#radio-failsafe"><span class="std std-ref">Radio Failsafe</span></a></p></li>
+<li><p>bit 1 set: Continue if in auto mode on <a class="reference internal" href="gcs-failsafe.html#gcs-failsafe"><span class="std std-ref">Ground Control Station Failsafe</span></a></p></li>
+<li><p>bit 2 set: Continue if in guided mode <a class="reference internal" href="radio-failsafe.html#radio-failsafe"><span class="std std-ref">Radio Failsafe</span></a></p></li>
+<li><p>bit 3 set: Continue if landing on any failsafe</p></li>
+<li><p>bit 4 set: Continue in pilot control on <a class="reference internal" href="gcs-failsafe.html#gcs-failsafe"><span class="std std-ref">Ground Control Station Failsafe</span></a></p></li>
+<li><p>bit 5 set: Release gripper during failsafe handling</p></li>
+<li><p>if none of the above are set, then execute the <a class="reference internal" href="parameters.html#batt-fs-low-act"><span class="std std-ref">BATT_FS_LOW_ACT</span></a> or <a class="reference internal" href="parameters.html#batt-fs-crt-act"><span class="std std-ref">BATT_FS_CRT_ACT</span></a> options as configured.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only bitmask bit 3 &amp; 5 affects actions taken during Battery failsafe. This parameter also works in conjunction with the GCS and radio failsafe, so ensure you are taking all options into account when setting this parameter.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Even if the failsafe action is set to “None” (i.e. <a class="reference internal" href="parameters.html#batt-fs-low-act"><span class="std std-ref">BATT_FS_LOW_ACT</span></a> = 0) the buzzer will buzz and the LEDs will flash yellow. To completely disable the battery failsafe set <a class="reference internal" href="parameters.html#batt-low-volt"><span class="std std-ref">BATT_LOW_VOLT</span></a> and <a class="reference internal" href="parameters.html#batt-low-mah"><span class="std std-ref">BATT_LOW_MAH</span></a> to zero.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once the battery failsafe has triggered, it cannot be reset until the autopilot is rebooted.</p>
+</div>
+</section>
+<section id="setting-up-using-mission-planner">
+<h2>Setting up using Mission Planner<a class="headerlink" href="#setting-up-using-mission-planner" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>On the <strong>INITIAL SETUP | Mandatory Hardware | Failsafe</strong> page:</p>
+<ul>
+<li><p>If the Battery section parameters are greyed out follow instructions to setup the <a class="reference internal" href="common-powermodule-landingpage.html#common-powermodule-landingpage"><span class="std std-ref">Power Module</span></a></p></li>
+<li><p>Set the “Low Battery” threshold voltage (i.e. 10.5 volts)</p></li>
+<li><p>Set the “Reserved MAH” or leave as “0” if the failsafe should never trigger based on estimated current consumed.</p></li>
+<li><p>Select the desired behavior (Land, RTL, SmartRTL, etc) from the drop-down list</p></li>
+</ul>
+</li>
+</ul>
+<a class="reference external image-reference" href="../_images/Failsafe_Battery_Setup.png"><img alt="../_images/Failsafe_Battery_Setup.png" src="../_images/Failsafe_Battery_Setup.png" /></a>
+</section>
+<section id="two-layer-failsafe">
+<h2>Two-Layer failsafe<a class="headerlink" href="#two-layer-failsafe" title="Link to this heading">¶</a></h2>
+<p>ArduPilot includes a two-layer battery failsafe. This allows setting up a follow-up action if the battery voltage or remaining capacity falls below an even lower threshold.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="parameters.html#batt-crt-volt"><span class="std std-ref">BATT_CRT_VOLT</span></a> - holds the secondary (lower) voltage threshold. Set to zero to disable.</p></li>
+<li><p><a class="reference internal" href="parameters.html#batt-crt-mah"><span class="std std-ref">BATT_CRT_MAH</span></a> - holds the secondary (lower) capacity threshold. Set to zero to disable.</p></li>
+<li><p><a class="reference internal" href="parameters.html#batt-fs-crt-act"><span class="std std-ref">BATT_FS_CRT_ACT</span></a> - holds the secondary action to take. A reasonable setup would be to have <a class="reference internal" href="parameters.html#batt-fs-low-act"><span class="std std-ref">BATT_FS_LOW_ACT</span></a> = 2 (RTL) and <a class="reference internal" href="parameters.html#batt-fs-crt-act"><span class="std std-ref">BATT_FS_CRT_ACT</span></a> = 1 (Land)</p></li>
+</ul>
+</section>
+<section id="advanced-settings">
+<h2>Advanced Settings<a class="headerlink" href="#advanced-settings" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="parameters.html#batt-fs-voltsrc"><span class="std std-ref">BATT_FS_VOLTSRC</span></a> allows configuring whether the raw battery voltage or a sag corrected voltage is used</p></li>
+<li><p><a class="reference internal" href="parameters.html#batt-low-timer"><span class="std std-ref">BATT_LOW_TIMER</span></a> can configure how long the voltage must be below the threshold for the failsafe to trigger</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BATTx_</span></code> parameters can be setup to trigger the failsafe on other batteries</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="radio-failsafe.html" class="btn btn-neutral float-left" title="Radio Failsafe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gcs-failsafe.html" class="btn btn-neutral float-right" title="GCS Failsafe" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+    Questions, issues, and suggestions about this page can be raised on the <a href="https://discuss.ardupilot.org">forums</a>. Issues and suggestions may be posted on the forums or the <a href="https://github.com/ArduPilot/ardupilot_wiki/issues/new?title=Battery Failsafe&amp;body=[Battery Failsafe](https://ardupilot.org/copter/docs/failsafe-battery.html)%20-%20Describe%20the%20issue/suggestion%20and%20improve%20the%20title.%20Please%20keep%20a%20link%20to%20the%20original%20article%20if%20relevant.&amp;labels=docs">Github Issue Tracker</a>.
+    <hr/>
+
+  <div role="contentinfo">
+    <p><a style="float:right;" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>&#169; Copyright 2024, ArduPilot Dev Team.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

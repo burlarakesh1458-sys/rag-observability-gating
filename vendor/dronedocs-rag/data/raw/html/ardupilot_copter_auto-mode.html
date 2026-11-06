@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Mode &mdash; Copter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ardupilot.css?v=ae9666d5" />
+      <link rel="stylesheet" type="text/css" href="../_static/common_theme_override.css?v=01d3cdd0" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon_copter.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=7f41d439"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/./useralerts.js?v=3014f84e"></script>
+        <script data-domain="ardupilot.org" defer="defer" src="https://plausible.ardupilot.org/js/script.outbound-links.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Brake Mode" href="brake-mode.html" />
+    <link rel="prev" title="AirMode" href="airmode.html" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2980b9" />
+  <link rel="apple-touch-icon" href="/apple-icon.png" />
+  <script src="/js/pwa.js" defer="defer"></script> 
+</head>
+
+<body class="wy-body-for-nav">    
+    <div id='cssmenu'>
+        <ul>
+           <li><a href='/ardupilot/index.html'>Home</a>
+              <ul>
+                 <li><a href='/copter/index.html'>Copter</a></li>
+                 <li><a href='/plane/index.html'>Plane</a></li>
+                 <li><a href='/rover/index.html'>Rover</a></li>
+                 <li><a href='/blimp/index.html'>Blimp</a></li>
+                 <li><a href='/sub/index.html'>Sub</a></li>
+                 <li><a href='/antennatracker/index.html'>AntennaTracker</a></li>
+                 <li><a href='/planner/index.html'>Mission Planner</a></li>
+                 <li><a href='/planner2/index.html'>APM Planner 2</a></li>
+                 <li><a href='/mavproxy/index.html'>MAVProxy</a></li>
+                 <li><a href='/dev/docs/companion-computers.html'>Companion Computers</a></li>
+                 <li><a href='/dev/index.html'>Developer</a></li>
+              </ul>
+           </li>
+           
+          
+           
+           <li><a href='https://firmware.ardupilot.org/'>Downloads</a>
+              <ul>
+                <li><a href='https://firmware.ardupilot.org/Tools/MissionPlanner/'>Mission Planner</a></li>
+                <li><a href='https://firmware.ardupilot.org/Tools/APMPlanner/'>APM Planner 2</a></li>
+                   <li><a title="Advanced User Tools" href="common-downloads_advanced_user_tools.html">Advanced User Tools</a></li>
+                   <li><a title="Developer Tools" href="common-downloads_developer_tools.html">Developer Tools</a></li>
+                   <li><a title="Firmware" href="common-downloads_firmware.html">Firmware</a></li>
+                </ul>
+           </li>
+           
+           <li><a href='https://discuss.ardupilot.org' />Community</a>
+              <ul>
+                 <li><a href='https://discuss.ardupilot.org/'>Support Forums</a></li>
+                 <li><a href='https://www.facebook.com/groups/ArduPilot.org'>Facebook</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Chat (Discord)</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Voice (Discord)</a></li>
+				 <li><a href='https://ardupilot.org/dev/docs/common-contact-us.html'>Contact us</a></li>
+				 <li><a href='https://ardupilot.org/dev/index.html#getting-involved'>Getting involved</a></li>
+                   <li><a title="Commercial Support" href="common-commercial-support.html">Commercial Support</a></li>
+                   <li><a title="Dev Team" href="common-team.html">Development Team</a></li>
+                   <li><a title="Training Centers" href="common-training-centers.html">UAS Training Centers</a></li>
+              </ul>
+           </li>
+             <li><a title="Stores" href="common-stores.html">Stores</a></li>
+
+
+           
+                        <li><a title="About" href="../index.html">About</a>
+               <ul>
+                   <li><a title="Project News" href="project-news.html">News</a></li>
+                   <li><a title="History of ArduPilot" href="common-history-of-ardupilot.html">History</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/license-gplv3.html'>License</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/trademark.html'>Trademark</a></li>
+                   <li><a title="Acknowledgments" href="common-acknowledgments.html">Acknowledgments</a></li>
+                   <li><a title="Wiki Editing Guide" href="common-wiki_editing_guide.html">Wiki Editing Guide</a></li>
+                   <li><a title="Partners Program" href="common-partners.html">Partners Program</a></li>
+               </ul>
+             </li>
+             <li><a title="Offline" href="common-offline.html">Offline</a></li>
+        </ul>
+        
+
+</div>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Copter
+              <img src="../_static/ardupilot_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="copter-introduction.html">Introduction to Copter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-autopilots.html">Choosing an Autopilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-GCS.html">Ground Control Stations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-setup.html">First Time Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flying-arducopter.html">First Flight and Tuning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="traditional-helicopters.html">Traditional Helicopters</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="traditional-helicopter-first-time-setup.html">First Time Setup</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common-install-gcs.html">Install Ground Station Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traditional-helicopter-autopilot-assembly-instructions.html">Autopilot System Assembly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-loading-firmware.html">Loading Firmware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-connect-mission-planner-autopilot.html">Connect Mission Planner to AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traditional-heli-parts-list.html">Suggested Parts List</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="traditional-helicopter-configuring-hardware.html">Configuration</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="common-basic-operation.html">Basic System Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frame-type-configuration.html">Frame Type Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-parameter-list.html">Helicopter Parameter List at a Glance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-connecting-apm.html">Configuring Servo, Motor, and RC Connections with the autopilot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-rc-calibration.html">Radio Control Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-accelerometer-calibration.html">Accelerometer Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-compass-calibration-in-mission-planner.html">Compass Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-rc-transmitter-flight-mode-configuration.html">RC Transmitter Mode Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-esc-calibration.html">ESC Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-swashplate-setup.html">Swashplate Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-tailrotor-setup.html">Tailrotor Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-rsc-setup.html">Rotor Speed Control Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-internal-rsc-governor.html">Internal Rotor Speed Governor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="failsafe-landing-page.html">Failsafe Mechanisms</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="flight-modes.html">Flight Modes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-first-flight.html">First Flights and Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="copter-flight-features.html">Flight Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dual-helicopter.html">Dual Helicopters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heliquads.html">HeliQuads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-tips.html">Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-configuration.html">ArduPilot Helicopter Ground School</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="common-mission-planning.html">Mission Planning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-when-problems-arise.html">If A Problem Arises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-advanced-configuration.html">Advanced Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-optional-hardware.html">Peripheral Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-information.html">Additional Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-user-alerts.html">User Alerts</a></li>
+</ul>
+
+          <!-- add paypal and dronecode logos -->        <div style="margin: auto; padding-left:20px; padding-right:20px; width=100%">
+
+        <hr />
+        <form style="margin:auto;" action="https://ardupilot.org/donate">
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate" />
+        </form>
+        <br>
+        <a href="common-donation.html">Individual</a>
+        <a href="common-partners.html">Partners</a>
+        <a href="https://ardupilot.org/shop">SWAG Shop</a>
+
+        <hr />
+        </div>
+          <!-- endadd paypal and dronecode logos -->
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Copter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="initial-setup.html">First Time Setup</a></li>
+          <li class="breadcrumb-item"><a href="configuring-hardware.html">Mandatory Hardware Configuration</a></li>
+          <li class="breadcrumb-item"><a href="flight-modes.html">Flight Modes</a></li>
+      <li class="breadcrumb-item active">Auto Mode</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ArduPilot/ardupilot_wiki/blob/master/copter/source/docs/auto-mode.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="auto-mode">
+<span id="id1"></span><h1>Auto Mode<a class="headerlink" href="#auto-mode" title="Link to this heading">¶</a></h1>
+<p>In Auto mode the copter will follow a pre-programmed mission script
+stored in the autopilot which is made up of navigation commands (i.e.
+waypoints) and “do” commands (i.e. commands that do not affect the
+location of the copter including triggering a camera shutter). This page
+provides an overview of  Auto mode.</p>
+<p>Information on creating a mission script, can be found on
+the <a class="reference internal" href="common-planning-a-mission-with-waypoints-and-events.html#common-planning-a-mission-with-waypoints-and-events"><span class="std std-ref">Planning a mission with waypoints and events</span></a> page.
+A full list of supported commands can be found on the <a class="reference internal" href="mission-command-list.html#mission-command-list"><span class="std std-ref">Mission Command List</span></a> page.</p>
+<p>AUTO mode incorporates the altitude control from <a class="reference internal" href="altholdmode.html#altholdmode"><span class="std std-ref">AltHold mode</span></a> and position
+control from <a class="reference internal" href="loiter-mode.html#loiter-mode"><span class="std std-ref">Loiter mode</span></a> and should not
+be attempted before these modes are flying well.  All the same
+requirements apply including ensuring that <a class="reference internal" href="common-measuring-vibration.html#common-measuring-vibration"><span class="std std-ref">vibration levels</span></a> and compass
+interference levels are acceptable and that the GPS is functioning well
+including returning an HDOP of under 1.4.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<a class="reference external image-reference" href="../_images/auto.jpg"><img alt="../_images/auto.jpg" src="../_images/auto.jpg" /></a>
+<p>AUTO mode navigates between each waypoint in a straight line and as it approaches each waypoint follows a smooth curving path towards the next waypoint (S-Curve). It controls the path as it approaches a waypoint to be within the <a class="reference internal" href="parameters.html#wp-radius-m"><span class="std std-ref">WP_RADIUS_M</span></a> of each waypoint. The speed is lowered below <a class="reference internal" href="parameters.html#wp-spd"><span class="std std-ref">WP_SPD</span></a>, as necessary, to keep the vehicle within the configured acceleration limits (<a class="reference internal" href="parameters.html#wp-acc"><span class="std std-ref">WP_ACC</span></a> and <a class="reference internal" href="parameters.html#wp-acc-cnr"><span class="std std-ref">WP_ACC_CNR</span></a>).</p>
+<p>This smooth curving path as it changes direction to the next waypoint will not occur if the next mission command after the waypoint is anything other than a normal waypoint (e.g LAND, LOITER_TURNS, RTL, etc). In these cases the copter will approach the waypoint, stop, and then proceed to the next navigation waypoint instead of smoothly curving in front of it and proceeding to that next navigation waypoint.</p>
+<p>Also, small <a class="reference internal" href="parameters.html#wp-radius-m"><span class="std std-ref">WP_RADIUS_M</span></a> values will require that the curve be very small, effectively appearing like the non-S-Curve behavior explained above.</p>
+</section>
+<section id="starting-a-mission">
+<h2>Starting a Mission<a class="headerlink" href="#starting-a-mission" title="Link to this heading">¶</a></h2>
+<p>Missions can be entered and amended through the Mission Planner’s Plan screen.  In general most missions begin with a Takeoff command, include a series of waypoints followed by a Return-To-Launch command.  Please refer to the <a class="reference internal" href="mission-command-list.html#mission-command-list"><span class="std std-ref">Mission Command List wiki page</span></a> for a list of supported commands along with a short description of each.</p>
+<p>AUTO should be set-up as one of the <a class="reference internal" href="flight-modes.html#flight-modes"><span class="std std-ref">Flight Modes</span></a> on the flight mode switch.</p>
+<p>By default the vehicle cannot be armed in Auto mode meaning the pilot must first <a class="reference internal" href="arming_the_motors.html#arming-the-motors"><span class="std std-ref">arm the motors</span></a> in another mode before switching to Auto mode.  The <a class="reference internal" href="parameters.html#auto-options"><span class="std std-ref">AUTO_OPTIONS</span></a> parameter can be used to alter this behaviour, allowing arming while in AUTO mode, and/or, allowing a mission takeoff command to start as soon as the vehicle enters AUTO mode, even if the throttle has not been raised.</p>
+<p>If starting the mission while the copter is on the ground the pilot
+should ensure the throttle is down, then switch to the Auto flight mode,
+then raise the throttle.  The moment that the throttle is raised above
+zero, the copter will begin the mission.</p>
+<p>If starting the mission while the vehicle is already flying, the mission will begin from the
+first command as soon as the vehicle is switched into Auto mode.
+If the first command in the mission is a take-off command but the
+vehicle is already above the take-off command’s altitude the take-off
+command will be considered completed and the vehicle will move onto the
+next waypoint.</p>
+<p>At any time the pilot can retake control from the autopilot by returning
+the flight mode switch to another flight mode such as Stabilize or
+Loiter.  If the pilot then switches to AUTO again, by default the mission will
+resume from the last command unless <a class="reference internal" href="parameters.html#mis-restart"><span class="std std-ref">MIS_RESTART</span></a> has been set to “1” in which case the mission will restart from the first command.</p>
+<p>During the mission the pilot’s roll, pitch and throttle inputs are
+ignored but the yaw can be overridden with the yaw stick.  This allows
+the pilot to, for example, aim the nose of the copter (which might have a
+hard mounted camera on it) as the copter flies the mission.  The
+autopilot will attempt to retake yaw control as the vehicle passes the
+next waypoint.  The <a class="reference internal" href="parameters.html#auto-options"><span class="std std-ref">AUTO_OPTIONS</span></a> param can be set to always ignore pilot yaw input.</p>
+<p>While the mission is executing a RTL, LAND, or guided command, pilot yaw
+availability is instead controlled by that flight mode’s own setting
+rather than <a class="reference internal" href="parameters.html#auto-options"><span class="std std-ref">AUTO_OPTIONS</span></a>: <a class="reference internal" href="parameters.html#rtl-options"><span class="std std-ref">RTL_OPTIONS</span></a>
+and <a class="reference internal" href="parameters.html#land-reposition"><span class="std std-ref">LAND_REPOSITION</span></a> for RTL and LAND commands (see
+<a class="reference internal" href="rtl-mode.html#rtl-mode"><span class="std std-ref">RTL Mode</span></a> and <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land Mode</span></a>), and <a class="reference internal" href="parameters.html#guid-options"><span class="std std-ref">GUID_OPTIONS</span></a>
+for a guided command (see <a class="reference internal" href="ac2_guidedmode.html#ac2-guidedmode"><span class="std std-ref">Guided Mode</span></a>).</p>
+</section>
+<section id="ending-a-mission">
+<h2>Ending a Mission<a class="headerlink" href="#ending-a-mission" title="Link to this heading">¶</a></h2>
+<p>Missions should normally have an RTL as their final command to ensure
+the copter will return after the mission completes.  Alternatively the
+final command could be a LAND with a different location.  Without a
+final RTL or LAND command the copter will simply stop at the final
+waypoint and the pilot will need to retake control with the transmitter.</p>
+<p>Remember that when using RTL, the copter will return to the “home”
+position which is the location where the copter was armed.</p>
+<p>As the copter touches down at the end of the mission the vehicle should automatically disarm but occasionally the vehicle may not sense the landing and the pilot may need to hold the throttle down and takeoff in another mode like Stabilize or Loiter and then manually disarm the vehicle.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>for a NAV_LAND, the <a class="reference internal" href="parameters.html#land-spd-ms"><span class="std std-ref">LAND_SPD_MS</span></a> and the <a class="reference internal" href="parameters.html#land-spd-high-ms"><span class="std std-ref">LAND_SPD_HIGH_MS</span></a> parameters affect descent speed just like in the <a class="reference internal" href="land-mode.html#land-mode"><span class="std std-ref">Land Mode</span></a>. The <a class="reference internal" href="parameters.html#pilot-thr-bhv"><span class="std std-ref">PILOT_THR_BHV</span></a> option bit 1, when set, allows high throttle stick position to cancel the landing, switching the vehicle to <a class="reference internal" href="loiter-mode.html#loiter-mode"><span class="std std-ref">Loiter</span></a> or <a class="reference internal" href="altholdmode.html#altholdmode"><span class="std std-ref">AltHold</span></a> if Loiter is unavailable. During landing the pilot can re-position the vehicle using the pitch and roll sticks to avoid obstacles unless the <a class="reference internal" href="parameters.html#land-reposition"><span class="std std-ref">LAND_REPOSITION</span></a> parameter is changed to “0”.</p>
+</div>
+</section>
+<section id="tuning">
+<h2>Tuning<a class="headerlink" href="#tuning" title="Link to this heading">¶</a></h2>
+<a class="reference external image-reference" href="../_images/Auto_Tuning.png"><img alt="../_images/Auto_Tuning.png" src="../_images/Auto_Tuning.png" /></a>
+<p>AUTO mode incorporates the altitude control from <a class="reference internal" href="altholdmode.html#altholdmode"><span class="std std-ref">AltHold mode</span></a> and position control from <a class="reference internal" href="loiter-mode.html#loiter-mode"><span class="std std-ref">Loiter mode</span></a>.</p>
+<p>Commonly adjusted settings are listed below.  Most of these can be adjusted from the Mission Planner’s Config, Extended Tuning screen (see above).</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="parameters.html#wp-spd"><span class="std std-ref">WP_SPD</span></a> is the maximum horizontal speed (in m/s) during missions.  The default is 10 which is 10m/s.  A typical copter can reach top speeds of 10m/s ~ 20m/s before it becomes unable to maintain both altitude and horizontal speed</p></li>
+<li><p><a class="reference internal" href="parameters.html#wp-acc"><span class="std std-ref">WP_ACC</span></a> determines how quickly the horizontal speed can change (in m/s/s).  Lower values result in smoother acceleration and deceleration and may also cause the vehicle to cut the corners more.  Higher values will lead to more aggressive movements and tighter cornering</p></li>
+<li><p><a class="reference internal" href="parameters.html#wp-spd-up"><span class="std std-ref">WP_SPD_UP</span></a> determines the max speed up in m/s.  Low values may lead to the vehicle’s horizontal speed slowing during diagonal climbing waypoint segments</p></li>
+<li><p><a class="reference internal" href="parameters.html#wp-spd-dn"><span class="std std-ref">WP_SPD_DN</span></a> determines the max speed down in m/s.  Low values may lead to the vehicle’s horizontal speed slowing during diagonal descending waypoint segments.  High values (above 150) may lead to unstable vertical descents as the vehicle passes through its own prop wash</p></li>
+<li><p><a class="reference internal" href="parameters.html#wp-radius-m"><span class="std std-ref">WP_RADIUS_M</span></a> allows you to control how close the copter must come to the waypoint before it is considered “complete” and the copter moves onto the next waypoint.  Setting this to a larger value may cause the vehicle to cut the corners more leading to a smoother path</p></li>
+</ul>
+<p>Less commonly adjusted parameters include:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="parameters.html#wp-acc-cnr"><span class="std std-ref">WP_ACC_CNR</span></a> determines the maximum cornering acceleration in m/s/s.  Higher values will cause the vehicle to make sharper corners meaning it will cut the corners less</p></li>
+<li><p><a class="reference internal" href="parameters.html#wp-acc-z"><span class="std std-ref">WP_ACC_Z</span></a> determines how quickly the vertical speed can change</p></li>
+<li><p><a class="reference internal" href="parameters.html#wp-jerk"><span class="std std-ref">WP_JERK</span></a> determines how quickly the horizontal acceleration can change (in m/s/s/s).  Lower values will lead to a smoother acceleration and deceleration but will also lead to the mission taking slightly longer to complete</p></li>
+</ul>
+</section>
+<section id="common-problems">
+<h2>Common Problems<a class="headerlink" href="#common-problems" title="Link to this heading">¶</a></h2>
+<p>Below are a list of commonly reported problems and recommendations</p>
+<ol class="arabic simple">
+<li><p>The vehicle does not cut the corners as much as I would like and/or stops at each waypoint</p>
+<ul class="simple">
+<li><p>Increase <a class="reference internal" href="parameters.html#wp-radius-m"><span class="std std-ref">WP_RADIUS_M</span></a> to allow the vehicle to pass further from each waypoint</p></li>
+<li><p>Increase <a class="reference internal" href="parameters.html#wp-spd"><span class="std std-ref">WP_SPD</span></a> to cause the vehicle to start turning earlier in order that it not surpass the max acceleration</p></li>
+<li><p>Decrease <a class="reference internal" href="parameters.html#wp-acc"><span class="std std-ref">WP_ACC</span></a> to cause the vehicle to start turning earlier and more gradually</p></li>
+<li><p>Decrease <a class="reference internal" href="parameters.html#wp-acc-cnr"><span class="std std-ref">WP_ACC_CNR</span></a> or reset to the default of zero</p></li>
+<li><p>Ensure the waypoint command’s Delay field is 0.  A delay of even 1 second will cause the vehicle to stop at the waypoint</p></li>
+<li><p>If <a class="reference internal" href="common-oa-dijkstras.html#common-oa-dijkstras"><span class="std std-ref">Dijkstras object avoidance</span></a> is enabled, by default the vehicle will stop at each waypoint.  This can be avoided by setting the <a class="reference internal" href="parameters.html#oa-options"><span class="std std-ref">OA_OPTIONS</span></a> parameter</p></li>
+</ul>
+</li>
+<li><p>The vehicle does not reach the configured maximum horizontal speed (e.g. <a class="reference internal" href="parameters.html#wp-spd"><span class="std std-ref">WP_SPD</span></a>)</p>
+<ul class="simple">
+<li><p>Increase <a class="reference external" href="https://ardupilot.org/rover/docs/parameters.html#wp-accel" title="(in Rover)"><span class="xref std std-ref">WP_ACCEL</span></a> to allow the vehicle to accelerate to its maximum speed more quickly</p></li>
+<li><p>Increase <a class="reference internal" href="parameters.html#wp-jerk"><span class="std std-ref">WP_JERK</span></a> to allow the vehicle to get to its maximum acceleration more quickly</p></li>
+<li><p>If the waypoint includes a climb or descent the vehicle’s horizontal speed may be limited by <a class="reference internal" href="parameters.html#wp-spd-up"><span class="std std-ref">WP_SPD_UP</span></a> or <a class="reference internal" href="parameters.html#wp-spd-dn"><span class="std std-ref">WP_SPD_DN</span></a></p></li>
+<li><p>Ensure the vehicle’s maximum lean angle (e.g. <a class="reference internal" href="parameters.html#atc-angle-max"><span class="std std-ref">ATC_ANGLE_MAX</span></a>) is sufficient to reach the desired speed</p></li>
+<li><p>Ensure the vehicle has enough power to maintain both altitude and the desired speed</p></li>
+<li><p>If the mission command uses <a class="reference internal" href="terrain-following.html#terrain-following"><span class="std std-ref">terrain following</span></a> the vehicle may need to slow horizontally to maintain the desired altitude above terrain</p></li>
+<li><p>Move the waypoints to be further apart.  S-Cruve navigation only looks forward two waypoints and plans a path that allows it to stop by the time it reaches the 2nd waypoints (<a class="reference external" href="https://github.com/ArduPilot/ardupilot/issues/28953">see this issue for more details</a>)</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="airmode.html" class="btn btn-neutral float-left" title="AirMode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="brake-mode.html" class="btn btn-neutral float-right" title="Brake Mode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+    Questions, issues, and suggestions about this page can be raised on the <a href="https://discuss.ardupilot.org">forums</a>. Issues and suggestions may be posted on the forums or the <a href="https://github.com/ArduPilot/ardupilot_wiki/issues/new?title=Auto Mode&amp;body=[Auto Mode](https://ardupilot.org/copter/docs/auto-mode.html)%20-%20Describe%20the%20issue/suggestion%20and%20improve%20the%20title.%20Please%20keep%20a%20link%20to%20the%20original%20article%20if%20relevant.&amp;labels=docs">Github Issue Tracker</a>.
+    <hr/>
+
+  <div role="contentinfo">
+    <p><a style="float:right;" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>&#169; Copyright 2024, ArduPilot Dev Team.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

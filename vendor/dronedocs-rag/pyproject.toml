@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dronedocs-rag"
+version = "1.0.0"
+description = "Production-grade RAG over drone regulations and autopilot docs: hybrid retrieval, cross-encoder reranking, citation enforcement, golden-set eval gating."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Rakesh Burla", email = "burlarakesh1458@gmail.com" }]
+requires-python = ">=3.11"
+dependencies = [
+  "chromadb==1.5.9",
+  "sentence-transformers==6.2.0",
+  "rank-bm25==0.2.2",
+  "langgraph==1.2.20",
+  "langchain-core==1.7.6",
+  "pypdf==6.21.4",
+  "beautifulsoup4==4.15.0",
+  "tiktoken==0.14.0",
+  "fastapi==0.162.0",
+  "uvicorn==0.54.0",
+  "httpx==0.28.1",
+  "pydantic==2.14.3",
+  "PyYAML==6.0.3",
+  "python-dotenv==1.2.4",
+  "numpy==2.5.4",
+]
+
+[project.optional-dependencies]
+eval = ["ragas==0.4.3", "langchain-openai==1.7.4", "matplotlib==3.11.2"]
+ui = ["streamlit==1.67.0"]
+dev = ["pytest==9.2.0", "ruff==0.17.4"]
+
+[project.scripts]
+dronedocs = "dronedocs.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+dronedocs = ["static/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF"]
+ignore = ["S101", "S311", "RUF001", "RUF002", "RUF003", "S603", "S607"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "B"]

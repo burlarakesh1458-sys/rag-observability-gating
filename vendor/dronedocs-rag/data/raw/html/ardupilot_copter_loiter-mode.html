@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loiter Mode &mdash; Copter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ardupilot.css?v=ae9666d5" />
+      <link rel="stylesheet" type="text/css" href="../_static/common_theme_override.css?v=01d3cdd0" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon_copter.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=7f41d439"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/./useralerts.js?v=3014f84e"></script>
+        <script data-domain="ardupilot.org" defer="defer" src="https://plausible.ardupilot.org/js/script.outbound-links.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PosHold Mode" href="poshold-mode.html" />
+    <link rel="prev" title="Land Mode" href="land-mode.html" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2980b9" />
+  <link rel="apple-touch-icon" href="/apple-icon.png" />
+  <script src="/js/pwa.js" defer="defer"></script> 
+</head>
+
+<body class="wy-body-for-nav">    
+    <div id='cssmenu'>
+        <ul>
+           <li><a href='/ardupilot/index.html'>Home</a>
+              <ul>
+                 <li><a href='/copter/index.html'>Copter</a></li>
+                 <li><a href='/plane/index.html'>Plane</a></li>
+                 <li><a href='/rover/index.html'>Rover</a></li>
+                 <li><a href='/blimp/index.html'>Blimp</a></li>
+                 <li><a href='/sub/index.html'>Sub</a></li>
+                 <li><a href='/antennatracker/index.html'>AntennaTracker</a></li>
+                 <li><a href='/planner/index.html'>Mission Planner</a></li>
+                 <li><a href='/planner2/index.html'>APM Planner 2</a></li>
+                 <li><a href='/mavproxy/index.html'>MAVProxy</a></li>
+                 <li><a href='/dev/docs/companion-computers.html'>Companion Computers</a></li>
+                 <li><a href='/dev/index.html'>Developer</a></li>
+              </ul>
+           </li>
+           
+          
+           
+           <li><a href='https://firmware.ardupilot.org/'>Downloads</a>
+              <ul>
+                <li><a href='https://firmware.ardupilot.org/Tools/MissionPlanner/'>Mission Planner</a></li>
+                <li><a href='https://firmware.ardupilot.org/Tools/APMPlanner/'>APM Planner 2</a></li>
+                   <li><a title="Advanced User Tools" href="common-downloads_advanced_user_tools.html">Advanced User Tools</a></li>
+                   <li><a title="Developer Tools" href="common-downloads_developer_tools.html">Developer Tools</a></li>
+                   <li><a title="Firmware" href="common-downloads_firmware.html">Firmware</a></li>
+                </ul>
+           </li>
+           
+           <li><a href='https://discuss.ardupilot.org' />Community</a>
+              <ul>
+                 <li><a href='https://discuss.ardupilot.org/'>Support Forums</a></li>
+                 <li><a href='https://www.facebook.com/groups/ArduPilot.org'>Facebook</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Chat (Discord)</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Voice (Discord)</a></li>
+				 <li><a href='https://ardupilot.org/dev/docs/common-contact-us.html'>Contact us</a></li>
+				 <li><a href='https://ardupilot.org/dev/index.html#getting-involved'>Getting involved</a></li>
+                   <li><a title="Commercial Support" href="common-commercial-support.html">Commercial Support</a></li>
+                   <li><a title="Dev Team" href="common-team.html">Development Team</a></li>
+                   <li><a title="Training Centers" href="common-training-centers.html">UAS Training Centers</a></li>
+              </ul>
+           </li>
+             <li><a title="Stores" href="common-stores.html">Stores</a></li>
+
+
+           
+                        <li><a title="About" href="../index.html">About</a>
+               <ul>
+                   <li><a title="Project News" href="project-news.html">News</a></li>
+                   <li><a title="History of ArduPilot" href="common-history-of-ardupilot.html">History</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/license-gplv3.html'>License</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/trademark.html'>Trademark</a></li>
+                   <li><a title="Acknowledgments" href="common-acknowledgments.html">Acknowledgments</a></li>
+                   <li><a title="Wiki Editing Guide" href="common-wiki_editing_guide.html">Wiki Editing Guide</a></li>
+                   <li><a title="Partners Program" href="common-partners.html">Partners Program</a></li>
+               </ul>
+             </li>
+             <li><a title="Offline" href="common-offline.html">Offline</a></li>
+        </ul>
+        
+
+</div>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Copter
+              <img src="../_static/ardupilot_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="copter-introduction.html">Introduction to Copter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-autopilots.html">Choosing an Autopilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-GCS.html">Ground Control Stations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-setup.html">First Time Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flying-arducopter.html">First Flight and Tuning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="traditional-helicopters.html">Traditional Helicopters</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="traditional-helicopter-first-time-setup.html">First Time Setup</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common-install-gcs.html">Install Ground Station Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traditional-helicopter-autopilot-assembly-instructions.html">Autopilot System Assembly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-loading-firmware.html">Loading Firmware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-connect-mission-planner-autopilot.html">Connect Mission Planner to AutoPilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traditional-heli-parts-list.html">Suggested Parts List</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="traditional-helicopter-configuring-hardware.html">Configuration</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="common-basic-operation.html">Basic System Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frame-type-configuration.html">Frame Type Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-parameter-list.html">Helicopter Parameter List at a Glance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-connecting-apm.html">Configuring Servo, Motor, and RC Connections with the autopilot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-rc-calibration.html">Radio Control Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-accelerometer-calibration.html">Accelerometer Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-compass-calibration-in-mission-planner.html">Compass Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="common-rc-transmitter-flight-mode-configuration.html">RC Transmitter Mode Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-esc-calibration.html">ESC Calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-swashplate-setup.html">Swashplate Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-tailrotor-setup.html">Tailrotor Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-rsc-setup.html">Rotor Speed Control Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traditional-helicopter-internal-rsc-governor.html">Internal Rotor Speed Governor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="failsafe-landing-page.html">Failsafe Mechanisms</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="flight-modes.html">Flight Modes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-first-flight.html">First Flights and Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="copter-flight-features.html">Flight Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dual-helicopter.html">Dual Helicopters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heliquads.html">HeliQuads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-tips.html">Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-configuration.html">ArduPilot Helicopter Ground School</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="common-mission-planning.html">Mission Planning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-when-problems-arise.html">If A Problem Arises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-advanced-configuration.html">Advanced Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-optional-hardware.html">Peripheral Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-information.html">Additional Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-user-alerts.html">User Alerts</a></li>
+</ul>
+
+          <!-- add paypal and dronecode logos -->        <div style="margin: auto; padding-left:20px; padding-right:20px; width=100%">
+
+        <hr />
+        <form style="margin:auto;" action="https://ardupilot.org/donate">
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate" />
+        </form>
+        <br>
+        <a href="common-donation.html">Individual</a>
+        <a href="common-partners.html">Partners</a>
+        <a href="https://ardupilot.org/shop">SWAG Shop</a>
+
+        <hr />
+        </div>
+          <!-- endadd paypal and dronecode logos -->
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Copter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="initial-setup.html">First Time Setup</a></li>
+          <li class="breadcrumb-item"><a href="configuring-hardware.html">Mandatory Hardware Configuration</a></li>
+          <li class="breadcrumb-item"><a href="flight-modes.html">Flight Modes</a></li>
+      <li class="breadcrumb-item active">Loiter Mode</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ArduPilot/ardupilot_wiki/blob/master/copter/source/docs/loiter-mode.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="loiter-mode">
+<span id="id1"></span><h1>Loiter Mode<a class="headerlink" href="#loiter-mode" title="Link to this heading">¶</a></h1>
+<p>Loiter Mode automatically attempts to maintain the current location, heading and altitude. The pilot may fly the copter in Loiter mode as if it were in a more manual flight mode but when the sticks are released, the vehicle will slow to a stop and hold position.</p>
+<p>A good GPS lock, <a class="reference internal" href="common-diagnosing-problems-using-logs.html#common-diagnosing-problems-using-logs-compass-interference"><span class="std std-ref">low magnetic interference on the compass</span></a> and <a class="reference internal" href="common-diagnosing-problems-using-logs.html#common-diagnosing-problems-using-logs-vibrations"><span class="std std-ref">low vibrations</span></a> are all important in achieving good loiter performance.</p>
+<div class="video_wrapper" style="padding-bottom: 56.250000%; padding-top: 30px; position: relative; width: 100%">
+<iframe loading="lazy" allowfullscreen="true" src="https://www.youtube.com/embed/yVAnBQkNJdY?start=261" style="border: 0; height: 100%; left: 0; position: absolute; top: 0; width: 100%">
+</iframe></div><section id="controls">
+<h2>Controls<a class="headerlink" href="#controls" title="Link to this heading">¶</a></h2>
+<p>The pilot can control the copter’s position with the control sticks.</p>
+<ul class="simple">
+<li><p>Horizontal location can be adjusted with the Roll and Pitch
+control sticks with the default maximum horizontal speed being 5m/s
+(see Tuning section below on how to adjust this).  When the pilot
+releases the sticks the copter will slow to a stop.</p></li>
+<li><p>Altitude can be controlled with the Throttle control stick just as in
+<a class="reference internal" href="altholdmode.html#altholdmode-controls"><span class="std std-ref">AltHold mode</span></a></p></li>
+<li><p>The heading can be set with the Yaw control stick</p></li>
+</ul>
+<p>The vehicle can be armed in Loiter mode but only once the GPS has 3D lock and the HDOP has dropped below 1.4.  <a class="reference internal" href="common-leds-pixhawk.html#common-leds-pixhawk"><span class="std std-ref">More details on LED patterns here</span></a>.
+If using another position source like optical flow or another <a class="reference internal" href="common-non-gps-navigation-landing-page.html#common-non-gps-navigation-landing-page"><span class="std std-ref">Non-GPS Navigation source</span></a>, setting an EKF origin via GCS is enough, provided the positioning source functions satisfactorily. This enables use of Loiter indoors.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When Coordinated Turns are enabled (via the <code class="docutils literal notranslate"><span class="pre">LOIT_OPTIONS</span></code> parameter, Bit 0), the aircraft modifies its commanded accelerations in Loiter mode to take into account the requested yaw rate and current horizontal velocity. This produces turns that feel more natural and “aircraft-like,” as the drone banks into the turn to match the trajectory. Without this option, Loiter turns are controlled purely by position and velocity demands, which can result in a flat, sliding turn.</p>
+</div>
+</section>
+<section id="tuning">
+<span id="loiter-mode-tuning"></span><h2>Tuning<a class="headerlink" href="#tuning" title="Link to this heading">¶</a></h2>
+<a class="reference external image-reference" href="../_images/Loiter_Tuning.png"><img alt="../_images/Loiter_Tuning.png" src="../_images/Loiter_Tuning.png" /></a>
+<p>Loiter mode incorporates the altitude controller from AltHold mode.
+Details for tuning <a class="reference internal" href="altholdmode.html#altholdmode-tuning"><span class="std std-ref">AltHold are on this wiki page</span></a>.</p>
+<section id="loiter-parameters">
+<h3>Loiter Parameters<a class="headerlink" href="#loiter-parameters" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="parameters.html#loit-options"><span class="std std-ref">LOIT_OPTIONS</span></a>: Enabling Coordinated Turns enables Loiter mode to automatically include coordinated turn logic. This adjusts the requested roll and pitch accelerations so that the vehicle’s motion matches both the horizontal velocity vector and the commanded yaw rate. Coordinated Turns are disabled by default (they were enabled by default in earlier 4.7 releases).</p></li>
+<li><p><a class="reference internal" href="parameters.html#loit-speed-ms"><span class="std std-ref">LOIT_SPEED_MS</span></a>: max horizontal speed in m/s</p></li>
+<li><p><a class="reference internal" href="parameters.html#loit-acc-max-m"><span class="std std-ref">LOIT_ACC_MAX_M</span></a>: max acceleration in m/s/s.  Higher values cause the copter to accelerate and stop more quickly</p></li>
+<li><p><a class="reference internal" href="parameters.html#loit-ang-max"><span class="std std-ref">LOIT_ANG_MAX</span></a>: max lean angle in degrees (i.e. 30deg).  By default this value is zero which causes the <a class="reference internal" href="parameters.html#psc-angle-max"><span class="std std-ref">PSC_ANGLE_MAX</span></a>  or <a class="reference internal" href="parameters.html#atc-angle-max"><span class="std std-ref">ATC_ANGLE_MAX</span></a> parameter’s value to be used</p></li>
+<li><p><a class="reference internal" href="parameters.html#loit-brk-acc-m"><span class="std std-ref">LOIT_BRK_ACC_M</span></a>: max acceleration in m/s/s while braking (i.e. pilot has moved sticks to center).  Higher values will stop the vehicle more quickly</p></li>
+<li><p><a class="reference internal" href="parameters.html#loit-brk-delay"><span class="std std-ref">LOIT_BRK_DELAY</span></a>: the delay in seconds before braking starts once the pilot has centered the sticks</p></li>
+<li><p><a class="reference internal" href="parameters.html#loit-brk-jrk-m"><span class="std std-ref">LOIT_BRK_JRK_M</span></a>: max change in acceleration in m/s/s/s while braking.  Higher numbers will make the vehicle reach the maximum braking angle more quickly, lower numbers will cause smoother braking</p></li>
+<li><p><a class="reference internal" href="parameters.html#psc-ne-pos-p"><span class="std std-ref">PSC_NE_POS_P</span></a>: (shown as “Position XY (Dist to Speed)” at the top right of the screen shot above) converts the horizontal position error (i.e difference between the desired position and the actual position) to a desired speed towards the target position.  <strong>It is generally not required to adjust this</strong></p></li>
+<li><p><a class="reference internal" href="parameters.html#psc-ne-vel-p"><span class="std std-ref">PSC_NE_VEL_P</span></a> (shown as “Velocity XY (Vel to Accel)”) converts the desired speed towards the target to a desired acceleration.  The resulting desired acceleration becomes a lean angle which is then passed to the same angular controller used by <a class="reference internal" href="stabilize-mode.html#stabilize-mode"><span class="std std-ref">Stabilize mode</span></a>.  <strong>It is generally not required to adjust this</strong></p></li>
+</ul>
+</section>
+</section>
+<section id="common-problems">
+<h2>Common Problems<a class="headerlink" href="#common-problems" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>The vehicle <a class="reference external" href="https://www.youtube.com/watch?v=a-3G9ZvXHhk">circles (aka “toiletbowls”)</a>.  This
+is normally caused by a compass problem the most likely being
+<a class="reference internal" href="common-diagnosing-problems-using-logs.html#common-diagnosing-problems-using-logs-compass-interference"><span class="std std-ref">magnetic interference</span></a>
+from the power cables under the autopilot.  Running
+<a class="reference internal" href="common-compass-setup-advanced.html#common-compass-setup-advanced-compassmot-compensation-for-interference-from-the-power-wires-escs-and-motors"><span class="std std-ref">compassmot</span></a>
+or purchasing a <a class="reference internal" href="common-installing-3dr-ublox-gps-compass-module.html#common-installing-3dr-ublox-gps-compass-module"><span class="std std-ref">GPS+compass module</span></a> normal
+resolves this.  Other possibilities include bad compass offsets set
+during the <a class="reference internal" href="common-compass-calibration-in-mission-planner.html#common-compass-calibration-in-mission-planner"><span class="std std-ref">compass calibration process</span></a>.</p></li>
+<li><p>The vehicle takes off in the wrong direction as soon as loiter is engaged.  The cause is the same as #2 except that the compass error is greater than 90deg.  Please try the suggestions above to resolve this.</p></li>
+</ol>
+</section>
+<section id="verifying-loiter-performance-with-dataflash-logs">
+<h2>Verifying Loiter performance with dataflash logs<a class="headerlink" href="#verifying-loiter-performance-with-dataflash-logs" title="Link to this heading">¶</a></h2>
+<p>Viewing the loiter’s horizontal performance is best done by <a class="reference internal" href="common-downloading-and-analyzing-data-logs-in-mission-planner.html#common-downloading-and-analyzing-data-logs-in-mission-planner"><span class="std std-ref">downloading a dataflash log</span></a> from your flight, then open it with the mission planner and graph the NTUN message’s DesVelX vs VelX and DesVelY vs VelY.  In a good performing copter the actual velocities will track the desired velocities as shown below.  X = latitude (so positive = moving North, negative = South), Y = longitude (positive = East, negative = West).</p>
+<a class="reference external image-reference" href="../_images/Loiter_TuningCheck.png"><img alt="../_images/Loiter_TuningCheck.png" src="../_images/Loiter_TuningCheck.png" /></a>
+<p>Checking altitude hold performance is the same as for <a class="reference internal" href="altholdmode.html#altholdmode-verifying-althold-performance-with-dataflash-logs"><span class="std std-ref">AltHold</span></a> mode.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="land-mode.html" class="btn btn-neutral float-left" title="Land Mode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="poshold-mode.html" class="btn btn-neutral float-right" title="PosHold Mode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+    Questions, issues, and suggestions about this page can be raised on the <a href="https://discuss.ardupilot.org">forums</a>. Issues and suggestions may be posted on the forums or the <a href="https://github.com/ArduPilot/ardupilot_wiki/issues/new?title=Loiter Mode&amp;body=[Loiter Mode](https://ardupilot.org/copter/docs/loiter-mode.html)%20-%20Describe%20the%20issue/suggestion%20and%20improve%20the%20title.%20Please%20keep%20a%20link%20to%20the%20original%20article%20if%20relevant.&amp;labels=docs">Github Issue Tracker</a>.
+    <hr/>
+
+  <div role="contentinfo">
+    <p><a style="float:right;" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>&#169; Copyright 2024, ArduPilot Dev Team.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

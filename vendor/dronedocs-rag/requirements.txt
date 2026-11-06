@@ -1,0 +1,17 @@
+# Runtime (pinned). Install CPU torch first for a small image:
+#   pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+chromadb==1.5.9
+sentence-transformers==6.2.0
+rank-bm25==0.2.2
+langgraph==1.2.20
+langchain-core==1.7.6
+pypdf==6.21.4
+beautifulsoup4==4.15.0
+tiktoken==0.14.0
+fastapi==0.162.0
+uvicorn==0.54.0
+httpx==0.28.1
+pydantic==2.14.3
+PyYAML==6.0.3
+python-dotenv==1.2.4
+numpy==2.5.4

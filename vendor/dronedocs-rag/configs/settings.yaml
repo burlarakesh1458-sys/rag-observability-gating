@@ -1,0 +1,75 @@
+# DroneDocs RAG — runtime configuration (versioned with the code).
+# Any key can be overridden by an env var: DRONEDOCS__<SECTION>__<KEY>=value
+app:
+  name: dronedocs-rag
+  prompt_file: configs/prompts/answer_v1.yaml   # versioned prompt bundle
+
+paths:
+  raw_dir: data/raw
+  index_dir: data/index          # chroma + bm25 + chunk manifest (gitignored)
+  cache_dir: .cache              # LLM response cache (gitignored)
+
+llm:
+  # Any OpenAI-compatible endpoint: Groq, OpenAI, Together, vLLM, Ollama (http://localhost:11434/v1)
+  base_url_env: LLM_BASE_URL               # env var holding the base url
+  api_key_env: LLM_API_KEY                 # env var holding the key (falls back to GROQ_API_KEY)
+  default_base_url: https://api.groq.com/openai/v1
+  model: openai/gpt-oss-20b      # generator
+  temperature: 0.0
+  max_tokens: 900
+  timeout_s: 60
+  max_retries: 10
+  reasoning_effort: low          # sent only to models that accept it (gpt-oss family)
+  cache: false                   # deterministic response cache for dev; keep false for honest latency
+
+judge:
+  model: qwen/qwen3.8-27b        # different model family from the generator, separate rate-limit bucket
+  temperature: 0.0
+  max_tokens: 700
+
+embeddings:
+  model: BAAI/bge-small-en-v1.5
+  query_instruction: "Represent this sentence for searching relevant passages: "
+  batch_size: 8
+
+chunking:
+  tokenizer: cl100k_base
+  chunk_tokens: 550              # within the 500-800 band
+  overlap_tokens: 100
+  min_chunk_tokens: 40
+  drop_non_latin_lines: true     # Indian Gazette PDFs are bilingual (Hindi+English)
+
+retrieval:
+  mode: hybrid                   # hybrid | vector | bm25
+  vector_k: 20
+  bm25_k: 20
+  rrf_k: 60
+  fused_k: 20                    # fused candidate list (traced; first rerank.candidates go to the reranker)
+
+rerank:
+  provider: cross_encoder        # cross_encoder | cohere | none
+  model: cross-encoder/ms-marco-MiniLM-L-6-v2
+  cohere_model: rerank-english-v3.0
+  candidates: 12                 # fused candidates scored by the cross-encoder (CPU cost is linear in this)
+  max_length: 256                # cross-encoder input tokens per (query, chunk) pair
+  top_n: 4                       # chunks put in the prompt (token budget: ~2.2k prompt tokens/request)
+
+guardrails:
+  min_rerank_score: -4.0         # evidence gate: refuse before calling the LLM if best chunk is below this
+  require_citations: true        # every answer must cite >=1 valid chunk id
+  max_uncited_sentence_ratio: 0.5
+
+eval:
+  golden_path: eval/golden.jsonl
+  report_dir: reports
+  concurrency: 1                 # free-tier TPM (8k/min) is shared; 1 in flight avoids retry storms
+  ragas: true                    # try Ragas; falls back to the built-in judge if it errors
+  ragas_sample: 3                # Ragas is call-heavy (~9k tokens/item); a small cross-check of the built-in judge
+  ragas_model: openai/gpt-oss-20b
+  thresholds:                    # CI fails if any metric is below its threshold
+    faithfulness: 0.80
+    answer_relevancy: 0.75
+    context_recall: 0.70
+    context_precision: 0.55
+    citation_accuracy: 0.90
+    refusal_correctness: 0.80

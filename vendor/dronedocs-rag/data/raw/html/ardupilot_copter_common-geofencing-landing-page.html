@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fences &mdash; Copter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ardupilot.css?v=ae9666d5" />
+      <link rel="stylesheet" type="text/css" href="../_static/common_theme_override.css?v=01d3cdd0" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon_copter.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=7f41d439"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/./useralerts.js?v=3014f84e"></script>
+        <script data-domain="ardupilot.org" defer="defer" src="https://plausible.ardupilot.org/js/script.outbound-links.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cylindrical Fence" href="common-ac2_simple_geofence.html" />
+    <link rel="prev" title="Autorotation" href="traditional-helicopter-autorotation.html" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2980b9" />
+  <link rel="apple-touch-icon" href="/apple-icon.png" />
+  <script src="/js/pwa.js" defer="defer"></script> 
+</head>
+
+<body class="wy-body-for-nav">    
+    <div id='cssmenu'>
+        <ul>
+           <li><a href='/ardupilot/index.html'>Home</a>
+              <ul>
+                 <li><a href='/copter/index.html'>Copter</a></li>
+                 <li><a href='/plane/index.html'>Plane</a></li>
+                 <li><a href='/rover/index.html'>Rover</a></li>
+                 <li><a href='/blimp/index.html'>Blimp</a></li>
+                 <li><a href='/sub/index.html'>Sub</a></li>
+                 <li><a href='/antennatracker/index.html'>AntennaTracker</a></li>
+                 <li><a href='/planner/index.html'>Mission Planner</a></li>
+                 <li><a href='/planner2/index.html'>APM Planner 2</a></li>
+                 <li><a href='/mavproxy/index.html'>MAVProxy</a></li>
+                 <li><a href='/dev/docs/companion-computers.html'>Companion Computers</a></li>
+                 <li><a href='/dev/index.html'>Developer</a></li>
+              </ul>
+           </li>
+           
+          
+           
+           <li><a href='https://firmware.ardupilot.org/'>Downloads</a>
+              <ul>
+                <li><a href='https://firmware.ardupilot.org/Tools/MissionPlanner/'>Mission Planner</a></li>
+                <li><a href='https://firmware.ardupilot.org/Tools/APMPlanner/'>APM Planner 2</a></li>
+                   <li><a title="Advanced User Tools" href="common-downloads_advanced_user_tools.html">Advanced User Tools</a></li>
+                   <li><a title="Developer Tools" href="common-downloads_developer_tools.html">Developer Tools</a></li>
+                   <li><a title="Firmware" href="common-downloads_firmware.html">Firmware</a></li>
+                </ul>
+           </li>
+           
+           <li><a href='https://discuss.ardupilot.org' />Community</a>
+              <ul>
+                 <li><a href='https://discuss.ardupilot.org/'>Support Forums</a></li>
+                 <li><a href='https://www.facebook.com/groups/ArduPilot.org'>Facebook</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Chat (Discord)</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Voice (Discord)</a></li>
+				 <li><a href='https://ardupilot.org/dev/docs/common-contact-us.html'>Contact us</a></li>
+				 <li><a href='https://ardupilot.org/dev/index.html#getting-involved'>Getting involved</a></li>
+                   <li><a title="Commercial Support" href="common-commercial-support.html">Commercial Support</a></li>
+                   <li><a title="Dev Team" href="common-team.html">Development Team</a></li>
+                   <li><a title="Training Centers" href="common-training-centers.html">UAS Training Centers</a></li>
+              </ul>
+           </li>
+             <li><a title="Stores" href="common-stores.html">Stores</a></li>
+
+
+           
+                        <li><a title="About" href="../index.html">About</a>
+               <ul>
+                   <li><a title="Project News" href="project-news.html">News</a></li>
+                   <li><a title="History of ArduPilot" href="common-history-of-ardupilot.html">History</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/license-gplv3.html'>License</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/trademark.html'>Trademark</a></li>
+                   <li><a title="Acknowledgments" href="common-acknowledgments.html">Acknowledgments</a></li>
+                   <li><a title="Wiki Editing Guide" href="common-wiki_editing_guide.html">Wiki Editing Guide</a></li>
+                   <li><a title="Partners Program" href="common-partners.html">Partners Program</a></li>
+               </ul>
+             </li>
+             <li><a title="Offline" href="common-offline.html">Offline</a></li>
+        </ul>
+        
+
+</div>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Copter
+              <img src="../_static/ardupilot_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="copter-introduction.html">Introduction to Copter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-autopilots.html">Choosing an Autopilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-GCS.html">Ground Control Stations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-setup.html">First Time Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flying-arducopter.html">First Flight and Tuning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="traditional-helicopters.html">Traditional Helicopters</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-first-time-setup.html">First Time Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-first-flight.html">First Flights and Tuning</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="copter-flight-features.html">Flight Features</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="traditional-helicopter-autorotation.html">Autorotation(Helicopter only)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Fences</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#general-setup">General Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#types-of-fences">Types of Fences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#altitude-fence-reference-frames">Altitude Fence Reference Frames</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fence-breach-actions">Fence Breach Actions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-the-fence-with-an-rc-channel-auxiliary-switch">Enabling the Fence with an RC Channel Auxiliary Switch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#automatic-altitude-breach-avoidance">Automatic Altitude Breach Avoidance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enabling-fences-in-mission-planner">Enabling Fences in Mission Planner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#use-for-r-c-training">Use for R/C Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mavlink-support">MAVLink support</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="common-object-avoidance-landing-page.html">Object Avoidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="terrain-following.html">Terrain Following (in Auto, Guided, etc)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="terrain-following-manual-modes.html">Surface Tracking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="traditional-helicopter-inverted-flight.html">Inverted Flight(Helicopter only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motor-thrust-scaling.html">Motor Thrust Scaling(MultiCopter only)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-imu-notch-filtering.html">Notch Filtering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-moving-vehicle-initialization.html">Moving Vehicle Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="common-non-gps-navigation-landing-page.html">Non-GPS Navigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="weathervaning.html">Weathervaning and Wind Hold</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dual-helicopter.html">Dual Helicopters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heliquads.html">HeliQuads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-tips.html">Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traditional-helicopter-configuration.html">ArduPilot Helicopter Ground School</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="common-mission-planning.html">Mission Planning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-when-problems-arise.html">If A Problem Arises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-advanced-configuration.html">Advanced Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-optional-hardware.html">Peripheral Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-information.html">Additional Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-user-alerts.html">User Alerts</a></li>
+</ul>
+
+          <!-- add paypal and dronecode logos -->        <div style="margin: auto; padding-left:20px; padding-right:20px; width=100%">
+
+        <hr />
+        <form style="margin:auto;" action="https://ardupilot.org/donate">
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate" />
+        </form>
+        <br>
+        <a href="common-donation.html">Individual</a>
+        <a href="common-partners.html">Partners</a>
+        <a href="https://ardupilot.org/shop">SWAG Shop</a>
+
+        <hr />
+        </div>
+          <!-- endadd paypal and dronecode logos -->
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Copter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="copter-introduction.html">Copter Introduction</a></li>
+          <li class="breadcrumb-item"><a href="copter-flight-features.html">Flight Features</a></li>
+      <li class="breadcrumb-item active">Fences</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ArduPilot/ardupilot_wiki/blob/master/common/source/docs/common-geofencing-landing-page.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fences">
+<span id="common-geofencing-landing-page"></span><h1>Fences<a class="headerlink" href="#fences" title="Link to this heading">¶</a></h1>
+<p>ArduPilot supports a home based Cylindrical (“TinCan”) and Polygonal and/or Cylindrical, Inclusion and/or Exclusion regions. Inclusion and Exclusion Fences are defined easily in Mission Planner under the PLAN screen and loaded to the autopilot, using the FENCES item in the drop down box, just like Missions or Rally Points are planned.</p>
+<p>Some vehicles can also have maximum and/or minimum altitude limits. Some flight modes will try to prevent exceeding these limits automatically, a fence breach will be declared in all modes if exceeded.</p>
+<p>Upon Fence breach, selectable actions are taken.</p>
+<section id="general-setup">
+<h2>General Setup<a class="headerlink" href="#general-setup" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Set <a class="reference internal" href="parameters.html#fence-enable"><span class="std std-ref">FENCE_ENABLE</span></a> = 1 to enable fences. This enables any fences that are setup, except the ALT_MIN fence, which must be enabled by using any fence enable means (GCS message, AUTOENABLE in plane, RC switch)</p></li>
+<li><p>Set <a class="reference internal" href="parameters.html#fence-action"><span class="std std-ref">FENCE_ACTION</span></a> = to whatever you wish for a breach action. These will vary depending on vehicle type. See <a class="reference internal" href="#fence-breach-actions"><span class="std std-ref">Fence Breach Actions</span></a> above.</p></li>
+<li><p>Set <a class="reference internal" href="parameters.html#fence-options"><span class="std std-ref">FENCE_OPTIONS</span></a> Set bit 1 to prevent mode changes after a fence breach until the vehicle returns within the fence boundary (Plane only, Copter/Rover do not allow mode changes while in breach). Set bit 2 to use the Union of inclusion areas instead of just Intersects. Set bit 3 to provide GCS warning when vehicle is less than <a class="reference internal" href="parameters.html#fence-margin"><span class="std std-ref">FENCE_MARGIN</span></a> from a breach. This parameter is also used in avoidance and path planning.</p></li>
+<li><p>Set <a class="reference internal" href="parameters.html#fence-alt-max"><span class="std std-ref">FENCE_ALT_MAX</span></a> = to the altitude limit you want (in meters). This is unavailable in Rover.</p></li>
+<li><p>Set <a class="reference internal" href="parameters.html#fence-margin"><span class="std std-ref">FENCE_MARGIN</span></a> = to the distance from the fence horizontal boundary the vehicle must maintain in order to prevent a breach.</p></li>
+<li><p>Set the <a class="reference internal" href="parameters.html#fence-alt-min"><span class="std std-ref">FENCE_ALT_MIN</span></a> as a minimum altitude breach boundary. This is unavailable in Rover.</p></li>
+<li><p>Set <a class="reference internal" href="parameters.html#fence-alt-max-tp"><span class="std std-ref">FENCE_ALT_MAX_TP</span></a> and <a class="reference internal" href="parameters.html#fence-alt-min-tp"><span class="std std-ref">FENCE_ALT_MIN_TP</span></a> to select the altitude reference frame used by the maximum and minimum altitude fences, respectively. See <a class="reference internal" href="#altitude-fence-frames"><span class="std std-ref">Altitude Fence Reference Frames</span></a> below. These are unavailable in Rover.</p></li>
+<li><p>Set <a class="reference internal" href="parameters.html#fence-autoenable"><span class="std std-ref">FENCE_AUTOENABLE</span></a> = (Plane Only)to allow automatic enabling of the fence (different than <a class="reference internal" href="parameters.html#fence-enable"><span class="std std-ref">FENCE_ENABLE</span></a>) under certain vehicle conditions, such as upon arming or takeoff. A value of 0 disables this feature. <a class="reference internal" href="parameters.html#fence-enable"><span class="std std-ref">FENCE_ENABLE</span></a> is ignored if this feature is enabled. Using <a class="reference internal" href="parameters.html#fence-autoenable"><span class="std std-ref">FENCE_AUTOENABLE</span></a> = 3 (enable on ARM) is the only recommended use. “1” or “2” functions are being deprecated shortly since they can produce undesirable results in terms of containment.</p></li>
+<li><p><a class="reference external" href="https://ardupilot.org/plane/docs/parameters.html#fence-ret-rally" title="(in Plane)"><span class="xref std std-ref">FENCE_RET_RALLY</span></a> allows returning to the nearest RALLY point (See: <a class="reference internal" href="common-rally-points.html#common-rally-points"><span class="std std-ref">Rally Points</span></a>), if loaded, instead of HOME.</p></li>
+<li><p>Set <a class="reference internal" href="parameters.html#fence-type"><span class="std std-ref">FENCE_TYPE</span></a> = is a bitmap set to enable the various fence types: MIN or MAX altitude, simple CIRCLE tin can around HOME, or POLYGON fences. The POLYGON fences must also have been loaded via a fence list from a ground control station in order to be active. See below for detailed setup of <a class="reference internal" href="common-ac2_simple_geofence.html#common-ac2-simple-geofence"><span class="std std-ref">Cylindrical Fence</span></a> and <a class="reference internal" href="common-polygon_fence.html#common-polygon-fence"><span class="std std-ref">Inclusion and Exclusion Fences</span></a>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Polygon fence type includes the circular fences specified in the Inclusion/Exclusion fence list. The simple home centered CIRCLE fence is a separate fence. Rover ignores altitudes, if set.</p>
+</div>
+<p>Defaults for <a class="reference internal" href="parameters.html#fence-type"><span class="std std-ref">FENCE_TYPE</span></a> are:</p>
+<ul class="simple">
+<li><p>Rover: CIRCLE and POLYGON</p></li>
+<li><p>Copter: ALT MAX, CIRCLE, and POLYGON</p></li>
+<li><p>Plane: POLYGON</p></li>
+</ul>
+<section id="detailed-setup">
+<h3>Detailed Setup<a class="headerlink" href="#detailed-setup" title="Link to this heading">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common-ac2_simple_geofence.html">Cylindrical Fence Failsafe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-polygon_fence.html">Inclusion/Exclusion Fence Failsafe</a></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="types-of-fences">
+<h2>Types of Fences<a class="headerlink" href="#types-of-fences" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>TYPE OF FENCE</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">FENCE_TYPE</span></code> bit</p></th>
+<th class="head"><p>PLANE</p></th>
+<th class="head"><p>COPTER</p></th>
+<th class="head"><p>ROVER</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><dl class="simple">
+<dt>Global Maximum Altitude</dt><dd><ul class="simple">
+<li><p>FENCE_ALT_MAX defines max altitude</p></li>
+</ul>
+</dd>
+</dl>
+</td>
+<td><p>0</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><dl class="simple">
+<dt>Cylindrical (“TinCan”)</dt><dd><ul class="simple">
+<li><p>Circle Centered on Home</p></li>
+<li><p>Parameters for radius, height</p></li>
+</ul>
+</dd>
+</dl>
+</td>
+<td><p>1</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+</tr>
+<tr class="row-even"><td><dl class="simple">
+<dt>Inclusion/Exclusion Zones</dt><dd><ul class="simple">
+<li><p>Arbitrary Locations</p></li>
+<li><p>Polygonal or Circular</p></li>
+<li><p>Inclusion or Exclusion</p></li>
+<li><p>Defined by list, like missions</p></li>
+<li><p>No height/altitude restriction</p></li>
+</ul>
+</dd>
+</dl>
+</td>
+<td><p>2</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+</tr>
+<tr class="row-odd"><td><dl class="simple">
+<dt>Global Minimum Altitude</dt><dd><ul class="simple">
+<li><p>FENCE_ALT_MIN defines min altitude</p></li>
+</ul>
+</dd>
+</dl>
+</td>
+<td><p>3</p></td>
+<td><p>X</p></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>if <a class="reference internal" href="parameters.html#fence-type"><span class="std std-ref">FENCE_TYPE</span></a> =2 inclusion zones overlap, a fence breach will occur when crossing a boundary, even if within another inclusion zone, UNLESS <a class="reference internal" href="parameters.html#fence-options"><span class="std std-ref">FENCE_OPTIONS</span></a> bit 1 is set to make all inclusions zones a union set.</p>
+</div>
+</section>
+<section id="altitude-fence-reference-frames">
+<span id="altitude-fence-frames"></span><h2>Altitude Fence Reference Frames<a class="headerlink" href="#altitude-fence-reference-frames" title="Link to this heading">¶</a></h2>
+<p>The maximum and minimum altitude fences (<a class="reference internal" href="parameters.html#fence-alt-max"><span class="std std-ref">FENCE_ALT_MAX</span></a> and <a class="reference internal" href="parameters.html#fence-alt-min"><span class="std std-ref">FENCE_ALT_MIN</span></a>) are altitudes above home by default. The altitude reference frame for each can be selected with <a class="reference internal" href="parameters.html#fence-alt-max-tp"><span class="std std-ref">FENCE_ALT_MAX_TP</span></a> and <a class="reference internal" href="parameters.html#fence-alt-min-tp"><span class="std std-ref">FENCE_ALT_MIN_TP</span></a>, respectively:</p>
+<ul class="simple">
+<li><p>0: above mean sea level (AMSL)</p></li>
+<li><p>1: above home (the default, and the behaviour of previous releases)</p></li>
+<li><p>2: above the EKF origin</p></li>
+<li><p>3: above terrain</p></li>
+</ul>
+<p>These parameters are unavailable in Rover. The altitude fences are global limits, independent of any Inclusion/Exclusion fence boundaries, which are horizontal-only.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using the above terrain frame (3) requires a terrain database (see <a class="reference external" href="https://ardupilot.org/plane/docs/common-terrain-following.html#common-terrain-following" title="(in Plane)"><span>Terrain Following</span></a>) and will prevent arming until terrain data is available. If the vehicle cannot determine its altitude in the selected frame while flying, the corresponding fence is treated as breached.</p>
+</div>
+</section>
+<section id="fence-breach-actions">
+<span id="id1"></span><h2>Fence Breach Actions<a class="headerlink" href="#fence-breach-actions" title="Link to this heading">¶</a></h2>
+<section id="rover-actions">
+<h3>Rover Actions<a class="headerlink" href="#rover-actions" title="Link to this heading">¶</a></h3>
+<p>Rover has no altitude actions, but if it reaches the Cylindrical fence boundary in either Steering or Acro modes, it will simply stop and not move beyond it. In other modes, it will execute the <a class="reference internal" href="parameters.html#fence-action"><span class="std std-ref">FENCE_ACTION</span></a>.</p>
+</section>
+<section id="copter-actions">
+<h3>Copter Actions<a class="headerlink" href="#copter-actions" title="Link to this heading">¶</a></h3>
+<p>Copter will stop increasing altitude at <a class="reference internal" href="parameters.html#fence-alt-max"><span class="std std-ref">FENCE_ALT_MAX</span></a> in Loiter, PosHold, and AltHold modes.</p>
+<p>In Loiter mode, it will try to stop at the horizontal boundaries, but declare a breach if exceeds the boundary.</p>
+<p>In other modes, it will execute the <a class="reference internal" href="parameters.html#fence-action"><span class="std std-ref">FENCE_ACTION</span></a> below if the altitude or boundary is reached.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" rowspan="2"><p>FENCE_ACTION</p></th>
+<th class="head" rowspan="2"><p>Copter</p></th>
+<th class="head" rowspan="2"><p>Rover</p></th>
+</tr>
+<tr class="row-even"></tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td rowspan="2"><p>0</p></td>
+<td colspan="2" rowspan="2"><p>Report Only</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="2"><p>1</p></td>
+<td rowspan="2"><p>RTL/LAND</p></td>
+<td rowspan="2"><p>RTL/HOLD</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="2"><p>2</p></td>
+<td rowspan="2"><p>LAND</p></td>
+<td rowspan="2"><p>HOLD</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="2"><p>3</p></td>
+<td rowspan="2"><p>SmartRTL/RTL/LAND</p></td>
+<td rowspan="2"><p>SmartRTL/RTL/HOLD</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="2"><p>4</p></td>
+<td rowspan="2"><p>BRAKE/LAND</p></td>
+<td rowspan="2"><p>SmartRTL/HOLD</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="2"><p>5</p></td>
+<td rowspan="2"><p>SmartRTL or  LAND</p></td>
+<td rowspan="2"><p>not applicable</p></td>
+</tr>
+<tr class="row-even"></tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>RTL/HOLD,etc. means it will attempt RTL first, but if it can’t switch to that mode (ie for RTL, GPS lock is lost), it will attempt to switch to the next,in this case HOLD.</p>
+</div>
+<p>If <a class="reference internal" href="common-object-avoidance-landing-page.html#common-object-avoidance-landing-page"><span class="std std-ref">Object Avoidance</span></a> is setup, RTL actions will attempt to avoid any fences as it returns.</p>
+<p>At the moment the fence is breached a backup fence is erected 20m
+further out (or up).  If the vehicle breaches this backup fence (for
+example if the vehicle is not set up correctly or the operator takes
+control but is unable to bring the copter back towards home), the vehicle
+will execute the <a class="reference internal" href="parameters.html#fence-action"><span class="std std-ref">FENCE_ACTION</span></a> again (and another backup fence an additional 20m further out will be created if this is breached again).</p>
+<p>If the vehicle eventually proceeds 100m outside the configured fence
+distance, despite the backup fences, the vehicle will switch into LAND mode (HOLD for Rover).  The idea being that it’s clearly impossible to get the vehicle home so best to just bring it down/stop it.  The pilot can still retake control of course with the flight mode
+switches.  Like with the earlier fences, another fence is erected 20m
+out which will again switch the vehicle to LAND (HOLD for Rover), if it continues away from
+home.</p>
+</section>
+</section>
+<section id="enabling-the-fence-with-an-rc-channel-auxiliary-switch">
+<h2>Enabling the Fence with an RC Channel Auxiliary Switch<a class="headerlink" href="#enabling-the-fence-with-an-rc-channel-auxiliary-switch" title="Link to this heading">¶</a></h2>
+<p>It is not necessary to set-up a switch to enable or disable the fence
+but if you wish to control the fence with a switch follow these
+steps:</p>
+<p>An <code class="docutils literal notranslate"><span class="pre">RCx_OPTION</span></code> can be set via the Config/Tuning &gt; Full Parameter List screen, for example using RC channel 7:</p>
+<ul class="simple">
+<li><p>Set <a class="reference internal" href="parameters.html#rc7-option"><span class="std std-ref">RC7_OPTION</span></a> = 11 (Fence Enable)</p></li>
+<li><p>setting the switch high (i.e. PWM &gt; 1800) will enable all configured fences, low
+(under 1800) will disable all fences.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>if the Minimum Altitude fence is enabled by the switch while on the ground and disarmed, a pre-arm failure will occur preventing arming.</p>
+</div>
+</section>
+<section id="automatic-altitude-breach-avoidance">
+<h2>Automatic Altitude Breach Avoidance<a class="headerlink" href="#automatic-altitude-breach-avoidance" title="Link to this heading">¶</a></h2>
+<p>For landing modes (NAV_LAND,QLAND,LAND,etc.) in Copter and Plane, the <a class="reference internal" href="parameters.html#fence-alt-min"><span class="std std-ref">FENCE_ALT_MIN</span></a> limit is automatically disabled.</p>
+<p>For Polygonal fences, Copter will stop increasing altitude at <a class="reference internal" href="parameters.html#fence-alt-max"><span class="std std-ref">FENCE_ALT_MAX</span></a> in Loiter, PosHold, and AltHold modes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>altitude control imperfections can still result in a breach unless the <a class="reference internal" href="parameters.html#fence-margin"><span class="std std-ref">FENCE_MARGIN</span></a> param is loose enough to accommodate these imperfections.</p>
+</div>
+</section>
+<section id="enabling-fences-in-mission-planner">
+<h2>Enabling Fences in Mission Planner<a class="headerlink" href="#enabling-fences-in-mission-planner" title="Link to this heading">¶</a></h2>
+<p>To enable Fences, go to the Mission Planner full parameter list (CONFIG-&gt;Full Parameter Tree), search for items with <code class="docutils literal notranslate"><span class="pre">FENCE_</span></code>:</p>
+<a class="reference external image-reference" href="../_images/fence_enable.png"><img alt="../_images/fence_enable.png" src="../_images/fence_enable.png" /></a>
+<div class="video_wrapper" style="padding-bottom: 56.250000%; padding-top: 30px; position: relative; width: 100%">
+<iframe loading="lazy" allowfullscreen="true" src="https://www.youtube.com/embed/yhNrtTERnJk" style="border: 0; height: 100%; left: 0; position: absolute; top: 0; width: 100%">
+</iframe></div><section id="copter-geofence-tab">
+<h3>Copter GeoFence Tab<a class="headerlink" href="#copter-geofence-tab" title="Link to this heading">¶</a></h3>
+<p>Copter and Traditional Heli, when connected to Mission Planner, present a CONFIG tab called GeoFence which provides another way to access these parameters in those vehicles.</p>
+<a class="reference external image-reference" href="../_images/Fence_MPSetup.png"><img alt="../_images/Fence_MPSetup.png" src="../_images/Fence_MPSetup.png" /></a>
+</section>
+</section>
+<section id="use-for-r-c-training">
+<h2>Use for R/C Training<a class="headerlink" href="#use-for-r-c-training" title="Link to this heading">¶</a></h2>
+<p>One of the main uses of geo-fencing is to teach yourself (or someone
+else) to fly radio controlled vehicles. When you have a properly
+configured geo-fence it is very hard to crash, and you can try
+manoeuvres that would normally be too likely to end in a crash, trusting
+the autopilot to ‘bounce’ the vehicle off the geo-fence before the flight ends
+in disaster.</p>
+<p>Geo-fencing can be combined with any flight mode. So for a raw
+beginner, you would combine it with one of the stabilised flight modes
+. Once the pilot has gained some confidence you could combine it with ACRO mode in Copter or MANUAL mode in Plane, which gives direct control of the vehicle and allows for the most interesting aerobatic manoeuvres.</p>
+</section>
+<section id="mavlink-support">
+<h2>MAVLink support<a class="headerlink" href="#mavlink-support" title="Link to this heading">¶</a></h2>
+<p>ArduPilot will report the fence status via the MAVLink GCS protocol. The
+key status packet is called FENCE_STATUS, and is defined in
+“ardupilotmega.xml”. A typical FENCE_STATUS packet looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2011</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">20</span> <span class="mi">16</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mf">35.60</span><span class="p">:</span> <span class="n">FENCE_STATUS</span> <span class="n">breach_status</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">breach_count</span> <span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="n">breach_type</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">breach_time</span> <span class="p">:</span> <span class="mi">1706506</span>
+</pre></div>
+</div>
+<p>The breach_status field is 0 if inside the fence, and 1 if outside. The
+breach_count is how many fence breaches you have had on this flight.
+The breach_type is the type of the last breach (see the FENCE_BREACH
+enum in ardupilotmega.xml). The breach_time is the time in milliseconds
+of the breach since APM was booted.</p>
+<p>The MAV_SYS_STATUS_GEOFENCE bit of the MAV_SYS_STATUS_SENSOR
+portion of the SYS_STATUS message indicates whether or not the
+geo-fence is breached.  As of this writing only the MAVProxy GCS
+recognizes this status bit and reports the status of the geo-fence.  In
+the future the Mission Planner, APM Planner, and other GCS applications
+should get support for announcing geo-fence status during the flight.</p>
+<p>The MAV_CMD_DO_FENCE_ENABLE MAVLink command message allows a GCS to
+enable or disable a fence interactively.  As of this writing only
+MAVProxy supports this message using the “fence enable” or “fence
+disable” commands.  In the future Mission Planner, APM Planner, and
+other GCS applications may get support for interactively enabling and
+disabling the geo-fence without needing to use a manual transmitter.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="traditional-helicopter-autorotation.html" class="btn btn-neutral float-left" title="Autorotation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="common-ac2_simple_geofence.html" class="btn btn-neutral float-right" title="Cylindrical Fence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+    Questions, issues, and suggestions about this page can be raised on the <a href="https://discuss.ardupilot.org">forums</a>. Issues and suggestions may be posted on the forums or the <a href="https://github.com/ArduPilot/ardupilot_wiki/issues/new?title=Fences&amp;body=[Fences](https://ardupilot.org/copter/docs/common-geofencing-landing-page.html)%20-%20Describe%20the%20issue/suggestion%20and%20improve%20the%20title.%20Please%20keep%20a%20link%20to%20the%20original%20article%20if%20relevant.&amp;labels=docs">Github Issue Tracker</a>.
+    <hr/>
+
+  <div role="contentinfo">
+    <p><a style="float:right;" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>&#169; Copyright 2024, ArduPilot Dev Team.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

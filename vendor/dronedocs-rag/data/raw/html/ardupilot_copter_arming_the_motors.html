@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arming the motors &mdash; Copter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ardupilot.css?v=ae9666d5" />
+      <link rel="stylesheet" type="text/css" href="../_static/common_theme_override.css?v=01d3cdd0" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon_copter.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=7f41d439"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/./useralerts.js?v=3014f84e"></script>
+        <script data-domain="ardupilot.org" defer="defer" src="https://plausible.ardupilot.org/js/script.outbound-links.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pre-Flight Checklist (Copter)" href="checklist.html" />
+    <link rel="prev" title="Pre-Arm Safety Checks" href="common-prearm-safety-checks.html" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2980b9" />
+  <link rel="apple-touch-icon" href="/apple-icon.png" />
+  <script src="/js/pwa.js" defer="defer"></script> 
+</head>
+
+<body class="wy-body-for-nav">    
+    <div id='cssmenu'>
+        <ul>
+           <li><a href='/ardupilot/index.html'>Home</a>
+              <ul>
+                 <li><a href='/copter/index.html'>Copter</a></li>
+                 <li><a href='/plane/index.html'>Plane</a></li>
+                 <li><a href='/rover/index.html'>Rover</a></li>
+                 <li><a href='/blimp/index.html'>Blimp</a></li>
+                 <li><a href='/sub/index.html'>Sub</a></li>
+                 <li><a href='/antennatracker/index.html'>AntennaTracker</a></li>
+                 <li><a href='/planner/index.html'>Mission Planner</a></li>
+                 <li><a href='/planner2/index.html'>APM Planner 2</a></li>
+                 <li><a href='/mavproxy/index.html'>MAVProxy</a></li>
+                 <li><a href='/dev/docs/companion-computers.html'>Companion Computers</a></li>
+                 <li><a href='/dev/index.html'>Developer</a></li>
+              </ul>
+           </li>
+           
+          
+           
+           <li><a href='https://firmware.ardupilot.org/'>Downloads</a>
+              <ul>
+                <li><a href='https://firmware.ardupilot.org/Tools/MissionPlanner/'>Mission Planner</a></li>
+                <li><a href='https://firmware.ardupilot.org/Tools/APMPlanner/'>APM Planner 2</a></li>
+                   <li><a title="Advanced User Tools" href="common-downloads_advanced_user_tools.html">Advanced User Tools</a></li>
+                   <li><a title="Developer Tools" href="common-downloads_developer_tools.html">Developer Tools</a></li>
+                   <li><a title="Firmware" href="common-downloads_firmware.html">Firmware</a></li>
+                </ul>
+           </li>
+           
+           <li><a href='https://discuss.ardupilot.org' />Community</a>
+              <ul>
+                 <li><a href='https://discuss.ardupilot.org/'>Support Forums</a></li>
+                 <li><a href='https://www.facebook.com/groups/ArduPilot.org'>Facebook</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Chat (Discord)</a></li>
+                 <li><a href='https://ardupilot.org/discord'>Developer Voice (Discord)</a></li>
+				 <li><a href='https://ardupilot.org/dev/docs/common-contact-us.html'>Contact us</a></li>
+				 <li><a href='https://ardupilot.org/dev/index.html#getting-involved'>Getting involved</a></li>
+                   <li><a title="Commercial Support" href="common-commercial-support.html">Commercial Support</a></li>
+                   <li><a title="Dev Team" href="common-team.html">Development Team</a></li>
+                   <li><a title="Training Centers" href="common-training-centers.html">UAS Training Centers</a></li>
+              </ul>
+           </li>
+             <li><a title="Stores" href="common-stores.html">Stores</a></li>
+
+
+           
+                        <li><a title="About" href="../index.html">About</a>
+               <ul>
+                   <li><a title="Project News" href="project-news.html">News</a></li>
+                   <li><a title="History of ArduPilot" href="common-history-of-ardupilot.html">History</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/license-gplv3.html'>License</a></li>
+                   <li><a href='https://ardupilot.org/dev/docs/trademark.html'>Trademark</a></li>
+                   <li><a title="Acknowledgments" href="common-acknowledgments.html">Acknowledgments</a></li>
+                   <li><a title="Wiki Editing Guide" href="common-wiki_editing_guide.html">Wiki Editing Guide</a></li>
+                   <li><a title="Partners Program" href="common-partners.html">Partners Program</a></li>
+               </ul>
+             </li>
+             <li><a title="Offline" href="common-offline.html">Offline</a></li>
+        </ul>
+        
+
+</div>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Copter
+              <img src="../_static/ardupilot_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="copter-introduction.html">Introduction to Copter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-autopilots.html">Choosing an Autopilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-GCS.html">Ground Control Stations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-setup.html">First Time Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="flying-arducopter.html">First Flight and Tuning</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="common-prearm-safety-checks.html">Pre-arm Safety Check</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Arming and Disarming</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#disarming-the-motors">Disarming the motors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gcs-status-messages">GCS Status Messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="checklist.html">Pre-Flight Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ac_tipsfornewpilots.html">Getting Off the Ground – Tips for New Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common-tuning.html">Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="common-measuring-vibration.html">Measuring Vibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ac_throttlemid.html">Setting Hover Throttle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autotrim.html">Save Trim &amp; Auto Trim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thrust_loss_yaw_imbalance.html">Thrust Loss and Yaw Imbalance Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indoor-flying.html">Indoor Flying</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aerobatic-multicopter.html">Aerobatic Multicopters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="traditional-helicopters.html">Traditional Helicopters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-mission-planning.html">Mission Planning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-when-problems-arise.html">If A Problem Arises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-advanced-configuration.html">Advanced Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-optional-hardware.html">Peripheral Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-information.html">Additional Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-user-alerts.html">User Alerts</a></li>
+</ul>
+
+          <!-- add paypal and dronecode logos -->        <div style="margin: auto; padding-left:20px; padding-right:20px; width=100%">
+
+        <hr />
+        <form style="margin:auto;" action="https://ardupilot.org/donate">
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate" />
+        </form>
+        <br>
+        <a href="common-donation.html">Individual</a>
+        <a href="common-partners.html">Partners</a>
+        <a href="https://ardupilot.org/shop">SWAG Shop</a>
+
+        <hr />
+        </div>
+          <!-- endadd paypal and dronecode logos -->
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Copter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="flying-arducopter.html">First Flight with Copter</a></li>
+      <li class="breadcrumb-item active">Arming the motors</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ArduPilot/ardupilot_wiki/blob/master/copter/source/docs/arming_the_motors.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="arming-the-motors">
+<span id="id1"></span><h1>Arming the motors<a class="headerlink" href="#arming-the-motors" title="Link to this heading">¶</a></h1>
+<p>Arming the vehicle allows the motors to start spinning.  Before arming,
+make sure all people, objects, and any body parts (e.g., hands) are
+clear of the propellers. Then do the following:</p>
+<ol class="arabic simple">
+<li><p>Turn on your transmitter.</p></li>
+<li><p>Plug in the LiPo battery.  The red and blue lights should flash for a few seconds as the gyros are calibrated (do not move the copter)</p></li>
+<li><p>The pre-arm checks will run automatically and if any problems are found the RGB LED will blink yellow and the failure will be displayed on the ground station.  Please refer to <a class="reference internal" href="common-prearm-safety-checks.html#common-prearm-safety-checks"><span class="std std-ref">this page</span></a></p></li>
+<li><p>Check that your flight mode switch is set to Stabilize, ACRO, AltHold, Loiter, or PosHold</p></li>
+<li><p>If using an autopilot with a safety switch, press it until the light goes solid</p></li>
+<li><p>If you are planning on using an autonomous mode (i.e. Loiter, RTL, Auto, etc) switch the vehicle to Loiter or PosHold and wait until the LEDs blink green indicating a good GPS lock</p></li>
+<li><p>Arm the motors by holding the throttle down, and rudder right for 5 seconds.  Do not hold the rudder right for too long (&gt;15 seconds) or you will begin the <a class="reference internal" href="autotrim.html#autotrim"><span class="std std-ref">AutoTrim</span></a> feature</p></li>
+<li><p>Once armed, the LEDs will go solid and the propellers will begin to spin</p></li>
+<li><p>Raise the throttle to take-off</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you leave the throttle at minimum for 15 seconds while in any
+of the above modes the motors will automatically disarm.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>you cannot arm while in certain modes. See the table below:</p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Modes not allowing Arming</p></th>
+<th class="head"><p>Exceptions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AUTO</p></td>
+<td><p><a class="reference internal" href="parameters.html#auto-options"><span class="std std-ref">AUTO_OPTIONS</span></a> bit 0 is set (Allow arming in mode)</p></td>
+</tr>
+<tr class="row-odd"><td><p>AUTOTUNE</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>BRAKE</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>CIRCLE</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>FLIP</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>GUIDED</p></td>
+<td><p>via MAVLink DO_ARM/DISARM command, <a class="reference internal" href="common-lua-scripts.html#common-lua-scripts"><span class="std std-ref">Lua Scripts</span></a>, or <a class="reference internal" href="common-auxiliary-functions.html#common-auxiliary-functions"><span class="std std-ref">common-auxiliary-functions</span></a> switch if enabled with <a class="reference internal" href="parameters.html#guid-options"><span class="std std-ref">GUID_OPTIONS</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>LAND</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>RTL</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SMARTRTL</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SYSID</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>AVOIDADSB</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>FOLLOW</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>AUTOTUNE</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If setup, you can use one of the <strong>RC_xOPTION switches</strong> that includes the arm function. See switch option “153”, “154, or “160”.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Copter will allow arming in some modes without a good GPS location being obtained before arming. If you want any of the modes such as RTL, LOITER, etc. to work properly, you should enable the “Need location” pre-arm check by setting the <a class="reference internal" href="parameters.html#arming-need-loc"><span class="std std-ref">ARMING_NEED_LOC</span></a> parameter to “1” to be sure you have position information available.</p>
+</div>
+<section id="disarming-the-motors">
+<h2>Disarming the motors<a class="headerlink" href="#disarming-the-motors" title="Link to this heading">¶</a></h2>
+<p>Disarming the motors will cause the motors to stop spinning. To disarm the motors do the following:</p>
+<ol class="arabic simple">
+<li><p>Check that your flight mode switch is set to Stabilize, ACRO, AltHold, Loiter, or PosHold</p></li>
+<li><p>Hold throttle at minimum and rudder to the left for 2 seconds</p></li>
+<li><p>The LED will start flashing indicating the vehicle is disarmed</p></li>
+<li><p>If using an autopilot with a safety switch, press it until the LED begins flashing</p></li>
+<li><p>Disconnect the Lipo battery.</p></li>
+<li><p>Turn off your transmitter.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If setup, you can use one of the <code class="docutils literal notranslate"><span class="pre">RC_xOPTION</span></code> switches that includes the disarm function. See switch option “81”, “153, or “154”.</p>
+</div>
+</section>
+<section id="gcs-status-messages">
+<h2>GCS Status Messages<a class="headerlink" href="#gcs-status-messages" title="Link to this heading">¶</a></h2>
+<p>Unless the <a class="reference internal" href="parameters.html#arming-options"><span class="std std-ref">ARMING_OPTIONS</span></a> bit 2 is set, text messages will be sent to the GCS to indicate when arming or disarming has occurred.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="common-prearm-safety-checks.html" class="btn btn-neutral float-left" title="Pre-Arm Safety Checks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="checklist.html" class="btn btn-neutral float-right" title="Pre-Flight Checklist (Copter)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+    Questions, issues, and suggestions about this page can be raised on the <a href="https://discuss.ardupilot.org">forums</a>. Issues and suggestions may be posted on the forums or the <a href="https://github.com/ArduPilot/ardupilot_wiki/issues/new?title=Arming the motors&amp;body=[Arming the motors](https://ardupilot.org/copter/docs/arming_the_motors.html)%20-%20Describe%20the%20issue/suggestion%20and%20improve%20the%20title.%20Please%20keep%20a%20link%20to%20the%20original%20article%20if%20relevant.&amp;labels=docs">Github Issue Tracker</a>.
+    <hr/>
+
+  <div role="contentinfo">
+    <p><a style="float:right;" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>&#169; Copyright 2024, ArduPilot Dev Team.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

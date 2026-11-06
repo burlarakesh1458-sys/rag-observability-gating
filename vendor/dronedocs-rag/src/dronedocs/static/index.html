@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DroneDocs RAG</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:820px;margin:40px auto;padding:0 16px;color:#1b1f24}
+  h1{font-size:1.4rem;margin-bottom:4px} .sub{color:#57606a;margin-top:0}
+  textarea{width:100%;height:80px;font-size:1rem;padding:8px;box-sizing:border-box}
+  button{margin-top:8px;padding:8px 18px;font-size:1rem;cursor:pointer}
+  .ans{white-space:pre-wrap;background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:12px;margin-top:16px}
+  .refused{border-color:#d1242f;background:#fff5f5}
+  .cite{font-size:.9rem;border-left:3px solid #0969da;padding:4px 10px;margin:8px 0;background:#fafbfc}
+  .meta{color:#57606a;font-size:.85rem;margin-top:8px}
+</style>
+</head>
+<body>
+<h1>DroneDocs RAG</h1>
+<p class="sub">Ask about India's Drone Rules 2021 (+ amendments) and ArduPilot / PX4 failsafe &amp; flight-mode docs. Every answer is cited, or refused.</p>
+<textarea id="q" placeholder="e.g. What is the maximum all-up weight of a micro drone?"></textarea>
+<button id="go">Ask</button>
+<div id="out"></div>
+<script>
+const out=document.getElementById('out');
+document.getElementById('go').onclick=async()=>{
+  const q=document.getElementById('q').value.trim(); if(!q) return;
+  out.innerHTML='<p class="meta">Retrieving, reranking, generating...</p>';
+  const r=await fetch('/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});
+  const d=await r.json();
+  if(!r.ok){out.innerHTML='<div class="ans refused">'+(d.detail||'error')+'</div>';return;}
+  const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  let h='<div class="ans'+(d.refused?' refused':'')+'">'+esc(d.answer)+'</div>';
+  for(const c of d.citations){h+='<div class="cite"><b>['+esc(c.chunk_id)+']</b> '+esc(c.source)+' &middot; '+esc(c.locator)+'<br><i>'+esc(c.snippet)+'&hellip;</i></div>';}
+  h+='<p class="meta">prompt '+d.prompt_version+' &middot; '+d.model+' &middot; '+d.latency_ms.total+' ms total</p>';
+  out.innerHTML=h;
+};
+</script>
+</body>
+</html>

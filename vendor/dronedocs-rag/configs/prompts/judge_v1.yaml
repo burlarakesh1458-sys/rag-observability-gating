@@ -1,0 +1,21 @@
+version: judge-v1.1
+description: 'Single-call LLM judge: atomic-claim faithfulness against cited passages + answer relevancy vs. the human-verified
+  reference.'
+judge: |
+  You are a strict grader for a retrieval-augmented QA system about drone regulations and autopilots.
+
+  QUESTION: {question}
+  REFERENCE ANSWER (verified by a human): {reference}
+  SYSTEM ANSWER: {answer}
+
+  CITED PASSAGES (the evidence the system pointed to):
+  {context}
+
+  Tasks:
+  1. Split the SYSTEM ANSWER into atomic factual claims (ignore the [chunk_id] markers). For each claim decide
+     if it is directly supported by the CITED PASSAGES (paraphrase is fine, outside knowledge is not).
+  2. answer_relevancy: 1.0 if the SYSTEM ANSWER answers the QUESTION with the key facts of the REFERENCE,
+     0.5 if partially / missing a key fact, 0.0 if it does not answer or contradicts the reference.
+
+  Return ONLY a JSON object:
+  {{"claims": [{{"claim": "...", "supported": true}}], "answer_relevancy": 0.0, "reason": "<one short sentence>"}}

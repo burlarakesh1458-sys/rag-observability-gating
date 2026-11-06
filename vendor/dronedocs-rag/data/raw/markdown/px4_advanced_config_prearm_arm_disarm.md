@@ -1,0 +1,243 @@
+# Arm, Disarm, Prearm Configuration
+
+Vehicles may have moving parts, some of which are potentially dangerous when powered (in particular motors and propellers)!
+
+To reduce the chance of accidents, PX4 has explicit state(s) for powering the vehicle components:
+
+- **Disarmed:** There is no power to motors or actuators.
+- **Pre-armed:** Motors/propellers are locked but actuators for non-dangerous electronics are powered (e.g. ailerons, flaps etc.).
+- **Armed:** Vehicle is fully powered. Motors/propellers may be turning (dangerous!)
+
+::: info
+Ground stations may display _disarmed_ for pre-armed vehicles.
+While not technically correct for pre-armed vehicles, it is "safe".
+:::
+
+Users can control progression though these states using a [safety switch](../getting_started/px4_basic_concepts.md#safety-switch) on the vehicle (optional) _and_ an [arming switch/button](#arm_disarm_switch), [arming gesture](#arm_disarm_gestures), or _MAVLink command_ on the ground controller:
+
+- A _safety switch_ is a control _on the vehicle_ that must be engaged before the vehicle can be armed, and which may also prevent pre-arming (depending on the configuration).
+  Commonly the safety switch is integrated into a GPS unit, but it may also be a separate physical component.
+
+  :::warning
+  A vehicle that is armed is potentially dangerous.
+  The safety switch is an additional mechanism that prevents arming from happening by accident.
+  :::
+
+- An _arming switch_ is a switch or button _on an RC controller_ that can be used to arm the vehicle and start motors (provided arming is not prevented by a safety switch).
+- An _arming gesture_ is a stick movement _on an RC controller_ that can be used as an alternative to an arming switch.
+- MAVLink commands can also be sent by a ground control station to pre-arm, arm, or disarm a vehicle.
+
+PX4 will also automatically disarm the vehicle if it does not takeoff within a certain amount of time after arming, and if it is not manually disarmed after landing.
+This reduces the amount of time where an armed (and therefore dangerous) vehicle is on the ground.
+
+PX4 allows you to configure how pre-arming, arming and disarming work using parameters (which can be edited in _QGroundControl_ via the [parameter editor](../advanced_config/parameters.md)), as described in the following sections.
+
+:::tip
+Arming/disarming parameters can be found in [Parameter Reference > Commander](../advanced_config/parameter_reference.md#commander) (search for `COM_ARM_*` and `COM_DISARM_*`).
+:::
+
+## Arming/Disarming Gestures {#arm_disarm_gestures}
+
+By default, the vehicle is armed and disarmed by moving RC throttle/yaw sticks to particular extremes and holding them for 1 second.
+
+- **Arming:** Throttle minimum, yaw maximum
+- **Disarming:** Throttle minimum, yaw minimum
+
+RC controllers will use different sticks for throttle and yaw [based on their mode](../getting_started/rc_transmitter_receiver.md#types-of-remote-controllers), and hence different gestures:
+
+- **Mode 2**:
+  - _Arm:_ Left stick to bottom right.
+  - _Disarm:_ Left stick to the bottom left.
+- **Mode 1**:
+  - _Arm:_ Left-stick to right, right-stick to bottom.
+  - _Disarm:_ Left-stick to left, right-stick to the bottom.
+
+Note that disarming in any altitude controlled mode is only possible after landing was detected.
+In manually piloted modes without altitude control, such as Stabilized, Acro, and Manual, it's always possible to disarm using gestures or buttons — even in flight.
+
+| Parameter                                                                                                | Description                                                              |
+| -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| <a id="MAN_ARM_GESTURE"></a>[MAN_ARM_GESTURE](../advanced_config/parameter_reference.md#MAN_ARM_GESTURE) | Enable arm/disarm stick guesture. `0`: Disabled, `1`: Enabled (default). |
+
+## Arming Button/Switch {#arm_disarm_switch}
+
+An _arming button_ or "momentary switch" can be configured to trigger arm/disarm _instead_ of [gesture-based arming](#arm_disarm_gestures) (setting an arming switch disables arming gestures).
+The button should be held down for one second to arm (when disarmed) or disarm (when armed).
+
+A two-position switch can also be used for arming/disarming, where the respective arm/disarm commands are sent on switch _transitions_.
+
+:::tip
+Two-position arming switches are primarily used in/recommended for racing drones.
+:::
+
+The switch or button is assigned (and enabled) using [RC_MAP_ARM_SW](#RC_MAP_ARM_SW), and the switch "type" is configured using [COM_ARM_SWISBTN](#COM_ARM_SWISBTN).
+
+| Parameter                                                                                                | Description                                                                                                                                                                                                                                                                                                                                        |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="RC_MAP_ARM_SW"></a>[RC_MAP_ARM_SW](../advanced_config/parameter_reference.md#RC_MAP_ARM_SW)       | RC arm switch channel (default: 0 - unassigned). If defined, the specified RC channel (button/switch) is used for arming instead of a stick gesture. <br>**Note:**<br>- This setting _disables the stick gesture_!<br>- This setting applies to RC controllers. It does not apply to Joystick controllers that are connected via _QGroundControl_. |
+| <a id="COM_ARM_SWISBTN"></a>[COM_ARM_SWISBTN](../advanced_config/parameter_reference.md#COM_ARM_SWISBTN) | Arm switch is a momentary button. <br>- `0`: Arm switch is a 2-position switch where arm/disarm commands are sent on switch transitions.<br>-`1`: Arm switch is a momentary button where the arm/disarm command is sent after holding down the button for one second.                                                                              |
+
+::: info
+The switch can also be set as part of _QGroundControl_ [Flight Mode](../config/flight_mode.md) configuration.
+:::
+
+## Auto-Disarming
+
+By default vehicles will automatically disarm on landing, or if you take too long to take off after arming.
+The feature is configured using the following timeouts.
+
+| Parameter                                                                                                   | Description                                                                    |
+| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| <a id="COM_DISARM_LAND"></a>[COM_DISARM_LAND](../advanced_config/parameter_reference.md#COM_DISARM_LAND)    | Time-out for auto disarm after landing. Default: 2s (-1 to disable).           |
+| <a id="COM_DISARM_PRFLT"></a>[COM_DISARM_PRFLT](../advanced_config/parameter_reference.md#COM_DISARM_PRFLT) | Time-out for auto disarm if too slow to takeoff. Default: 10s (-1 to disable). |
+
+By default, the vehicle keeps safety off after disarming.
+If [COM_FORCE_SAFETY](#COM_FORCE_SAFETY) is set to `1`, safety is re-enabled on disarm, so it must be turned off again (by switch or MAVLink command, depending on [COM_SAFETY_MODE](#COM_SAFETY_MODE)) before the next arming.
+In modes that pre-arm when safety is turned off, this also exits the pre-armed state.
+This parameter has no effect when `COM_SAFETY_MODE` is set to `0`.
+
+| Parameter                                                                                                   | Description                                                         |
+| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| <a id="COM_FORCE_SAFETY"></a>[COM_FORCE_SAFETY](../advanced_config/parameter_reference.md#COM_FORCE_SAFETY) | Re-enable safety when the vehicle disarms. Default: `0` (Disabled). |
+
+## Auto-Arming on Boot
+
+The vehicle can be configured to arm automatically on boot once all preflight checks pass,
+using the `COM_ARM_ON_BOOT` parameter. For safety, PX4 enforces a minimum 5-second delay after boot before attempting to arm.
+
+Once armed this way, the vehicle will not re-arm automatically after a manual disarm.
+
+::: info
+The parameter value is read once at boot.
+Changing it while the system is running has no effect until the next reboot.
+:::
+
+:::warning
+Use with caution.
+A vehicle that arms automatically can spin up motors and actuators without any operator gesture.
+Ensure the vehicle is in a safe state before powering on.
+:::
+
+| Parameter                                                                                                | Description                                                                       |
+| -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| <a id="COM_ARM_ON_BOOT"></a>[COM_ARM_ON_BOOT](../advanced_config/parameter_reference.md#COM_ARM_ON_BOOT) | Arm automatically once preflight checks pass after boot. Default: `0` (Disabled). |
+
+## Pre-Arm Checks {#prearm_checks}
+
+To reduce accidents, vehicles are only allowed to arm certain conditions are met (some of which are configurable).
+Arming is prevented if:
+
+- The vehicle is not in a "healthy" state.
+  For example it is not calibrated, or is reporting sensor errors.
+- The vehicle still has its [safety state](#safety_state) set to _ON_. This could for instance be a [safety switch](../getting_started/px4_basic_concepts.md#safety-switch) that has not been engaged.
+- The vehicle has a [remote ID](../peripherals/remote_id.md) that is unhealthy or otherwise not ready
+- A VTOL vehicle is in fixed-wing mode ([by default](../advanced_config/parameter_reference.md#CBRK_VTOLARMING)).
+- The current mode requires an adequate global position estimate but the vehicle does not have GPS lock.
+- Many more (see [arming/disarming safety settings](../config/safety.md#arming-disarming-settings) for more information).
+
+The current failed checks can be viewed in QGroundControl (v4.2.0 and later) [Arming Check Report](../flying/pre_flight_checks.md#qgc-arming-check-report) (see also [Fly View > Toolbar > Flight Status](https://docs.qgroundcontrol.com/master/en/qgc-user-guide/fly_view/fly_view_toolbar.html#flight-status)).
+
+Note that internally PX4 runs arming checks at 10Hz.
+A list of the failed checks is kept, and if the list changes PX4 emits the current list using the [Events interface](../concept/events_interface.md).
+The list is also sent out when the GCS connects.
+Effectively the GCS knows the status of pre-arm checks immediately, both when disarmed and armed.
+
+:::details Implementation notes for developers
+The client implementation is in [libevents](https://github.com/mavlink/libevents):
+
+- [libevents > Event groups](https://github.com/mavlink/libevents#event-groups)
+- [health_and_arming_checks.h](https://github.com/mavlink/libevents/blob/main/libs/cpp/parse/health_and_arming_checks.h)
+
+QGC implementation: [HealthAndArmingCheckReport.cc](https://github.com/mavlink/qgroundcontrol/blob/master/src/MAVLink/LibEvents/HealthAndArmingCheckReport.cc).
+:::
+
+PX4 also emits a subset of the arming check information in the [SYS_STATUS](https://mavlink.io/en/messages/common.html#SYS_STATUS) message (see [MAV_SYS_STATUS_SENSOR](https://mavlink.io/en/messages/common.html#MAV_SYS_STATUS_SENSOR)).
+
+## Arming Sequence: Safety State {#safety_state}
+
+The arming sequence depends on whether or not there is a _safety switch_, and is controlled by the parameter [COM_SAFETY_MODE](#COM_SAFETY_MODE). Changes to the parameter only take effect after a reboot.
+
+When disarmed (or pre-armed), the safety state can either be _ON_ (a.k.a. _SAFE_), or _OFF_ (a.k.a. _DANGEROUS_). When it is _ON_, arming will always be prevented. When it is _OFF_, the vehicle can be armed for as long as the [pre-arm checks](#prearm_checks) have passed.
+
+Additionally, the [COM_PREARM_MODE](#COM_PREARM_MODE) parameter defines when/if pre-arm mode is enabled ("safe"/non-throttling actuators are able to move):
+
+- `Disabled` (Default): Pre-arm mode disabled (there is no stage where only non-throttling actuators are enabled).
+- `When safety off`: Pre-arm mode is enabled when safety is turned off.
+- `Always`: Pre-arm mode is enabled from power up.
+
+The sections below detail the startup sequences for the different configurations of [COM_SAFETY_MODE](#COM_SAFETY_MODE) and [COM_PREARM_MODE](#COM_PREARM_MODE).
+
+### COM_SAFETY_MODE=Always off (Default) and COM_PREARM_MODE=Disabled (Default)
+
+The default configuration does not impose any additional safety measures. Arming is possible as soon as the rest of the system is ready.
+
+The startup sequence is:
+
+1. Power-up.
+   - All actuators locked into disarmed position
+   - System safety is off: Arming possible once the other pre-arm checks pass.
+1. Arm command is issued.
+   - The system is armed.
+   - All motors and actuators can move.
+
+### COM_SAFETY_MODE=Safety switch (physical or virtual via MAVLink) and COM_PREARM_MODE=When safety off
+
+This configuration lets you use either the safety switch or a MAVLink command [MAV_CMD_DO_SET_SAFETY_SWITCH_STATE](https://mavlink.io/en/messages/common.html#MAV_CMD_DO_SET_SAFETY_SWITCH_STATE) to turn safety off. Note that sending the corresponding MAVLink command with SAFETY*SWITCH_STATE_SAFE also lets you turn safety back on, but the physical switch does \_not* allow to go back to a safe state.
+
+The startup sequence is:
+
+1. Power-up.
+   - All actuators locked into disarmed position
+   - Not possible to arm.
+1. Safety switch is pressed or a MAVLink command is received.
+   - System now pre-armed: non-throttling actuators can move (e.g. ailerons).
+   - System safety is off: Arming possible once the other pre-arm checks pass.
+1. Arm command is issued.
+   - The system is armed.
+   - All motors and actuators can move.
+
+### COM_SAFETY_MODE=Physical safety switch only and COM_PREARM_MODE=When safety off
+
+When safety mode is `Physical safety switch only`, you must press the safety switch to turn safety off. Note that pressing the safety switch again does _not_ allow to go back to a safe state.
+The MAVLink command is rejected.
+
+The startup sequence is:
+
+1. Power-up.
+   - All actuators locked into disarmed position
+   - Not possible to arm.
+1. Safety switch is pressed.
+   - System now pre-armed: non-throttling actuators can move (e.g. ailerons).
+   - System safety is off: Arming possible once the other pre-arm checks pass.
+1. Arm command is issued.
+   - The system is armed.
+   - All motors and actuators can move.
+
+### COM_SAFETY_MODE=MAVLink only and COM_PREARM_MODE=When safety off
+
+When safety mode is `MAVLink only`, you must send a MAVLink command [MAV_CMD_DO_SET_SAFETY_SWITCH_STATE](https://mavlink.io/en/messages/common.html#MAV_CMD_DO_SET_SAFETY_SWITCH_STATE) to turn safety off. Note that sending the corresponding MAVLink command with SAFETY_SWITCH_STATE_SAFE also lets you turn safety back on.
+Any physical safety switch is ignored.
+
+The startup sequence is:
+
+1. Power-up.
+   - All actuators locked into disarmed position
+   - Not possible to arm.
+1. A MAVLink command is received.
+   - System now pre-armed: non-throttling actuators can move (e.g. ailerons).
+   - System safety is off: Arming possible once the other pre-arm checks pass.
+1. Arm command is issued.
+   - The system is armed.
+   - All motors and actuators can move.
+
+### Parameters
+
+| Parameter                                                                                                | Description                                                                            |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| <a id="COM_SAFETY_MODE"></a>[COM_SAFETY_MODE](../advanced_config/parameter_reference.md#COM_SAFETY_MODE) | Condition to turn safety off. Vehicle arming is prevented for as long as safety is on. |
+| <a id="COM_PREARM_MODE"></a>[COM_PREARM_MODE](../advanced_config/parameter_reference.md#COM_PREARM_MODE) | Condition to enter the prearmed state.                                                 |
+
+<!-- Discussion:
+https://github.com/PX4/PX4-Autopilot/pull/12806#discussion_r318337567
+https://github.com/PX4/PX4-user_guide/issues/567#issue-486653048
+-->
