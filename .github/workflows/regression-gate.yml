@@ -1,0 +1,62 @@
+name: rag-regression-gate
+
+# Runs on every PR. Prompt/config files live next to the code, so a PR that edits
+# configs/prompts/*.yaml or configs/observability.yaml is evaluated exactly like a code change.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: gate-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONPATH: src:vendor/dronedocs-rag/src
+  DRONEDOCS_ROOT: ${{ github.workspace }}/vendor/dronedocs-rag
+  HF_HOME: ~/.cache/huggingface
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - run: pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install -r requirements-dev.txt && pip install -e . --no-deps
+      - run: ruff check src tests scripts dashboard
+      - run: pytest -q
+
+  regression-gate:
+    needs: unit
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    env:
+      LLM_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      LLM_BASE_URL: https://api.groq.com/openai/v1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - uses: actions/cache@v4
+        with: { path: ~/.cache/huggingface, key: hf-models-v1 }
+      - run: pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install -r requirements.txt && pip install -e . --no-deps
+      - name: Build index
+        run: python -m dronedocs.cli ingest
+      - name: Golden-set regression gate vs. baselines/eval_baseline.json
+        run: python -m ragobs.gate --subset ci
+      - name: Gate summary
+        if: always()
+        run: cat reports/gate_summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload gate report + traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-report
+          path: |
+            reports/gate_*.json
+            traces/*.jsonl
