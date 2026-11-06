@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import logging
 import pickle
@@ -15,8 +16,11 @@ from .chunking import Chunk
 log = logging.getLogger(__name__)
 
 _TOKEN = re.compile(r"[a-z0-9_]+(?:\.[0-9]+)?")
-_STOP = set("a an the of to in on for and or is are be by with as at from that this it its what which "
-            "who how when does do can i my under any per".split())
+_STOP_WORDS = (
+    "a an the of to in on for and or is are be by with as at from "
+    "that this it its what which who how when does do can i my under any per"
+)
+_STOP = set(_STOP_WORDS.split())
 
 
 def bm25_tokenize(text: str) -> list[str]:
@@ -34,8 +38,9 @@ class Hit:
     metadata: dict = field(default_factory=dict)
 
 
-def reciprocal_rank_fusion(rankings: Sequence[Sequence[str]], k: int = 60,
-                           weights: Sequence[float] | None = None) -> list[tuple[str, float]]:
+def reciprocal_rank_fusion(
+    rankings: Sequence[Sequence[str]], k: int = 60, weights: Sequence[float] | None = None
+) -> list[tuple[str, float]]:
     """RRF(d) = sum_i w_i / (k + rank_i(d)), ranks are 1-based. Returns ids sorted by fused score."""
     weights = list(weights) if weights else [1.0] * len(rankings)
     scores: dict[str, float] = {}
@@ -54,8 +59,9 @@ class Embedder:
         self.batch_size = batch_size
 
     def embed_docs(self, texts: list[str]) -> list[list[float]]:
-        return self.model.encode(texts, batch_size=self.batch_size, normalize_embeddings=True,
-                                 show_progress_bar=False).tolist()
+        return self.model.encode(
+            texts, batch_size=self.batch_size, normalize_embeddings=True, show_progress_bar=False
+        ).tolist()
 
     def embed_query(self, text: str) -> list[float]:
         return self.model.encode([self.query_instruction + text], normalize_embeddings=True)[0].tolist()
@@ -79,8 +85,9 @@ class HybridIndex:
         import chromadb
         from chromadb.config import Settings
 
-        return chromadb.PersistentClient(path=str(self.index_dir / "chroma"),
-                                         settings=Settings(anonymized_telemetry=False))
+        return chromadb.PersistentClient(
+            path=str(self.index_dir / "chroma"), settings=Settings(anonymized_telemetry=False)
+        )
 
     def build(self, chunks: list[Chunk]) -> None:
         from rank_bm25 import BM25Okapi
@@ -89,17 +96,19 @@ class HybridIndex:
             raise RuntimeError("embedder required to build the index")
         self.index_dir.mkdir(parents=True, exist_ok=True)
         client = self._client()
-        try:
+        with contextlib.suppress(Exception):
             client.delete_collection(self.COLLECTION)
-        except Exception:  # noqa: BLE001 - collection may not exist yet
-            pass
         col = client.create_collection(self.COLLECTION, metadata={"hnsw:space": "cosine"})
         texts = [c.text for c in chunks]
         vecs = self.embedder.embed_docs(texts)
         for i in range(0, len(chunks), 256):
             sl = slice(i, i + 256)
-            col.add(ids=[c.chunk_id for c in chunks[sl]], embeddings=vecs[sl], documents=texts[sl],
-                    metadatas=[c.to_metadata() for c in chunks[sl]])
+            col.add(
+                ids=[c.chunk_id for c in chunks[sl]],
+                embeddings=vecs[sl],
+                documents=texts[sl],
+                metadatas=[c.to_metadata() for c in chunks[sl]],
+            )
         self._collection = col
         self.chunks = {c.chunk_id: c for c in chunks}
         self._bm25_ids = [c.chunk_id for c in chunks]
@@ -136,15 +145,21 @@ class HybridIndex:
 
         scores = self._bm25.get_scores(bm25_tokenize(query))
         order = np.argsort(-scores)[:k]
-        return [Hit(self._bm25_ids[i], float(scores[i]), r, "bm25", self.chunks[self._bm25_ids[i]].text)
-                for r, i in enumerate(order, start=1) if scores[i] > 0]
+        return [
+            Hit(self._bm25_ids[i], float(scores[i]), r, "bm25", self.chunks[self._bm25_ids[i]].text)
+            for r, i in enumerate(order, start=1)
+            if scores[i] > 0
+        ]
 
-    def hybrid_search(self, query: str, vector_k: int = 20, bm25_k: int = 20, rrf_k: int = 60,
-                      fused_k: int = 20, mode: str = "hybrid") -> tuple[list[Hit], dict]:
+    def hybrid_search(
+        self, query: str, vector_k: int = 20, bm25_k: int = 20, rrf_k: int = 60, fused_k: int = 20, mode: str = "hybrid"
+    ) -> tuple[list[Hit], dict]:
         vec = self.vector_search(query, vector_k) if mode in ("hybrid", "vector") else []
         bm = self.bm25_search(query, bm25_k) if mode in ("hybrid", "bm25") else []
         fused = reciprocal_rank_fusion([[h.chunk_id for h in vec], [h.chunk_id for h in bm]], k=rrf_k)
         hits = [Hit(cid, s, r, mode, self.chunks[cid].text) for r, (cid, s) in enumerate(fused[:fused_k], 1)]
-        debug = {"vector": [(h.chunk_id, round(h.score, 4)) for h in vec],
-                 "bm25": [(h.chunk_id, round(h.score, 3)) for h in bm]}
+        debug = {
+            "vector": [(h.chunk_id, round(h.score, 4)) for h in vec],
+            "bm25": [(h.chunk_id, round(h.score, 3)) for h in bm],
+        }
         return hits, debug

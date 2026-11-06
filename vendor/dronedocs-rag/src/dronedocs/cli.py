@@ -28,11 +28,13 @@ def main(argv: list[str] | None = None) -> int:
     p_ev.add_argument("--resume", action="store_true", help="reuse finished rows from the last interrupted run")
     p_ev.add_argument("--report-only", action="store_true", help="rebuild the report from the checkpoint, no calls")
     p_srv = sub.add_parser("serve", help="run the FastAPI server")
-    p_srv.add_argument("--host", default="0.0.0.0")
+    p_srv.add_argument("--host", default="0.0.0.0")  # noqa: S104 - container entrypoint
     p_srv.add_argument("--port", type=int, default=8000)
     args = ap.parse_args(argv)
-    logging.basicConfig(level=logging.INFO if args.verbose else logging.WARNING,
-                        format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    logging.basicConfig(
+        level=logging.INFO if args.verbose else logging.WARNING,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
 
     if args.cmd == "ingest":
         from .ingest import ingest
@@ -49,14 +51,22 @@ def main(argv: list[str] | None = None) -> int:
             print(res.answer, "\n")
             for c in res.citations:
                 print(f"  [{c.chunk_id}] {c.source} - {c.locator}")
-            print(f"\n  prompt={res.prompt_version} model={res.model} "
-                  f"latency={res.stage_timings['total']:.2f}s refused={res.refused}")
+            print(
+                f"\n  prompt={res.prompt_version} model={res.model} "
+                f"latency={res.stage_timings['total']:.2f}s refused={res.refused}"
+            )
         return 0
     if args.cmd == "eval":
         from .eval.run_eval import run
 
-        return run(limit=args.limit, use_ragas=not args.no_ragas, gate=not args.no_gate, out=args.out,
-                   resume=args.resume, report_only=args.report_only)
+        return run(
+            limit=args.limit,
+            use_ragas=not args.no_ragas,
+            gate=not args.no_gate,
+            out=args.out,
+            resume=args.resume,
+            report_only=args.report_only,
+        )
     if args.cmd == "serve":
         import uvicorn
 

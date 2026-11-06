@@ -46,24 +46,27 @@ def run_ragas(cfg: dict, items: list[dict], rows: list[dict], chunks: dict[str, 
     picked = [r for r in rows if r["answerable"] and not r["refused"]][:sample]
     if not picked:
         return {"status": "skipped", "reason": "no answered items"}
-    data = [{
-        "user_input": r["question"],
-        "response": r["answer"],
-        "retrieved_contexts": [chunks[c].text for c in r["context_ids"]],
-        "reference": by_id[r["id"]]["reference"],
-    } for r in picked]
+    data = [
+        {
+            "user_input": r["question"],
+            "response": r["answer"],
+            "retrieved_contexts": [chunks[c].text for c in r["context_ids"]],
+            "reference": by_id[r["id"]]["reference"],
+        }
+        for r in picked
+    ]
     llm_cfg = cfg["llm"]
     base_url = os.environ.get(llm_cfg.get("base_url_env", "LLM_BASE_URL")) or llm_cfg["default_base_url"]
     api_key = os.environ.get(llm_cfg.get("api_key_env", "LLM_API_KEY")) or os.environ.get("GROQ_API_KEY")
     ragas_model = cfg["eval"].get("ragas_model") or cfg["judge"]["model"]
-    chat = ChatOpenAI(model=ragas_model, base_url=base_url, api_key=api_key, temperature=0,
-                      max_retries=6, timeout=90)
+    chat = ChatOpenAI(model=ragas_model, base_url=base_url, api_key=api_key, temperature=0, max_retries=6, timeout=90)
     llm = LangchainLLMWrapper(chat)
     result = evaluate(
         EvaluationDataset.from_list(data),
         metrics=[_Faithfulness(llm=llm), _LLMContextRecall(llm=llm)],
         run_config=RunConfig(max_workers=1, max_retries=6, max_wait=60, timeout=180),
-        show_progress=False, raise_exceptions=False,
+        show_progress=False,
+        raise_exceptions=False,
     )
     df = result.to_pandas()
     out = {"status": "ok", "n": len(picked), "ragas_model": ragas_model}

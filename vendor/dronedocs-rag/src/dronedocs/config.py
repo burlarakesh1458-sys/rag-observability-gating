@@ -39,7 +39,7 @@ def apply_env_overrides(cfg: dict, environ: dict[str, str] | None = None) -> dic
     for key, raw in environ.items():
         if not key.startswith(ENV_PREFIX):
             continue
-        path = [p.lower() for p in key[len(ENV_PREFIX):].split("__") if p]
+        path = [p.lower() for p in key[len(ENV_PREFIX) :].split("__") if p]
         node = out
         for part in path[:-1]:
             node = node.setdefault(part, {})

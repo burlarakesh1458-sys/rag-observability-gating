@@ -15,13 +15,15 @@ from dataclasses import dataclass, field
 CITE_RE = re.compile(r"\[([^\[\]]+?#c\d{3}(?:\s*[,;]\s*[^\[\]]+?#c\d{3})*)\]")
 _SENT_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9(\"'])")
 
-REFUSAL_TEXT = ("I can't answer that from the indexed documents: the retrieved passages do not "
-                "contain enough evidence to support an answer.")
+REFUSAL_TEXT = (
+    "I can't answer that from the indexed documents: the retrieved passages do not "
+    "contain enough evidence to support an answer."
+)
 
 
 @dataclass
 class CitationCheck:
-    status: str                                  # ok | refused_by_model | refused_no_citations | refused_uncited
+    status: str  # ok | refused_by_model | refused_no_citations | refused_uncited
     cited_ids: list[str] = field(default_factory=list)
     valid_ids: list[str] = field(default_factory=list)
     invalid_ids: list[str] = field(default_factory=list)
@@ -69,9 +71,14 @@ def is_refusal(text: str, sentinel: str = "INSUFFICIENT_EVIDENCE") -> bool:
     return not t or sentinel in t or t.lower().startswith("i can't answer that from the indexed documents")
 
 
-def check_citations(answer: str, context_ids: set[str], known_ids: set[str] | None = None,
-                    sentinel: str = "INSUFFICIENT_EVIDENCE", require_citations: bool = True,
-                    max_uncited_sentence_ratio: float = 0.5) -> CitationCheck:
+def check_citations(
+    answer: str,
+    context_ids: set[str],
+    known_ids: set[str] | None = None,
+    sentinel: str = "INSUFFICIENT_EVIDENCE",
+    require_citations: bool = True,
+    max_uncited_sentence_ratio: float = 0.5,
+) -> CitationCheck:
     answer = normalize_citations(answer)
     if is_refusal(answer, sentinel):
         return CitationCheck(status="refused_by_model")

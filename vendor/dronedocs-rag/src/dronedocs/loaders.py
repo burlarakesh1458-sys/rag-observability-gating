@@ -14,8 +14,9 @@ from pathlib import Path
 
 SUPPORTED = {".pdf": "pdf", ".md": "markdown", ".markdown": "markdown", ".html": "html", ".htm": "html"}
 
-_QUOTES = str.maketrans({"‗": "'", "―": '"', "‖": '"', "“": '"', "”": '"', "‘": "'", "’": "'",
-                         "–": "-", "—": "-", "\u00a0": " "})
+_QUOTES = str.maketrans(
+    {"‗": "'", "―": '"', "‖": '"', "“": '"', "”": '"', "‘": "'", "’": "'", "–": "-", "—": "-", "\u00a0": " "}
+)
 
 
 _TABLE_RULE = re.compile(r"^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$")
@@ -26,9 +27,9 @@ _ANCHOR = re.compile(r"\s*\{#[^}]*\}")
 
 @dataclass
 class Section:
-    source: str          # file name, e.g. drone_rules_2021.pdf
-    doc_type: str        # pdf | markdown | html
-    locator: str         # "page 27" or "section: Failsafe Actions > Battery"
+    source: str  # file name, e.g. drone_rules_2021.pdf
+    doc_type: str  # pdf | markdown | html
+    locator: str  # "page 27" or "section: Failsafe Actions > Battery"
     text: str
     page: int | None = None
     section: str | None = None
@@ -73,8 +74,9 @@ def load_pdf(path: Path, drop_non_latin_lines: bool = True) -> Iterator[Section]
 _MD_HEADING = re.compile(r"^(#{1,6})\s+(.*)$")
 
 
-def _split_by_headings(path: Path, lines: list[tuple[int, str]], doc_type: str,
-                       drop_non_latin_lines: bool) -> Iterator[Section]:
+def _split_by_headings(
+    path: Path, lines: list[tuple[int, str]], doc_type: str, drop_non_latin_lines: bool
+) -> Iterator[Section]:
     """lines: (level, text) where level>0 marks a heading."""
     stack: list[str] = []
     buf: list[str] = []
@@ -89,7 +91,7 @@ def _split_by_headings(path: Path, lines: list[tuple[int, str]], doc_type: str,
         if level:
             yield from flush()
             buf = []
-            stack = stack[: level - 1] + [text.strip()]
+            stack = [*stack[: level - 1], text.strip()]
         else:
             buf.append(text)
     yield from flush()
@@ -98,12 +100,12 @@ def _split_by_headings(path: Path, lines: list[tuple[int, str]], doc_type: str,
 def load_markdown(path: Path, drop_non_latin_lines: bool = True) -> Iterator[Section]:
     raw = path.read_text(encoding="utf-8")
     raw = re.sub(r"<!--.*?-->", "", raw, flags=re.S)
-    raw = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", raw)                 # images
-    raw = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", raw)               # links -> text
-    raw = re.sub(r"\[([^\]]+)\]\[[^\]]*\]", r"\1", raw)              # reference-style links
-    raw = re.sub(r"(?m)^\[[^\]]+\]:\s+\S+.*$", "", raw)            # link reference definitions
+    raw = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", raw)  # images
+    raw = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", raw)  # links -> text
+    raw = re.sub(r"\[([^\]]+)\]\[[^\]]*\]", r"\1", raw)  # reference-style links
+    raw = re.sub(r"(?m)^\[[^\]]+\]:\s+\S+.*$", "", raw)  # link reference definitions
     raw = re.sub(r"<br\s*/?>", "\n", raw)
-    raw = re.sub(r"<[^>]+>", "", raw)                                 # img, Badge, anchors...
+    raw = re.sub(r"<[^>]+>", "", raw)  # img, Badge, anchors...
     raw = "\n".join(line for line in raw.splitlines() if not _ADMONITION.match(line))
     lines: list[tuple[int, str]] = []
     in_code = False

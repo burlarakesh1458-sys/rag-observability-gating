@@ -80,9 +80,15 @@ class RAGState(TypedDict, total=False):
 
 
 class RAGPipeline:
-    def __init__(self, settings: dict | None = None, index: HybridIndex | None = None,
-                 reranker: Reranker | None = None, llm: ChatClient | None = None,
-                 prompt_bundle: dict | None = None, observers: list[Observer] | None = None):
+    def __init__(
+        self,
+        settings: dict | None = None,
+        index: HybridIndex | None = None,
+        reranker: Reranker | None = None,
+        llm: ChatClient | None = None,
+        prompt_bundle: dict | None = None,
+        observers: list[Observer] | None = None,
+    ):
         self.cfg = settings or get_settings()
         if index is None:
             emb = Embedder(self.cfg["embeddings"]["model"], self.cfg["embeddings"].get("query_instruction", ""))
@@ -100,33 +106,57 @@ class RAGPipeline:
         for ob in self.observers:
             try:
                 ob.on_stage(state["request_id"], stage, payload, dt)
-            except Exception:  # noqa: BLE001 - observability must never break serving
+            except Exception:
                 log.exception("observer %r failed on %s", ob, stage)
 
     def _hit_dict(self, h: Hit) -> dict:
         c = self.index.chunks[h.chunk_id]
-        return {"chunk_id": h.chunk_id, "score": round(h.score, 4), "rank": h.rank, "source": c.source,
-                "locator": c.locator, "pre_rank": h.metadata.get("pre_rank"), "n_tokens": c.n_tokens}
+        return {
+            "chunk_id": h.chunk_id,
+            "score": round(h.score, 4),
+            "rank": h.rank,
+            "source": c.source,
+            "locator": c.locator,
+            "pre_rank": h.metadata.get("pre_rank"),
+            "n_tokens": c.n_tokens,
+        }
 
     def build_messages(self, question: str, hits: list[Hit]) -> list[dict]:
         p = self.prompts
         ctx = "\n".join(
-            p["context_item"].format(chunk_id=h.chunk_id, source=self.index.chunks[h.chunk_id].source,
-                                     locator=self.index.chunks[h.chunk_id].locator, text=h.text)
-            for h in hits)
-        return [{"role": "system", "content": p["system"].strip()},
-                {"role": "user", "content": p["user"].format(context=ctx, question=question)}]
+            p["context_item"].format(
+                chunk_id=h.chunk_id,
+                source=self.index.chunks[h.chunk_id].source,
+                locator=self.index.chunks[h.chunk_id].locator,
+                text=h.text,
+            )
+            for h in hits
+        )
+        return [
+            {"role": "system", "content": p["system"].strip()},
+            {"role": "user", "content": p["user"].format(context=ctx, question=question)},
+        ]
 
     # ------------------------------------------------------------------ nodes
     def _retrieve(self, state: RAGState) -> RAGState:
         r = self.cfg["retrieval"]
         t0 = time.perf_counter()
-        hits, debug = self.index.hybrid_search(state["question"], r["vector_k"], r["bm25_k"], r["rrf_k"],
-                                               r["fused_k"], r.get("mode", "hybrid"))
+        hits, debug = self.index.hybrid_search(
+            state["question"], r["vector_k"], r["bm25_k"], r["rrf_k"], r["fused_k"], r.get("mode", "hybrid")
+        )
         dt = time.perf_counter() - t0
         state.update(fused=hits, retrieval_debug=debug)
-        self._emit(state, "retrieve", {"mode": r.get("mode", "hybrid"), "fused": [self._hit_dict(h) for h in hits],
-                                       "vector": debug["vector"][:10], "bm25": debug["bm25"][:10]}, dt)
+        self._emit(
+            state,
+            "retrieve",
+            {
+                "mode": r.get("mode", "hybrid"),
+                "fused": [self._hit_dict(h) for h in hits],
+                "vector": debug["vector"][:10],
+                "bm25": debug["bm25"][:10],
+            },
+            dt,
+        )
         return state
 
     def _rerank(self, state: RAGState) -> RAGState:
@@ -134,8 +164,9 @@ class RAGPipeline:
         top = self.reranker.rerank(state["question"], state["fused"], self.cfg["rerank"]["top_n"])
         dt = time.perf_counter() - t0
         state["reranked"] = top
-        self._emit(state, "rerank", {"provider": self.cfg["rerank"]["provider"],
-                                     "order": [self._hit_dict(h) for h in top]}, dt)
+        self._emit(
+            state, "rerank", {"provider": self.cfg["rerank"]["provider"], "order": [self._hit_dict(h) for h in top]}, dt
+        )
         return state
 
     def _gate(self, state: RAGState) -> RAGState:
@@ -145,8 +176,12 @@ class RAGPipeline:
         is_ce = self.cfg["rerank"]["provider"] == "cross_encoder"
         passed = bool(top) and (not is_ce or top[0].score >= thr)
         state["gate_passed"] = passed
-        self._emit(state, "evidence_gate", {"passed": passed, "best_score": top[0].score if top else None,
-                                            "threshold": thr}, time.perf_counter() - t0)
+        self._emit(
+            state,
+            "evidence_gate",
+            {"passed": passed, "best_score": top[0].score if top else None, "threshold": thr},
+            time.perf_counter() - t0,
+        )
         return state
 
     def _generate(self, state: RAGState) -> RAGState:
@@ -156,22 +191,40 @@ class RAGPipeline:
         resp = self.llm.chat(msgs)
         dt = time.perf_counter() - t0
         state["llm"] = resp
-        self._emit(state, "generate", {"model": resp.model, "prompt_version": self.prompts["version"],
-                                       "messages": msgs, "response": resp.text,
-                                       "prompt_tokens": resp.prompt_tokens,
-                                       "completion_tokens": resp.completion_tokens,
-                                       "retries": resp.retries, "cached": resp.cached}, dt)
+        self._emit(
+            state,
+            "generate",
+            {
+                "model": resp.model,
+                "prompt_version": self.prompts["version"],
+                "messages": msgs,
+                "response": resp.text,
+                "prompt_tokens": resp.prompt_tokens,
+                "completion_tokens": resp.completion_tokens,
+                "retries": resp.retries,
+                "cached": resp.cached,
+            },
+            dt,
+        )
         return state
 
     def _validate(self, state: RAGState) -> RAGState:
         t0 = time.perf_counter()
         g = self.cfg["guardrails"]
         ctx_ids = {h.chunk_id for h in state["reranked"]}
-        chk = check_citations(state["llm"].text, ctx_ids, set(self.index.chunks),
-                              self.prompts.get("refusal_sentinel", "INSUFFICIENT_EVIDENCE"),
-                              g.get("require_citations", True), g.get("max_uncited_sentence_ratio", 0.5))
-        answer = REFUSAL_TEXT if chk.refused else strip_invalid_citations(normalize_citations(state["llm"].text),
-                                                                          chk.invalid_ids)
+        chk = check_citations(
+            state["llm"].text,
+            ctx_ids,
+            set(self.index.chunks),
+            self.prompts.get("refusal_sentinel", "INSUFFICIENT_EVIDENCE"),
+            g.get("require_citations", True),
+            g.get("max_uncited_sentence_ratio", 0.5),
+        )
+        answer = (
+            REFUSAL_TEXT
+            if chk.refused
+            else strip_invalid_citations(normalize_citations(state["llm"].text), chk.invalid_ids)
+        )
         state.update(check=chk, answer=answer)
         self._emit(state, "validate_citations", {**asdict(chk), "coverage": chk.coverage}, time.perf_counter() - t0)
         return state
@@ -195,8 +248,11 @@ class RAGPipeline:
         g.add_edge(START, "retrieve")
         g.add_edge("retrieve", "rerank")
         g.add_edge("rerank", "evidence_gate")
-        g.add_conditional_edges("evidence_gate", lambda s: "generate" if s["gate_passed"] else "refuse",
-                                {"generate": "generate", "refuse": "refuse"})
+        g.add_conditional_edges(
+            "evidence_gate",
+            lambda s: "generate" if s["gate_passed"] else "refuse",
+            {"generate": "generate", "refuse": "refuse"},
+        )
         g.add_edge("generate", "validate_citations")
         g.add_edge("validate_citations", END)
         g.add_edge("refuse", END)
@@ -210,7 +266,7 @@ class RAGPipeline:
         error = None
         try:
             state = self.graph.invoke(state)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             log.exception("pipeline failed")
             error = f"{type(e).__name__}: {e}"
             state["answer"] = "The system hit an error while answering. Please retry."
@@ -225,21 +281,34 @@ class RAGPipeline:
                 cites.append(Citation(cid, c.source, c.locator, c.text[:240]))
         llm: LLMResponse | None = state.get("llm")
         res = AskResult(
-            request_id=rid, question=question, answer=state["answer"], refused=chk.refused,
-            refusal_reason=None if not chk.refused else chk.status, citations=cites,
-            prompt_version=self.prompts["version"], model=self.llm.model, stage_timings=timings,
+            request_id=rid,
+            question=question,
+            answer=state["answer"],
+            refused=chk.refused,
+            refusal_reason=None if not chk.refused else chk.status,
+            citations=cites,
+            prompt_version=self.prompts["version"],
+            model=self.llm.model,
+            stage_timings=timings,
             retrieved=[self._hit_dict(h) for h in state.get("fused", [])],
             reranked=[self._hit_dict(h) for h in state.get("reranked", [])],
             context_ids=[h.chunk_id for h in state.get("reranked", [])],
-            prompt_messages=state.get("messages", []), raw_answer=llm.text if llm else "",
-            usage={"prompt_tokens": llm.prompt_tokens, "completion_tokens": llm.completion_tokens,
-                   "retries": llm.retries} if llm else {"prompt_tokens": 0, "completion_tokens": 0, "retries": 0},
-            citation_check={**asdict(chk), "coverage": chk.coverage}, error=error,
+            prompt_messages=state.get("messages", []),
+            raw_answer=llm.text if llm else "",
+            usage={
+                "prompt_tokens": llm.prompt_tokens,
+                "completion_tokens": llm.completion_tokens,
+                "retries": llm.retries,
+            }
+            if llm
+            else {"prompt_tokens": 0, "completion_tokens": 0, "retries": 0},
+            citation_check={**asdict(chk), "coverage": chk.coverage},
+            error=error,
         )
         for ob in self.observers:
             if hasattr(ob, "on_result"):
                 try:
                     ob.on_result(res)
-                except Exception:  # noqa: BLE001
+                except Exception:
                     log.exception("observer on_result failed")
         return res

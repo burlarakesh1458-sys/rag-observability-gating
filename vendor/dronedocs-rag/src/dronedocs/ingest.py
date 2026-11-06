@@ -21,8 +21,9 @@ def build_chunks(raw_dir: str | Path, cfg: dict) -> list[Chunk]:
     chunks: list[Chunk] = []
     for path in discover(raw_dir):
         sections = load_file(path, c.get("drop_non_latin_lines", True))
-        doc_chunks = chunk_sections(sections, c["chunk_tokens"], c["overlap_tokens"],
-                                    c["min_chunk_tokens"], c["tokenizer"])
+        doc_chunks = chunk_sections(
+            sections, c["chunk_tokens"], c["overlap_tokens"], c["min_chunk_tokens"], c["tokenizer"]
+        )
         log.info("%s: %d sections -> %d chunks", path.name, len(sections), len(doc_chunks))
         chunks.extend(doc_chunks)
     return chunks
@@ -36,8 +37,11 @@ def ingest(raw_dir: str | Path | None = None, settings: dict | None = None) -> d
     if not chunks:
         raise RuntimeError(f"no documents found under {raw_dir}")
     t_chunk = time.perf_counter() - t0
-    emb = Embedder(cfg["embeddings"]["model"], cfg["embeddings"].get("query_instruction", ""),
-                   cfg["embeddings"].get("batch_size", 32))
+    emb = Embedder(
+        cfg["embeddings"]["model"],
+        cfg["embeddings"].get("query_instruction", ""),
+        cfg["embeddings"].get("batch_size", 32),
+    )
     t1 = time.perf_counter()
     HybridIndex(cfg["paths"]["index_dir"], emb).build(chunks)
     t_index = time.perf_counter() - t1

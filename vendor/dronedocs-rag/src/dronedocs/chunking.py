@@ -27,7 +27,7 @@ class Chunk:
     chunk_id: str
     source: str
     doc_type: str
-    locator: str                 # human readable: "page 27" / "pages 27-28" / "section: A > B"
+    locator: str  # human readable: "page 27" / "pages 27-28" / "section: A > B"
     text: str
     n_tokens: int
     pages: list[int] = field(default_factory=list)
@@ -68,8 +68,8 @@ def chunk_sections(
     source, doc_type = sections[0].source, sections[0].doc_type
 
     tokens: list[int] = []
-    owner: list[int] = []           # section index owning each token
-    boundaries: set[int] = set()     # token offsets where a paragraph starts
+    owner: list[int] = []  # section index owning each token
+    boundaries: set[int] = set()  # token offsets where a paragraph starts
     for si, sec in enumerate(sections):
         for para in [p for p in sec.text.split("\n\n") if p.strip()]:
             boundaries.add(len(tokens))
@@ -94,12 +94,19 @@ def chunk_sections(
             sec_names = [sections[i].section for i in secs_idx if sections[i].section]
             text = enc.decode(window).strip()
             cid = f"{source}#c{len(chunks):03d}"
-            chunks.append(Chunk(
-                chunk_id=cid, source=source, doc_type=doc_type,
-                locator=make_locator(pages, sec_names), text=text, n_tokens=len(window),
-                pages=pages, sections=list(dict.fromkeys(sec_names)),
-                content_hash=hashlib.sha1(text.encode()).hexdigest()[:12],
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=cid,
+                    source=source,
+                    doc_type=doc_type,
+                    locator=make_locator(pages, sec_names),
+                    text=text,
+                    n_tokens=len(window),
+                    pages=pages,
+                    sections=list(dict.fromkeys(sec_names)),
+                    content_hash=hashlib.sha1(text.encode(), usedforsecurity=False).hexdigest()[:12],
+                )
+            )
         if end >= n:
             break
         start = max(end - overlap_tokens, start + 1)

@@ -28,8 +28,10 @@ def norm(s: str) -> str:
 
 
 def _refs(item: dict) -> list[dict]:
-    return [{"source": item["source"], "locator": item["locator"], "evidence": item["evidence"]},
-            *(item.get("alt_evidence") or [])]
+    return [
+        {"source": item["source"], "locator": item["locator"], "evidence": item["evidence"]},
+        *(item.get("alt_evidence") or []),
+    ]
 
 
 def _matches(chunk: Chunk, ref: dict) -> bool:
@@ -101,10 +103,13 @@ class JudgeResult:
     tokens: int
 
 
-def judge_answer(judge: ChatClient, item: dict, answer: str, cited: list[Chunk],
-                 prompt_template: str | None = None) -> JudgeResult:
+def judge_answer(
+    judge: ChatClient, item: dict, answer: str, cited: list[Chunk], prompt_template: str | None = None
+) -> JudgeResult:
     ctx = "\n\n".join(f"[{c.chunk_id}] ({c.source}, {c.locator})\n{c.text}" for c in cited) or "(none)"
-    prompt = (prompt_template or JUDGE_PROMPT).format(question=item["question"], reference=item["reference"], answer=answer, context=ctx)
+    prompt = (prompt_template or JUDGE_PROMPT).format(
+        question=item["question"], reference=item["reference"], answer=answer, context=ctx
+    )
     last_err = ""
     tokens = 0
     for _ in range(2):  # one re-ask on malformed JSON
@@ -116,8 +121,9 @@ def judge_answer(judge: ChatClient, item: dict, answer: str, cited: list[Chunk],
             sup = sum(1 for c in claims if c.get("supported") in (True, "true", "yes", 1))
             faith = sup / len(claims) if claims else None
             rel = float(data.get("answer_relevancy", 0.0))
-            return JudgeResult(faith, max(0.0, min(1.0, rel)), len(claims), sup,
-                               str(data.get("reason", ""))[:300], tokens)
+            return JudgeResult(
+                faith, max(0.0, min(1.0, rel)), len(claims), sup, str(data.get("reason", ""))[:300], tokens
+            )
         except (ValueError, TypeError, AttributeError) as e:
             last_err = str(e)
     return JudgeResult(None, None, 0, 0, f"judge_parse_error: {last_err[:200]}", tokens)

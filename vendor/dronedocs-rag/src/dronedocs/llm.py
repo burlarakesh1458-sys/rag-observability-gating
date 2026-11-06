@@ -91,8 +91,9 @@ class ChatClient:
 
     # ------------------------------------------------------------------ factory
     @classmethod
-    def from_settings(cls, llm_cfg: dict, paths: dict | None = None, model: str | None = None,
-                      **overrides) -> ChatClient:
+    def from_settings(
+        cls, llm_cfg: dict, paths: dict | None = None, model: str | None = None, **overrides
+    ) -> ChatClient:
         base_url = os.environ.get(llm_cfg.get("base_url_env", "LLM_BASE_URL")) or llm_cfg.get("default_base_url")
         api_key = (
             os.environ.get(llm_cfg.get("api_key_env", "LLM_API_KEY"))
@@ -117,8 +118,9 @@ class ChatClient:
         return cls(**kw)
 
     # ------------------------------------------------------------------ call
-    def _payload(self, messages: list[dict], temperature: float | None, max_tokens: int | None,
-                 json_mode: bool) -> dict:
+    def _payload(
+        self, messages: list[dict], temperature: float | None, max_tokens: int | None, json_mode: bool
+    ) -> dict:
         body: dict = {
             "model": self.model,
             "messages": messages,
@@ -131,8 +133,13 @@ class ChatClient:
             body["response_format"] = {"type": "json_object"}
         return body
 
-    def chat(self, messages: list[dict], temperature: float | None = None,
-             max_tokens: int | None = None, json_mode: bool = False) -> LLMResponse:
+    def chat(
+        self,
+        messages: list[dict],
+        temperature: float | None = None,
+        max_tokens: int | None = None,
+        json_mode: bool = False,
+    ) -> LLMResponse:
         body = self._payload(messages, temperature, max_tokens, json_mode)
         key = hashlib.sha256(json.dumps([self.base_url, body], sort_keys=True).encode()).hexdigest()
         if self._cache and (hit := self._cache.get(key)):
@@ -198,7 +205,7 @@ def _retry_wait(r: httpx.Response | None, attempt: int) -> float:
                 return min(float(ra) + random.uniform(0.1, 0.8), 65.0)
             except ValueError:
                 pass
-    return min(2 ** attempt + random.uniform(0, 1), 60.0)
+    return min(2**attempt + random.uniform(0, 1), 60.0)
 
 
 def parse_json_loose(text: str) -> dict:
@@ -206,8 +213,8 @@ def parse_json_loose(text: str) -> dict:
     t = text.strip()
     if t.startswith("```"):
         t = t.strip("`")
-        t = t[t.find("{"):] if "{" in t else t
+        t = t[t.find("{") :] if "{" in t else t
     start, end = t.find("{"), t.rfind("}")
     if start == -1 or end == -1:
         raise ValueError(f"no JSON object in: {text[:200]}")
-    return json.loads(t[start:end + 1])
+    return json.loads(t[start : end + 1])

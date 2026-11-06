@@ -64,8 +64,12 @@ class IngestRequest(BaseModel):
 def health() -> dict:
     cfg = get_settings()
     index_ready = (Path(cfg["paths"]["index_dir"]) / "chunks.jsonl").exists()
-    return {"status": "ok" if index_ready else "degraded", "index_ready": index_ready,
-            "version": __version__, "pipeline_loaded": _state["pipeline"] is not None}
+    return {
+        "status": "ok" if index_ready else "degraded",
+        "index_ready": index_ready,
+        "version": __version__,
+        "pipeline_loaded": _state["pipeline"] is not None,
+    }
 
 
 @app.post("/ask", response_model=AskResponse)
@@ -78,11 +82,17 @@ def ask(req: AskRequest) -> AskResponse:
     if res.error:
         raise HTTPException(status_code=502, detail=res.error)
     return AskResponse(
-        request_id=res.request_id, answer=res.answer, refused=res.refused, refusal_reason=res.refusal_reason,
-        citations=[CitationOut(**c.__dict__) for c in res.citations], prompt_version=res.prompt_version,
-        model=res.model, latency_ms={k: round(v * 1000, 1) for k, v in res.stage_timings.items()},
+        request_id=res.request_id,
+        answer=res.answer,
+        refused=res.refused,
+        refusal_reason=res.refusal_reason,
+        citations=[CitationOut(**c.__dict__) for c in res.citations],
+        prompt_version=res.prompt_version,
+        model=res.model,
+        latency_ms={k: round(v * 1000, 1) for k, v in res.stage_timings.items()},
         debug={"reranked": res.reranked, "usage": res.usage, "citation_check": res.citation_check}
-        if req.include_debug else None,
+        if req.include_debug
+        else None,
     )
 
 
