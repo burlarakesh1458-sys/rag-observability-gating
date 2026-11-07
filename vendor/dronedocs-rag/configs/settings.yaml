@@ -19,6 +19,8 @@ llm:
   max_tokens: 900
   timeout_s: 60
   max_retries: 10
+  max_retry_after_s: 120         # a longer retry-after = daily quota gone: stop instead of stalling the run
+  min_interval_s: 0              # optional client-side pacing between calls (the eval resume used 4)
   reasoning_effort: low          # sent only to models that accept it (gpt-oss family)
   cache: false                   # deterministic response cache for dev; keep false for honest latency
 
@@ -65,8 +67,17 @@ eval:
   concurrency: 1                 # free-tier TPM (8k/min) is shared; 1 in flight avoids retry storms
   ragas: true                    # try Ragas; falls back to the built-in judge if it errors
   ragas_sample: 3                # Ragas is call-heavy (~9k tokens/item); a small cross-check of the built-in judge
-  ragas_model: openai/gpt-oss-20b
-  thresholds:                    # CI fails if any metric is below its threshold
+  ragas_model: qwen/qwen3.8-27b
+  recordings_path: eval/recordings/answers_v1.2_gpt-oss-20b.jsonl  # frozen live answers for the offline gate
+  offline_thresholds:            # deterministic CI gate (dronedocs eval --offline): regression floors, no LLM
+    context_recall: 0.85         # live run: 0.885
+    context_precision: 0.65      # live run: 0.709
+    citation_accuracy: 0.80      # live run: 0.854 (recorded answers re-validated against today's context)
+    citation_validity: 0.95      # live run: 1.000
+    refusal_correctness: 0.75    # live run: 0.817
+    refusal_rate_unanswerable: 0.875  # live run: 8/8
+    fused_recall@20: 0.95        # live run: 1.000
+  thresholds:                    # live quality bar (dronedocs eval): fails if any metric is below it
     faithfulness: 0.80
     answer_relevancy: 0.75
     context_recall: 0.70

@@ -1,6 +1,9 @@
 # RAG Observability: tracing, quality SLOs and a CI regression gate for a production RAG
 
-This repo adds an observability layer to the DroneDocs RAG system from [`01-production-rag`](../01-production-rag):
+<!-- links -->
+[![CI](https://github.com/burlarakesh1458-sys/rag-observability-gating/actions/workflows/regression-gate.yml/badge.svg)](https://github.com/burlarakesh1458-sys/rag-observability-gating/actions/workflows/regression-gate.yml) **Live demo:** <http://rakeshburla.dpdns.org/rag-observability-gating/> · **Code:** <https://github.com/burlarakesh1458-sys/rag-observability-gating> · **Resume bullets:** [RESUME_BULLETS.md](RESUME_BULLETS.md) · **License:** MIT
+
+This repo adds an observability layer to the DroneDocs RAG system from [`dronedocs-production-rag`](https://github.com/burlarakesh1458-sys/dronedocs-production-rag):
 cited Q&A over Indian drone regulations and ArduPilot/PX4 docs. It is built to answer one question:
 
 > *"Quality degraded last Tuesday. What happened?"*
@@ -142,6 +145,15 @@ Root cause and timeline: [`docs/incident-2026-11-03.md`](docs/incident-2026-11-0
 
 Reports: `reports/gate_answer-v1.2_ci.json`, `reports/gate_answer-v1.3-concise_ci.json`.
 
+**Replay mode (what CI runs on every push).** A live gate on every push made the build depend on Groq's
+free-tier quota, so `python -m ragobs.gate --replay` keeps ingestion, retrieval, rerank, the evidence gate,
+citation validation and tracing real but serves the generator's answers from
+`baselines/recorded_answers_ci.jsonl` (the 10 answers of the baseline run above; the other 2 subset items are
+declined by the evidence gate before any LLM call) and skips the judge. Only the deterministic metrics
+(context recall, citation accuracy, refusal correctness) are gated, against the same baseline and floors. The
+live gate (with judge) still runs on pull requests from this repo and on manual dispatch when the
+`GROQ_API_KEY` secret is set. The replay run writes `reports/gate_answer-v1.2_ci_replay.json` and posts its table to the job summary.
+
 ### Latency (replay, `answer-v1.2`)
 
 | Stage | p50 | p95 |
@@ -183,7 +195,7 @@ retrieval or the model.
 | Deployment needed fewer tokens/request than upstream | `rag.overrides` in `observability.yaml` (`rerank.top_n: 3`, ~1.9k prompt tokens) without forking the vendored settings |
 | Gate chart drew "0.00" for metrics that were really n/a | n/a labelled explicitly; n/a fails the gate |
 | Free-text declines were counted as unsupported answers once the sentinel was gone | Documented in the incident; it is why the refusal sentinel is part of the gated prompt contract |
-| Upstream RAG bugs (gpt-oss `【】` citation brackets, PIB duplicating Drone Rules facts, OOM during eval) | Fixed upstream in `01-production-rag` and re-vendored |
+| Upstream RAG bugs (gpt-oss `【】` citation brackets, PIB duplicating Drone Rules facts, OOM during eval) | Fixed upstream in [`dronedocs-production-rag`](https://github.com/burlarakesh1458-sys/dronedocs-production-rag) and re-vendored |
 
 ## Limitations
 
@@ -197,6 +209,8 @@ retrieval or the model.
 - Small samples: 8 requests/day means a single request moves a daily rate by 12.5 points. The anomaly rules
   use abs thresholds and a minimum request count for that reason.
 - Latency numbers reflect the Groq free tier and a shared 2-CPU sandbox, not production hardware.
+- **The push-time gate replays recorded answers.** It catches code, config and retrieval regressions without an
+  API key, but not a prompt change: that needs the live gate (PRs / manual dispatch).
 
 ## Future work
 

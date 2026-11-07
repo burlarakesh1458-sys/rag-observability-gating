@@ -19,7 +19,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from ..config import get_settings, load_prompt_bundle, project_root
-from ..llm import ChatClient, LLMError
+from ..llm import ChatClient, LLMError, ReplayClient
 from . import metrics as M
 
 log = logging.getLogger(__name__)
@@ -125,9 +125,10 @@ def _pct(xs: list[float], q: float) -> float | None:
 
 
 def is_quota_error(row: dict) -> bool:
-    """Provider daily-quota failures say nothing about answer quality: they are reported as
-    'not evaluated' instead of being scored as refusals."""
-    return bool(row.get("error")) and "quota exhausted" in str(row["error"])
+    """Provider daily-quota failures (and, in offline replay, questions with no recorded answer) say
+    nothing about answer quality: they are reported as 'not evaluated' instead of being scored."""
+    err = str(row.get("error") or "")
+    return "quota exhausted" in err or "not recorded" in err
 
 
 def summarize(rows: list[dict]) -> dict:
@@ -229,13 +230,17 @@ def run(
     pipeline=None,
     resume: bool = False,
     report_only: bool = False,
+    offline: bool = False,
 ) -> int:
+    """``offline=True`` is the deterministic CI gate: real retrieval, rerank, evidence gate and citation
+    validation, with the generator replaced by answers recorded from a live run (``ReplayClient``) and no
+    LLM judge. It gates on ``eval.offline_thresholds`` and never touches the network or an API key."""
     from ..pipeline import RAGPipeline
 
     cfg = settings or get_settings()
     ecfg = cfg["eval"]
     items = load_golden(ecfg["golden_path"], limit)
-    judge = build_judge(cfg)
+    judge = None if offline else build_judge(cfg)
     judge_bundle = load_prompt_bundle("configs/prompts/judge_v1.yaml")
     t0 = time.perf_counter()
     ck_dir = Path(ecfg.get("report_dir", "reports"))
@@ -243,7 +248,15 @@ def run(
     ck_dir.mkdir(parents=True, exist_ok=True)
     prompt_bundle = load_prompt_bundle(cfg["app"]["prompt_file"])
     ck = ck_dir / f"checkpoint_{prompt_bundle['version']}_{cfg['llm']['model'].replace('/', '_')}.jsonl"
-    if report_only:
+    thresholds = ecfg["offline_thresholds"] if offline else ecfg["thresholds"]
+    if offline:
+        rec = Path(ecfg["recordings_path"])
+        rec = rec if rec.is_absolute() else project_root() / rec
+        pipeline = pipeline or RAGPipeline(cfg, llm=ReplayClient(rec))
+        use_ragas = False
+        rows, summary = evaluate(pipeline, items, None, 1, judge_bundle["judge"], None)
+        summary["faithfulness"] = summary["answer_relevancy"] = None  # judge metrics: live eval only
+    elif report_only:
         # rebuild the report from the checkpoint without any model or LLM calls (last row per id wins)
         last: dict[str, dict] = {}
         for line in ck.read_text(encoding="utf-8").splitlines():
@@ -276,7 +289,7 @@ def run(
             log.warning("Ragas evaluation unavailable, using built-in judge only: %s", e)
             ragas_summary = {"status": "unavailable", "error": f"{type(e).__name__}: {e}"[:400]}
 
-    failures = check_thresholds(summary, ecfg["thresholds"])
+    failures = check_thresholds(summary, thresholds)
     if summary.get("n_not_evaluated_quota"):
         log.warning(
             "%d items not evaluated (provider quota): %s",
@@ -286,14 +299,15 @@ def run(
     report = {
         "timestamp": datetime.now(UTC).isoformat(timespec="seconds"),
         "generator_model": pipeline.llm.model,
-        "judge_model": judge.model,
+        "mode": "offline-replay" if offline else ("report-only" if report_only else "live"),
+        "judge_model": judge.model if judge else None,
         "prompt_version": pipeline.prompts["version"],
         "judge_prompt_version": judge_bundle["version"],
         "retrieval": cfg["retrieval"],
         "rerank": {k: cfg["rerank"][k] for k in ("provider", "model", "top_n")},
         "chunking": cfg["chunking"],
         "embedding_model": cfg["embeddings"]["model"],
-        "thresholds": ecfg["thresholds"],
+        "thresholds": thresholds,
         "gate_failures": failures,
         "passed": not failures,
         "partial": bool(summary.get("n_not_evaluated_quota")),
@@ -305,9 +319,13 @@ def run(
     if not rep_dir.is_absolute():
         rep_dir = project_root() / rep_dir
     rep_dir.mkdir(parents=True, exist_ok=True)
-    out_path = Path(out) if out else rep_dir / f"eval_{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}.json"
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    out_path = Path(out) if out else rep_dir / (f"offline_gate_{stamp}.json" if offline else f"eval_{stamp}.json")
     out_path.write_text(json.dumps(report, indent=2, default=str))
-    (rep_dir / "latest.json").write_text(json.dumps(report, indent=2, default=str))
+    # latest.json holds the live eval; the offline gate writes its own file so it never overwrites it
+    latest = rep_dir / ("offline_gate.json" if offline else "latest.json")
+    if not out:
+        latest.write_text(json.dumps(report, indent=2, default=str))
     print_summary(report)
     print(f"\nreport: {out_path}")
     if failures:

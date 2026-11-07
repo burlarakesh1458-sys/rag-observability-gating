@@ -2,8 +2,12 @@
 
 Groq, OpenAI, Together, vLLM and Ollama all speak ``/v1/chat/completions``; only the
 base url, key and model name change. Adds exponential backoff on 429/5xx (Groq free tier
-is 8k tokens/minute), honours ``retry-after``, records token usage + latency and an
-optional on-disk response cache for development.
+is 8k tokens/minute), honours ``retry-after``, paces itself from the ``x-ratelimit-*`` headers so it
+waits *before* a request would be throttled, records token usage + latency and keeps an optional
+on-disk response cache (sqlite) so a resumed or repeated run never pays for the same call twice.
+
+``ReplayClient`` serves recorded answers by question with no network at all; the CI quality gate
+uses it so the build is deterministic and needs no API key.
 """
 
 from __future__ import annotations
@@ -13,6 +17,7 @@ import json
 import logging
 import os
 import random
+import re
 import sqlite3
 import threading
 import time
@@ -75,6 +80,8 @@ class ChatClient:
         reasoning_effort: str | None = None,
         cache_path: str | Path | None = None,
         transport: httpx.BaseTransport | None = None,
+        max_retry_after_s: float = 120.0,
+        min_interval_s: float = 0.0,
     ):
         self.model = model
         self.base_url = (base_url or "https://api.groq.com/openai/v1").rstrip("/")
@@ -84,6 +91,11 @@ class ChatClient:
         self.max_retries = max_retries
         self.reasoning_effort = reasoning_effort
         self._cache = _Cache(Path(cache_path)) if cache_path else None
+        # a retry-after longer than this means a daily (TPD/RPD) cap, not a per-minute one: stop the call
+        self.max_retry_after_s = max_retry_after_s
+        self.min_interval_s = min_interval_s  # client-side pacing between requests (0 = off)
+        self._pace_lock = threading.Lock()
+        self._next_ok = 0.0  # monotonic time before which no request is sent
         headers = {"Content-Type": "application/json"}
         if api_key:
             headers["Authorization"] = f"Bearer {api_key}"
@@ -113,6 +125,8 @@ class ChatClient:
             max_retries=llm_cfg.get("max_retries", 6),
             reasoning_effort=llm_cfg.get("reasoning_effort"),
             cache_path=cache_path,
+            max_retry_after_s=float(llm_cfg.get("max_retry_after_s", 120)),
+            min_interval_s=float(llm_cfg.get("min_interval_s", 0)),
         )
         kw.update(overrides)
         return cls(**kw)
@@ -149,8 +163,10 @@ class ChatClient:
         attempt = 0
         last_err: str = ""
         while attempt <= self.max_retries:
+            self._wait_turn()
             try:
                 r = self._http.post(f"{self.base_url}/chat/completions", json=body)
+                self._update_pacing(r, body)
             except httpx.HTTPError as e:  # network / timeout
                 last_err = f"{type(e).__name__}: {e}"
                 r = None
@@ -180,7 +196,7 @@ class ChatClient:
                     raise LLMError(last_err)
                 if r.status_code == 400 and json_mode:  # model refused json mode -> drop it once
                     body.pop("response_format", None)
-            if r is not None and r.status_code == 429 and _retry_after(r) > 120:
+            if r is not None and r.status_code == 429 and _retry_after(r) > self.max_retry_after_s:
                 # daily quota (TPD/RPD) exhausted: waiting minutes per call would stall the whole run
                 raise LLMError(f"quota exhausted (retry-after {_retry_after(r):.0f}s): {last_err}")
             wait = _retry_wait(r, attempt)
@@ -188,6 +204,85 @@ class ChatClient:
             time.sleep(wait)
             attempt += 1
         raise LLMError(f"LLM call failed after {self.max_retries} retries: {last_err}")
+
+    # ------------------------------------------------------------------ pacing
+    def _wait_turn(self) -> None:
+        with self._pace_lock:
+            delay = self._next_ok - time.monotonic()
+        if delay > 0:
+            log.info("pacing: waiting %.1fs for the provider's rate window", delay)
+            time.sleep(delay)
+
+    def _update_pacing(self, r: httpx.Response, body: dict) -> None:
+        """Push the next allowed send time forward when the token window is nearly empty."""
+        now = time.monotonic()
+        nxt = now + self.min_interval_s
+        try:
+            remaining = float(r.headers.get("x-ratelimit-remaining-tokens", "inf"))
+        except ValueError:
+            remaining = float("inf")
+        need = _estimate_tokens(body)
+        if remaining < need:
+            nxt = max(nxt, now + _parse_duration(r.headers.get("x-ratelimit-reset-tokens", "")) + 0.25)
+        with self._pace_lock:
+            self._next_ok = max(self._next_ok, nxt)
+
+
+class ReplayClient:
+    """Serves recorded model answers keyed by question text; no network, fully deterministic.
+
+    Recordings are JSONL rows ``{"question": ..., "raw_answer": ..., "usage": {...}}`` captured from a
+    live eval run (``scripts/record_answers.py``). A question without a recording raises ``LLMError``
+    with ``not recorded`` so the eval marks the item as not evaluated instead of scoring it.
+    """
+
+    def __init__(self, path: str | Path, model: str = "replay"):
+        self.model = model
+        self._rows: dict[str, dict] = {}
+        for line in Path(path).read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                row = json.loads(line)
+                self._rows[_norm_q(row["question"])] = row
+        if self._rows:
+            self.model = next(iter(self._rows.values())).get("model", model)
+
+    def __len__(self) -> int:
+        return len(self._rows)
+
+    def lookup(self, question: str) -> dict | None:
+        return self._rows.get(_norm_q(question))
+
+    def chat(self, messages: list[dict], **_: object) -> LLMResponse:
+        user = _norm_q(next((m["content"] for m in reversed(messages) if m["role"] == "user"), ""))
+        matches = [q for q in self._rows if q and q in user]
+        if not matches:
+            raise LLMError("not recorded: no recorded answer for this question")
+        row = self._rows[max(matches, key=len)]  # longest match: one question may contain another
+        u = row.get("usage") or {}
+        return LLMResponse(
+            text=row["raw_answer"],
+            model=self.model,
+            prompt_tokens=int(u.get("prompt_tokens", 0)),
+            completion_tokens=int(u.get("completion_tokens", 0)),
+            cached=True,
+        )
+
+
+def _norm_q(q: str) -> str:
+    return " ".join(q.split()).lower()
+
+
+def _estimate_tokens(body: dict) -> int:
+    chars = sum(len(str(m.get("content", ""))) for m in body.get("messages", []))
+    return chars // 4 + int(body.get("max_tokens") or 0)
+
+
+def _parse_duration(s: str) -> float:
+    """Parse Groq/OpenAI reset durations such as ``577ms``, ``7.66s``, ``2m59.56s``, ``1h2m3s``."""
+    total = 0.0
+    for num, unit in re.findall(r"([\d.]+)(ms|h|m|s)", s or ""):
+        total += float(num) * {"ms": 0.001, "s": 1.0, "m": 60.0, "h": 3600.0}[unit]
+    return total
 
 
 def _retry_after(r: httpx.Response) -> float:

@@ -27,6 +27,11 @@ def main(argv: list[str] | None = None) -> int:
     p_ev.add_argument("--out")
     p_ev.add_argument("--resume", action="store_true", help="reuse finished rows from the last interrupted run")
     p_ev.add_argument("--report-only", action="store_true", help="rebuild the report from the checkpoint, no calls")
+    p_ev.add_argument(
+        "--offline",
+        action="store_true",
+        help="deterministic CI gate: replay recorded answers, no LLM/judge/network (uses eval.offline_thresholds)",
+    )
     p_srv = sub.add_parser("serve", help="run the FastAPI server")
     p_srv.add_argument("--host", default="0.0.0.0")  # noqa: S104 - container entrypoint
     p_srv.add_argument("--port", type=int, default=8000)
@@ -66,6 +71,7 @@ def main(argv: list[str] | None = None) -> int:
             out=args.out,
             resume=args.resume,
             report_only=args.report_only,
+            offline=args.offline,
         )
     if args.cmd == "serve":
         import uvicorn

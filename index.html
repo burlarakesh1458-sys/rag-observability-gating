@@ -25,8 +25,21 @@ footer{border-top:1px solid var(--line);color:var(--mut);padding:20px 0;font-siz
 id="rag-observability-tracing-quality-slos-and-a-ci-regression-gate-for-a-production-rag">RAG
 Observability: tracing, quality SLOs and a CI regression gate for a
 production RAG</h1>
+<!-- links -->
+
+<p><a
+href="https://github.com/burlarakesh1458-sys/rag-observability-gating/actions/workflows/regression-gate.yml"><img
+src="https://github.com/burlarakesh1458-sys/rag-observability-gating/actions/workflows/regression-gate.yml/badge.svg"
+alt="CI" /></a> <strong>Live demo:</strong> <a
+href="http://rakeshburla.dpdns.org/rag-observability-gating/">http://rakeshburla.dpdns.org/rag-observability-gating/</a>
+· <strong>Code:</strong> <a
+href="https://github.com/burlarakesh1458-sys/rag-observability-gating">https://github.com/burlarakesh1458-sys/rag-observability-gating</a>
+· <strong>Resume bullets:</strong> <a
+href="https://github.com/burlarakesh1458-sys/rag-observability-gating/blob/main/RESUME_BULLETS.md">RESUME_BULLETS.md</a> ·
+<strong>License:</strong> MIT</p>
 <p>This repo adds an observability layer to the DroneDocs RAG system
-from <a href="https://github.com/burlarakesh1458-sys/rag-observability-gating/blob/main/01-production-rag"><code>01-production-rag</code></a>:
+from <a
+href="https://github.com/burlarakesh1458-sys/dronedocs-production-rag"><code>dronedocs-production-rag</code></a>:
 cited Q&amp;A over Indian drone regulations and ArduPilot/PX4 docs. It
 is built to answer one question:</p>
 <blockquote>
@@ -291,6 +304,20 @@ regression gate: baseline vs. the regressed prompt</h3>
 </table>
 <p>Reports: <code>reports/gate_answer-v1.2_ci.json</code>,
 <code>reports/gate_answer-v1.3-concise_ci.json</code>.</p>
+<p><strong>Replay mode (what CI runs on every push).</strong> A live
+gate on every push made the build depend on Groq's free-tier quota, so
+<code>python -m ragobs.gate --replay</code> keeps ingestion, retrieval,
+rerank, the evidence gate, citation validation and tracing real but
+serves the generator's answers from
+<code>baselines/recorded_answers_ci.jsonl</code> (the 10 answers of the
+baseline run above; the other 2 subset items are declined by the
+evidence gate before any LLM call) and skips the judge. Only the
+deterministic metrics (context recall, citation accuracy, refusal
+correctness) are gated, against the same baseline and floors. The live
+gate (with judge) still runs on pull requests from this repo and on
+manual dispatch when the <code>GROQ_API_KEY</code> secret is set. The
+replay run writes <code>reports/gate_answer-v1.2_ci_replay.json</code>
+and posts its table to the job summary.</p>
 <h3 id="latency-replay-answer-v12">Latency (replay,
 <code>answer-v1.2</code>)</h3>
 <table>
@@ -402,8 +429,9 @@ of the gated prompt contract</td>
 <tr class="even">
 <td>Upstream RAG bugs (gpt-oss <code>【】</code> citation brackets, PIB
 duplicating Drone Rules facts, OOM during eval)</td>
-<td>Fixed upstream in <code>01-production-rag</code> and
-re-vendored</td>
+<td>Fixed upstream in <a
+href="https://github.com/burlarakesh1458-sys/dronedocs-production-rag"><code>dronedocs-production-rag</code></a>
+and re-vendored</td>
 </tr>
 </tbody>
 </table>
@@ -427,6 +455,10 @@ rate by 12.5 points. The anomaly rules use abs thresholds and a minimum
 request count for that reason.</li>
 <li>Latency numbers reflect the Groq free tier and a shared 2-CPU
 sandbox, not production hardware.</li>
+<li><strong>The push-time gate replays recorded answers.</strong> It
+catches code, config and retrieval regressions without an API key, but
+not a prompt change: that needs the live gate (PRs / manual
+dispatch).</li>
 </ul>
 <h2 id="future-work">Future work</h2>
 <ul>
