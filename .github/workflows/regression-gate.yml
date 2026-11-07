@@ -72,7 +72,8 @@ jobs:
     steps:
       - name: Check for an API key
         id: key
-        run: if [ -n "$LLM_API_KEY" ]; then echo "ok=true" >> "$GITHUB_OUTPUT"; else echo "No GROQ_API_KEY secret: live gate skipped" >> "$GITHUB_STEP_SUMMARY"; fi
+        run: |
+          if [ -n "$LLM_API_KEY" ]; then echo "ok=true" >> "$GITHUB_OUTPUT"; else echo "No GROQ_API_KEY secret, live gate skipped" >> "$GITHUB_STEP_SUMMARY"; fi
       - if: steps.key.outputs.ok == 'true'
         uses: actions/checkout@v4
       - if: steps.key.outputs.ok == 'true'
